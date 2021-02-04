@@ -1,25 +1,24 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Menu from "./components/Menu/Menu";
+import {HashRouter, Link, Route} from "react-router-dom";
+import ListeDemandes from "./components/ListeDemandes/ListeDemandes";
+import NouvelleDemande from "./components/NouvelleDemande/NouvelleDemande";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div className="App">
+          <HashRouter>
+              <div>
+                  <h1>TEZEA SI</h1>
+                  <div className="content">
+                      <Route exact path="/" component={Menu}/>
+                      <Route path="/liste" component={ListeDemandes}/>
+                      <Route path="/nouvelle_demande" component={NouvelleDemande}/>
+                  </div>
+              </div>
+          </HashRouter>
+      </div>
   );
 }
 
