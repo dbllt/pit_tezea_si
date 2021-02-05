@@ -37,7 +37,7 @@
           <legend>Informations client</legend>
 
           <div class="row">
-            <div class="col-6">
+            <div class="col-md-6">
               <label for="client_fname" class="form-label"
                 >Nom du client:</label
               >
@@ -48,7 +48,7 @@
                 class="form-control is-valid"
               />
             </div>
-            <div class="col-6">
+            <div class="col-md-6">
               <label for="client_lname" class="form-label"
                 >Prénom du client:</label
               >
@@ -65,7 +65,7 @@
           </div>
           <br />
           <div class="row">
-            <div class="col-6">
+            <div class="col-md-6">
               <label for="client_tel" class="form-label"
                 >Téléphone client:</label
               >
@@ -76,7 +76,7 @@
                 class="form-control"
               />
             </div>
-            <div class="col-6">
+            <div class="col-md-6">
               <label for="client_mail" class="form-label">Mail client:</label>
               <input
                 type="email"
@@ -91,7 +91,7 @@
         <fieldset>
           <legend>Adresse</legend>
           <div class="row">
-            <div class="col-6">
+            <div class="col-md-6">
               <label for="client_addr" class="form-label">Adresse:</label>
               <input
                 type="text"
@@ -100,7 +100,7 @@
                 class="form-control"
               />
             </div>
-            <div class="col-2">
+            <div class="col-md-2">
               <label for="client_pcode" class="form-label">Code postal:</label>
               <input
                 type="number"
@@ -110,7 +110,7 @@
                 placeholder="35000"
               />
             </div>
-            <div class="col-4">
+            <div class="col-md-4">
               <label for="client_city" class="form-label">Ville:</label>
               <input
                 type="text"
@@ -182,12 +182,31 @@
 
         <fieldset>
           <legend>Régularité</legend>
-          <input
-            type="text"
-            id="task_regularity"
-            name="task_regularity"
-            class="form-control"
-          />
+          <div class="row g-3">
+            <div class="col-auto">
+                <input
+                  type="number"
+                  id="task_nb_regularity"
+                  name="task_nb_regularity"
+                  class="form-control"
+                  placeholder="0"
+                />
+
+            </div>
+            <div class="col-auto form-label">
+                par
+            </div>
+            <div class="col-auto">
+                <select class="form-select" id="task_unit_regularity">
+                  <option value="day">jour</option>
+                  <option value="week">semaine</option>
+                  <option value="month">mois</option>
+                  <option value="year">année</option>
+                </select>
+                
+            </div>
+
+          </div>
         </fieldset>
 
         <fieldset>
