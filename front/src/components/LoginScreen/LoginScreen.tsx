@@ -1,9 +1,8 @@
 import React from 'react';
 import styles from './LoginScreen.module.css';
-import {Button, Container, TextField} from "@material-ui/core";
+import {Button, TextField} from "@material-ui/core";
 import {Link} from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
-import Form from "@material-ui/core/FormControl";
 
 const LoginScreen: React.FC = () => (
     <div className={styles.LoginScreen}>
