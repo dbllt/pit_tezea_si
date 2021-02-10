@@ -1,7 +1,8 @@
+
 interface Request {
     id: string;
     task: string;
-    adress: string;
+    address: string;
 }
 
 interface Client {
@@ -14,20 +15,29 @@ let requests: Request[] = [];
 let clients: Client[] = [];
 const API = {
 
+    test: async function():Promise<string> {
+        let res:string = "";
+        await fetch("https://pokeapi.co/api/v2/pokemon/ditto")
+            .then(res => res.json()).then((data) => {
+                res = data["id"]
+            }).catch(console.log);
+        return res;
+    },
 
-    login: function async(email: string, password: string) {
+
+    login: async function(email: string, password: string):Promise<any>  {
         return true;
     },
-    register: function async(email: string, password: string) {
+    register: async function(email: string, password: string):Promise<any>  {
         return true;
     },
-    getRequests: function async() {
+    getRequests: async function():Promise<Request[]>  {
         return requests;
     },
-    addRequest: function async(request: Request) {
+    addRequest: async function(request: Request):Promise<any>  {
         requests.push(request);
     },
-    getRequest: function async(id: string) {
+    getRequest: async function(id: string):Promise<any>  {
         requests.forEach(function (request) {
             if (request.id === id) {
                 return request;
@@ -35,27 +45,27 @@ const API = {
         });
         return false;
     },
-    editRequest: function async(id: string, request: Request) {
-        var index =  requests.findIndex(x => x.id===id);
+    editRequest: async function(id: string, request: Request):Promise<any>  {
+        let index = requests.findIndex(x => x.id === id);
         if (index > -1) {
             requests.splice(index, 1);
             requests.push(request);
         }
     },
-    removeRequest: function async(id: string) {
-        var index =  requests.findIndex(x => x.id===id);
+    removeRequest: async function(id: string):Promise<any>  {
+        let index = requests.findIndex(x => x.id === id);
         if (index > -1) {
             requests.splice(index, 1);
         }
     },
-    getClients: function async() {
+    getClients: async function():Promise<Client[]>  {
         return clients;
     },
-    addClient: function async(client: Client) {
+    addClient: async function(client: Client):Promise<any>  {
         clients.push(client);
     },
 
-    getClient: function async(id: string) {
+    getClient: async function(id: string):Promise<any>  {
         clients.forEach(function (client) {
             if (client.id === id) {
                 return client;
@@ -64,16 +74,16 @@ const API = {
         return false;
     },
 
-    editClient: function async(id: string, client: Client) {
-        var index =  clients.findIndex(x => x.id===id);
+    editClient: async function(id: string, client: Client):Promise<any> {
+        let index = clients.findIndex(x => x.id === id);
         if (index > -1) {
             clients.splice(index, 1);
             clients.push(client);
         }
     },
 
-    removeClient: function async(id: string) {
-        var index =  clients.findIndex(x => x.id===id);
+    removeClient: async function(id: string):Promise<any> {
+        let index = clients.findIndex(x => x.id === id);
         if (index > -1) {
             clients.splice(index, 1);
         }
