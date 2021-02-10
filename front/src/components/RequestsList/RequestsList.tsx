@@ -5,7 +5,7 @@ import {Button} from '@material-ui/core'
 const RequestsList: React.FC = () => (
   <div>
     Liste de Demandes
-      <Link to="/">
+      <Link to="/menu">
           <Button color="primary">
               Retour
           </Button>

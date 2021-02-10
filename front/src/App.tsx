@@ -6,6 +6,8 @@ import RequestsList from "./components/RequestsList/RequestsList";
 import NewRequest from "./components/NewRequest/NewRequest";
 import {AppBar, Toolbar} from "@material-ui/core";
 import ServiceList from "./components/ServiceList/ServiceList";
+import LoginScreen from "./components/LoginScreen/LoginScreen";
+import RegisterScreen from "./components/RegisterScreen/RegisterScreen";
 
 function App() {
   return (
@@ -26,10 +28,12 @@ function App() {
                   </AppBar>
 
                   <div className="content">
-                      <Route exact path="/" component={Menu}/>
+                      <Route path="/menu" component={Menu}/>
                       <Route path="/requestsList" component={RequestsList}/>
                       <Route path="/newRequest" component={NewRequest}/>
                       <Route path="/serviceList" component={ServiceList}/>
+                      <Route exact path="/" component={LoginScreen}/>
+                      <Route path="/register" component={RegisterScreen}/>
                   </div>
               </div>
           </HashRouter>

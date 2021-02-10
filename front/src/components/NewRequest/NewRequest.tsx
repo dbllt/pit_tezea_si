@@ -265,7 +265,7 @@ export default function NewRequest() {
                 Enregistrer la demande
             </Button>
 
-            <Link to="/">
+            <Link to="/menu">
                 <Button type="button">
                     Retour
                 </Button>
