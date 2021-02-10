@@ -1,0 +1,21 @@
+### Unauthorized
+GET http://localhost:8080/hello
+
+### Authentication
+POST http://localhost:8080/authenticate
+Content-Type: application/json
+
+{
+    "username":"grogu",
+    "password":"password"
+}
+
+
+### Replace the current bearer by the token from previous request
+GET http://localhost:8080/hello
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJncm9ndSIsImV4cCI6MTYxMjk3MjU3MiwiaWF0IjoxNjEyOTU0NTcyfQ.O3Bn3XrXKROJM0JOsgvtXca62LM-jr6YgoIIGYZFF9Qp1B9GP2uXk0xuZi4I9nKG3UWKL59SUTKIx_fzdhftA
+
+### Unauthorized
+POST http://localhost:8080/test
+
+### 
