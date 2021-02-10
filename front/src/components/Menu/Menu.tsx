@@ -21,14 +21,14 @@ class Menu extends React.Component<Props, State> {
 
     render() {
         return (
-            <div>
-                <Link to="/requestsList">
-                    <Button color="primary">
+            <div style={{margin:50}}>
+                <Link to="/requestsList"style={{margin:20}}>
+                    <Button variant="contained">
                         Liste de demandes
                     </Button>
                 </Link>
-                <Link to="/newRequest">
-                    <Button color="primary">
+                <Link to="/newRequest"style={{margin:20}}>
+                    <Button variant="contained">
                         Nouvelle demande
                     </Button>
                 </Link>
