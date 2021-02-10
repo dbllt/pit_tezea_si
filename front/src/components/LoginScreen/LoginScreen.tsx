@@ -39,6 +39,12 @@ const LoginScreen: React.FC = () => (
                         S'inscrire
                     </Button>
                 </Link>
+                <Button type="button" onClick={async ()=>{await fetch("/api/ints")
+            .then(res => res.json()).then((data) => {
+                console.log(data)
+            }).catch(console.log);}}>
+                        Appel api
+                    </Button>
             </Grid>
         </Grid>
     </div>
