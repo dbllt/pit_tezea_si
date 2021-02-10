@@ -1,22 +1,22 @@
 package tezea.si.model;
 
 import java.io.Serializable;
-
 /**
- * Classic response for a JWT authenticated request
+ * Model for a refresh request from client
  * 
  * @author Nils Richard
  *
  */
-public class JwtResponse implements Serializable {
-    private static final long serialVersionUID = 6098474392852070760L;
+public class JwtRefreshResponse implements Serializable {
+    private static final long serialVersionUID = -7724494183255621013L;
     private final String jwttoken;
 
-    public JwtResponse(String jwttoken) {
+    public JwtRefreshResponse(String jwttoken) {
         this.jwttoken = jwttoken;
     }
 
     public String getToken() {
         return this.jwttoken;
     }
+
 }

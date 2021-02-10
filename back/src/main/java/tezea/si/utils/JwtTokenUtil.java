@@ -22,12 +22,13 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class JwtTokenUtil implements Serializable {
     private static final long serialVersionUID = -7588967588818311029L;
     public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+    public static final long JWT_REFRESH_TOKEN_VALIDITY = 24 * 60 * 60;
 
     @Value("${jwt.secret}")
     private String secret;
 
     /**
-     * Retrieve username from JWT token
+     * Retrieves username from JWT token
      * 
      * @param token
      * @return
@@ -37,7 +38,7 @@ public class JwtTokenUtil implements Serializable {
     }
 
     /**
-     * Retrieve expiration date from JWT token
+     * Retrieves expiration date from JWT token
      * 
      * @param token
      * @return
@@ -52,7 +53,7 @@ public class JwtTokenUtil implements Serializable {
     }
 
     /**
-     * Parse the JWT token with the secret key
+     * Parses the JWT token with the secret key
      * 
      * @param token
      * @return
@@ -62,7 +63,7 @@ public class JwtTokenUtil implements Serializable {
     }
 
     /**
-     * Check if the token has expired
+     * Checks if the token has expired
      * 
      * @param token
      * @return
@@ -73,24 +74,36 @@ public class JwtTokenUtil implements Serializable {
     }
 
     /**
-     * Generate token for user
+     * Generates token for user
      * 
      * @param userDetails
      * @return
      */
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, userDetails.getUsername());
+        return doGenerateToken(claims, userDetails.getUsername(), JWT_TOKEN_VALIDITY);
     }
 
     /**
-     * Generate JWT token
+     * Generates token for user
+     * 
+     * @param userDetails
+     * @return
+     */
+    public String generateRefreshToken(UserDetails userDetails) {
+        Map<String, Object> claims = new HashMap<>();
+        return doGenerateToken(claims, userDetails.getUsername(), JWT_REFRESH_TOKEN_VALIDITY);
+    }
+
+    /**
+     * Generates JWT token
      * 
      * @param claims
      * @param subject
+     * @param expiration expiration time in seconds
      * @return
      */
-    private String doGenerateToken(Map<String, Object> claims, String subject) {
+    private String doGenerateToken(Map<String, Object> claims, String subject, long expiration) {
 //      While creating the token 
 //      * 1. Define claims of the token, like Issuer, Expiration, Subject, and the ID
 //      * 2. Sign the JWT using the HS512 algorithm and secret key.
@@ -98,12 +111,12 @@ public class JwtTokenUtil implements Serializable {
 //      * Serialization(https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-3.1)
 //      * compaction of the JWT to a URL-safe string
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
     /**
-     * Validate token
+     * Validates token
      * 
      * @param token
      * @param userDetails

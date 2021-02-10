@@ -2,7 +2,7 @@
 GET http://localhost:8080/hello
 
 ### Authentication
-POST http://localhost:8080/authenticate
+POST http://localhost:8080/auth/authenticate
 Content-Type: application/json
 
 {
@@ -10,10 +10,26 @@ Content-Type: application/json
     "password":"password"
 }
 
+### Refresh token
+POST http://localhost:8080/auth/token
+Content-Type: application/json
+
+{
+    "refreshToken":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJncm9ndSIsImV4cCI6MTYxMzA2MzA0NiwiaWF0IjoxNjEyOTc2NjQ2fQ.k3u_MdbE6BSiELxtZ4z6cRlX8OnG9Mu7CnsjZujMC71QH4KIjRpTHBNCNtLSNnxu3i87YQesT-ovPh4ZfJn8dQ"
+}
+
+
+### Invalidate Refresh token
+PUT http://localhost:8080/auth/token
+Content-Type: application/json
+
+{
+    "refreshToken":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJncm9ndSIsImV4cCI6MTYxMzA2MzA0NiwiaWF0IjoxNjEyOTc2NjQ2fQ.k3u_MdbE6BSiELxtZ4z6cRlX8OnG9Mu7CnsjZujMC71QH4KIjRpTHBNCNtLSNnxu3i87YQesT-ovPh4ZfJn8dQ"
+}
 
 ### Replace the current bearer by the token from previous request
 GET http://localhost:8080/hello
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJncm9ndSIsImV4cCI6MTYxMjk3MjU3MiwiaWF0IjoxNjEyOTU0NTcyfQ.O3Bn3XrXKROJM0JOsgvtXca62LM-jr6YgoIIGYZFF9Qp1B9GP2uXk0xuZi4I9nKG3UWKL59SUTKIx_fzdhftA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJncm9ndSIsImV4cCI6MTYxMjk4NzA3NSwiaWF0IjoxNjEyOTY5MDc1fQ.UdOjy6_JzvnjsRDyqrlwdpLeCrirzC80f-7QDfZYgnybXJtttfG-2bnXiGy8nXn_bvAnQyv7FwPslyQg15SHAw
 
 ### Unauthorized
 POST http://localhost:8080/test

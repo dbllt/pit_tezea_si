@@ -1,6 +1,7 @@
 package tezea.si.service;
 
 import java.util.ArrayList;
+
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
+    
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // Just a temporary version with no db and with a single user possible
@@ -30,4 +32,5 @@ public class JwtUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
     }
+
 }
