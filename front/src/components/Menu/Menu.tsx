@@ -27,7 +27,7 @@ class Menu extends React.Component<Props, State> {
                         Liste de demandes
                     </Button>
                 </Link>
-                <Link to="/newRequest"style={{margin:20}}>
+                <Link to="/serviceList"style={{margin:20}}>
                     <Button variant="contained">
                         Nouvelle demande
                     </Button>

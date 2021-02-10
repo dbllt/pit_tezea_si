@@ -5,6 +5,7 @@ import {HashRouter, Link, Route} from "react-router-dom";
 import RequestsList from "./components/RequestsList/RequestsList";
 import NewRequest from "./components/NewRequest/NewRequest";
 import {AppBar, Toolbar} from "@material-ui/core";
+import ServiceList from "./components/ServiceList/ServiceList";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
                       <Route exact path="/" component={Menu}/>
                       <Route path="/requestsList" component={RequestsList}/>
                       <Route path="/newRequest" component={NewRequest}/>
+                      <Route path="/serviceList" component={ServiceList}/>
                   </div>
               </div>
           </HashRouter>
