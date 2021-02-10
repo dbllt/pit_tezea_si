@@ -1,11 +1,8 @@
 import React from "react";
 import {
-    Route,
-    HashRouter,
     Link
 } from "react-router-dom";
-import NouvelleDemande from "../NouvelleDemande/NouvelleDemande";
-import ListeDemandes from "../ListeDemandes/ListeDemandes";
+import { Button } from '@material-ui/core';
 
 interface Props {
 
@@ -25,15 +22,15 @@ class Menu extends React.Component<Props, State> {
     render() {
         return (
             <div>
-                <Link to="/liste">
-                    <button type="button">
+                <Link to="/requestsList">
+                    <Button color="primary">
                         Liste de demandes
-                    </button>
+                    </Button>
                 </Link>
-                <Link to="/nouvelle_demande">
-                    <button type="button">
+                <Link to="/newRequest">
+                    <Button color="primary">
                         Nouvelle demande
-                    </button>
+                    </Button>
                 </Link>
 
             </div>

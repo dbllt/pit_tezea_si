@@ -1,9 +1,9 @@
 import React from 'react';
 import './App.css';
 import Menu from "./components/Menu/Menu";
-import {HashRouter, Link, Route} from "react-router-dom";
-import ListeDemandes from "./components/ListeDemandes/ListeDemandes";
-import NouvelleDemande from "./components/NouvelleDemande/NouvelleDemande";
+import {HashRouter, Route} from "react-router-dom";
+import RequestsList from "./components/RequestsList/RequestsList";
+import NewRequest from "./components/NewRequest/NewRequest";
 
 function App() {
   return (
@@ -13,8 +13,8 @@ function App() {
                   <h1>TEZEA SI</h1>
                   <div className="content">
                       <Route exact path="/" component={Menu}/>
-                      <Route path="/liste" component={ListeDemandes}/>
-                      <Route path="/nouvelle_demande" component={NouvelleDemande}/>
+                      <Route path="/requestsList" component={RequestsList}/>
+                      <Route path="/newRequest" component={NewRequest}/>
                   </div>
               </div>
           </HashRouter>
