@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import tezea.si.service.JwtUserDetailsService;
 import tezea.si.service.RefreshTokenService;
 import tezea.si.utils.JwtTokenUtil;
@@ -54,6 +57,9 @@ public class JwtAuthenticationController {
      * @return
      * @throws Exception
      */
+    @Operation(summary = "Authenticate and get an access token")
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Your access token"),
+            @ApiResponse(responseCode = "401", description = "If your credentials are incorrect") })
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest)
             throws Exception {
@@ -83,6 +89,9 @@ public class JwtAuthenticationController {
      * @return
      * @throws Exception
      */
+    @Operation(summary = "Refresh an access token")
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Your access token"),
+            @ApiResponse(responseCode = "401", description = "If refresh token is invalid") })
     @RequestMapping(value = "/token", method = RequestMethod.POST)
     public ResponseEntity<?> refreshAccess(@RequestBody JwtRefreshRequest refreshRequest) throws Exception {
         if (refreshTokenService.isValid(refreshRequest.getRefreshToken())) {
@@ -104,10 +113,13 @@ public class JwtAuthenticationController {
      * @return
      * @throws Exception
      */
+    @Operation(summary = "Invalidate a refresh token (logout)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Refresh token has been invalidated (you are logged out)") })
     @RequestMapping(value = "/token", method = RequestMethod.PUT)
     public ResponseEntity<?> invalidateRefreshToken(@RequestBody JwtRefreshRequest refreshRequest) throws Exception {
         refreshTokenService.invalidate(refreshRequest.getRefreshToken());
-        
+
         return ResponseEntity.noContent().build();
     }
 
