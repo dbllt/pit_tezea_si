@@ -1,20 +1,20 @@
 package tezea.si.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import tezea.si.dao.ClientDAO;
-import tezea.si.model.Client;
+import tezea.si.model.business.Client;
 
 @RestController
 public class TestController {
+    
+    @Autowired
+    ClientDAO clientDAO;
 	
 	@RequestMapping(("/test"))
     public void test() {
-		Client c = new Client("joe");
-		ClientDAO daoc = new ClientDAO();
-		System.out.println(c.getNom());
-		daoc.persist(c);
+	    clientDAO.save(new Client("Yoda"));
     }
 }

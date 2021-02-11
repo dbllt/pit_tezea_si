@@ -1,6 +1,10 @@
 ### Unauthorized
 GET http://localhost:8080/hello
 
+### Test
+GET http://localhost:8080/test
+
+
 ### Authentication
 POST http://localhost:8080/auth/authenticate
 Content-Type: application/json
@@ -29,7 +33,7 @@ Content-Type: application/json
 
 ### Replace the current bearer by the token from previous request
 GET http://localhost:8080/hello
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJncm9ndSIsImV4cCI6MTYxMjk4NzA3NSwiaWF0IjoxNjEyOTY5MDc1fQ.UdOjy6_JzvnjsRDyqrlwdpLeCrirzC80f-7QDfZYgnybXJtttfG-2bnXiGy8nXn_bvAnQyv7FwPslyQg15SHAw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJncm9ndSIsImV4cCI6MTYxMzA1ODMzOSwiaWF0IjoxNjEzMDQwMzM5fQ.yyN5hsjh1x3lOnKwNIE0x8qYc1AMlbEfVjg1bJG5GnOjGeDPD3N31k1J0ilUpTjlP_lDj4eb1x9-w1cwI6d4tQ
 
 ### Unauthorized
 POST http://localhost:8080/test

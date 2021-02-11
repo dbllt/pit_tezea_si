@@ -2,7 +2,6 @@ FROM openjdk:11 AS build
 
 COPY ./pom.xml ./pom.xml
 COPY ./src ./src
-COPY ./volume_share/META-INF ./src/main/resources/META-INF
 COPY ./mvnw ./mvnw
 COPY ./.mvn ./.mvn
 

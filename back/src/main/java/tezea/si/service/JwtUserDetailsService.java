@@ -2,11 +2,17 @@ package tezea.si.service;
 
 import java.util.ArrayList;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import tezea.si.dao.UserTezeaDAO;
+import tezea.si.model.business.UserTezea;
 
 /**
  * The Spring Security Authentication Manager calls this method for getting the
@@ -19,9 +25,14 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
-    
+    Logger logger = LogManager.getLogger(getClass());
+
+    @Autowired
+    private UserTezeaDAO userTezeaDao;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        logger.debug(userTezeaDao.save(new UserTezea()));
         // Just a temporary version with no db and with a single user possible
         // username : grogu
         // password : password (here it is hashed like if in db)
