@@ -1,5 +1,6 @@
 package tezea.si.service;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 
 import org.apache.logging.log4j.LogManager;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import tezea.si.dao.UserTezeaDAO;
@@ -29,10 +31,36 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserTezeaDAO userTezeaDao;
+    
+    @Autowired
+    private PasswordEncoder bcryptEncoder;
+    
+    public void save(String username, String password) throws Exception {
+    	System.out.println("SAVE USER");
+    	if (userTezeaDao.checkUserByName(username).compareTo(BigInteger.valueOf(0)) > 0) {
+            throw new Exception("USER ALREADY EXISTS");
+        }
+        
+        UserTezea newUser = new UserTezea();
+        newUser.setUsername(username);
+        newUser.setPassword(bcryptEncoder.encode(password));
+    	System.out.println("SAVE USER");
+        userTezeaDao.save(newUser);
+    	System.out.println("SAVE USER");
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        logger.debug(userTezeaDao.save(new UserTezea()));
+    	System.out.println("LOAD USER");
+    	if (userTezeaDao.checkUserByName(username).compareTo(BigInteger.valueOf(0)) > 0) {
+            UserTezea modelUser = userTezeaDao.getUserByName(username);
+            //chiffrer le mot de passe?
+            return new User(modelUser.getUsername(), modelUser.getPassword(), new ArrayList<>());
+        } else {
+            System.out.println("WRONG USER");
+        }
+    	
+    	//logger.debug(userTezeaDao.save(new UserTezea()));
         // Just a temporary version with no db and with a single user possible
         // username : grogu
         // password : password (here it is hashed like if in db)

@@ -3,6 +3,7 @@ package tezea.si.controller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -121,6 +122,24 @@ public class JwtAuthenticationController {
         refreshTokenService.invalidate(refreshRequest.getRefreshToken());
 
         return ResponseEntity.noContent().build();
+    }
+    
+    @Operation(summary = "Creating a new user then authenticate")
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ResponseEntity<?> createAccount(@RequestBody JwtAuthenticationRequest authenticationRequest) throws Exception {
+        System.out.println("CALLED");
+        
+        try {
+            userDetailsService.save(
+            		authenticationRequest.getUsername(),
+            		authenticationRequest.getPassword());
+        } catch (Exception e) {
+            // attempt failed
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("IMPOSSBLE TO CREATE NEW ACCOUNT");
+        }
+        
+        // register then connect ?
+        return createAuthenticationToken(authenticationRequest);
     }
 
 }

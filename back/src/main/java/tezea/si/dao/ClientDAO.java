@@ -6,4 +6,5 @@ import tezea.si.model.business.Client;
 
 @Repository
 public interface ClientDAO extends CrudRepository<Client, Long> {
+	
 }
