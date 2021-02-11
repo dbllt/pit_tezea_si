@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Serializable, AccessDeniedHandler {
+public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Serializable {
     private static final long serialVersionUID = 1152669427419990320L;
 
     @Override
@@ -30,9 +30,4 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Se
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
     }
 
-    @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response,
-            AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-    }
 }

@@ -64,7 +64,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 logger.debug("JWT token signature can't be trusted");
             }
         } else {
-            logger.warn("JWT Token does not begin with Bearer String");
+            logger.trace("JWT Token does not begin with Bearer String");
         }
         // Once we get the token validate it.
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
