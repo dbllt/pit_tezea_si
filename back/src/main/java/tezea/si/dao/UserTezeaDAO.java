@@ -15,5 +15,9 @@ public interface UserTezeaDAO extends JpaRepository<UserTezea, Long>{
 	public UserTezea getUserByName(@Param("username") String username);
 	
 	@Query(value="SELECT CASE WHEN COUNT(*) > 0 THEN true ELSE false END FROM user u WHERE u.username = :username",nativeQuery = true)
-	public BigInteger checkUserByName(@Param("username") String username);
+	public BigInteger countUserByName(@Param("username") String username);
+
+	public default boolean checkForExistanceUsername(String username) {
+		return countUserByName(username).compareTo(BigInteger.ZERO)>0;
+	}
 }

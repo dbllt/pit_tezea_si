@@ -36,28 +36,24 @@ public class JwtUserDetailsService implements UserDetailsService {
     private PasswordEncoder bcryptEncoder;
     
     public void save(String username, String password) throws Exception {
-    	System.out.println("SAVE USER");
-    	if (userTezeaDao.checkUserByName(username).compareTo(BigInteger.valueOf(0)) > 0) {
+    	if (userTezeaDao.checkForExistanceUsername(username)) {
             throw new Exception("USER ALREADY EXISTS");
         }
         
         UserTezea newUser = new UserTezea();
         newUser.setUsername(username);
         newUser.setPassword(bcryptEncoder.encode(password));
-    	System.out.println("SAVE USER");
         userTezeaDao.save(newUser);
-    	System.out.println("SAVE USER");
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    	System.out.println("LOAD USER");
-    	if (userTezeaDao.checkUserByName(username).compareTo(BigInteger.valueOf(0)) > 0) {
+    	if (userTezeaDao.checkForExistanceUsername(username)) {
             UserTezea modelUser = userTezeaDao.getUserByName(username);
             //chiffrer le mot de passe?
             return new User(modelUser.getUsername(), modelUser.getPassword(), new ArrayList<>());
         } else {
-            System.out.println("WRONG USER");
+
         }
     	
     	//logger.debug(userTezeaDao.save(new UserTezea()));

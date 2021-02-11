@@ -126,16 +126,14 @@ public class JwtAuthenticationController {
     
     @Operation(summary = "Creating a new user then authenticate")
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<?> createAccount(@RequestBody JwtAuthenticationRequest authenticationRequest) throws Exception {
-        System.out.println("CALLED");
-        
+    public ResponseEntity<?> createAccount(@RequestBody JwtAuthenticationRequest authenticationRequest) throws Exception {        
         try {
             userDetailsService.save(
             		authenticationRequest.getUsername(),
             		authenticationRequest.getPassword());
         } catch (Exception e) {
             // attempt failed
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("IMPOSSBLE TO CREATE NEW ACCOUNT");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("ALREADY_USED_USERNAME");
         }
         
         // register then connect ?
