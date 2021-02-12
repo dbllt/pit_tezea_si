@@ -10,7 +10,10 @@ public class UserTezea {
     private long id;
     private String username;
     private String password;
-
+    
+    
+    public UserTezea() {}
+    
     @Id
     @GeneratedValue
     public long getId() {

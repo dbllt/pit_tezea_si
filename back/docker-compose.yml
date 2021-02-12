@@ -21,5 +21,7 @@ services:
       MYSQL_DATABASE: apidb
       MYSQL_USER: dbuser
       MYSQL_PASSWORD: somepw
+    volumes:
+      - ./datasql:/var/lib/mysql
 
 
