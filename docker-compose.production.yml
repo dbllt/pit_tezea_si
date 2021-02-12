@@ -5,10 +5,16 @@ services:
     build: ./front
     ports:
       - 80:8080
+      - 443:8443
     depends_on:
       - api
     volumes:
       - ./front/nginx:/server-confs
+      - ./certs:/etc/letsencrypt
+    environment:
+      - SERVER_NAME=tezea.fleh.men
+      - AUTO_LETS_ENCRYPT=yes
+      - REDIRECT_HTTP_TO_HTTPS=yes
 
   api:
     build: ./back
