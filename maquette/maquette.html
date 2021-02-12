@@ -13,7 +13,6 @@
       .bg-tezea {
         background-color: #8fbe40;
       }
-
     </style>
   </head>
   <body>
@@ -27,12 +26,56 @@
             height="50"
           />
         </a>
-        <h1 class="text-white">Service recyclerie</h1>
+        <h1 class="text-white">Site</h1>
       </div>
     </nav>
     <section class="container-md">
       <h1>Enregistrer une demande client</h1>
       <form>
+        <fieldset>
+          <div class="row">
+            <div class="col-auto">
+              <input
+                type="radio"
+                class="btn-check"
+                name="options-outlined"
+                id="success-outlined"
+                autocomplete="off"
+                checked
+              />
+              <label class="btn btn-outline-success" for="success-outlined"
+                >Conciegerie</label
+              >
+            </div>
+            <div class="col-auto">
+              <input
+                type="radio"
+                class="btn-check"
+                name="options-outlined"
+                id="success-outlined"
+                autocomplete="off"
+                checked
+              />
+              <label class="btn btn-outline-success" for="success-outlined"
+                >Recyclerie</label
+              >
+            </div>
+            <div class="col-auto">
+              <input
+                type="radio"
+                class="btn-check"
+                name="options-outlined"
+                id="success-outlined"
+                autocomplete="off"
+                checked
+              />
+              <label class="btn btn-outline-success" for="success-outlined"
+                >Estimateur</label
+              >
+            </div>
+          </div>
+        </fieldset>
+
         <fieldset>
           <legend>Informations client</legend>
 
@@ -58,7 +101,10 @@
                 name="client_lname"
                 class="form-control is-invalid"
               />
-              <div id="validationServerUsernameFeedback" class="invalid-feedback">
+              <div
+                id="validationServerUsernameFeedback"
+                class="invalid-feedback"
+              >
                 Le nom du client doit être renseigné
               </div>
             </div>
@@ -151,31 +197,31 @@
               />
             </div>
             <div class="col-auto">
-                <label class="col-form-label">jours</label>
+              <label class="col-form-label">jours</label>
             </div>
             <div class="col-auto">
-                <input
-                  type="number"
-                  id="task_time_hour"
-                  name="task_time_hour"
-                  class="col-1 form-control"
-                  placeholder="4"
-                />
+              <input
+                type="number"
+                id="task_time_hour"
+                name="task_time_hour"
+                class="col-1 form-control"
+                placeholder="4"
+              />
             </div>
             <div class="col-auto">
-                <label class="col-form-label">heures</label>
+              <label class="col-form-label">heures</label>
             </div>
             <div class="col-auto">
-                <input
-                  type="number"
-                  id="task_time_min"
-                  name="task_time_min"
-                  class="form-control"
-                  placeholder="00"
-                />
+              <input
+                type="number"
+                id="task_time_min"
+                name="task_time_min"
+                class="form-control"
+                placeholder="00"
+              />
             </div>
             <div class="col-auto">
-                <label class="col-form-label">minutes</label>
+              <label class="col-form-label">minutes</label>
             </div>
           </div>
         </fieldset>
@@ -184,28 +230,23 @@
           <legend>Régularité</legend>
           <div class="row g-3">
             <div class="col-auto">
-                <input
-                  type="number"
-                  id="task_nb_regularity"
-                  name="task_nb_regularity"
-                  class="form-control"
-                  placeholder="0"
-                />
-
+              <input
+                type="number"
+                id="task_nb_regularity"
+                name="task_nb_regularity"
+                class="form-control"
+                placeholder="0"
+              />
             </div>
-            <div class="col-auto form-label">
-                par
-            </div>
+            <div class="col-auto form-label">par</div>
             <div class="col-auto">
-                <select class="form-select" id="task_unit_regularity">
-                  <option value="day">jour</option>
-                  <option value="week">semaine</option>
-                  <option value="month">mois</option>
-                  <option value="year">année</option>
-                </select>
-                
+              <select class="form-select" id="task_unit_regularity">
+                <option value="day">jour</option>
+                <option value="week">semaine</option>
+                <option value="month">mois</option>
+                <option value="year">année</option>
+              </select>
             </div>
-
           </div>
         </fieldset>
 
@@ -228,14 +269,13 @@
             class="form-control"
           ></textarea>
         </fieldset>
-        <br/>
-        <button
-          type="submit"
-          class="btn btn-outline-success"
-        >Enregistrer la demande</button>
+        <br />
+        <button type="submit" class="btn btn-outline-success">
+          Enregistrer la demande
+        </button>
       </form>
     </section>
-    <br/>
-    <br/>
+    <br />
+    <br />
   </body>
 </html>
