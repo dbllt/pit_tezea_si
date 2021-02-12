@@ -92,6 +92,16 @@ class AuthenticationTests {
 		this.mockMvc.perform(get(url).header("Authorization", validAuthorizationHeader()))
 				.andExpect(status().isOk());
 	}
+	
+	@Test
+	public void shouldNotAllowAccessUsingRfereshToken() throws Exception {
+		// Arrange
+		String url = "/hello";
+
+		// Act, assert
+		this.mockMvc.perform(get(url).header("Authorization", "Bearer " + validRefreshToken()))
+				.andExpect(status().isUnauthorized());
+	}
 
 	@Test
 	public void canRefreshToken() throws Exception {
