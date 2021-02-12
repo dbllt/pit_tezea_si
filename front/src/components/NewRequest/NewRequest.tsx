@@ -8,6 +8,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import {Link} from "react-router-dom";
 import "./NewRequest.css";
 import {RouteComponentProps} from "react-router-dom";
+import FormClient from "../FormClient/FormClient";
 
 
 type StateType = {
@@ -39,84 +40,7 @@ class NewRequest extends Component<IndexProps, IState> {
                 <h1>Service {this.state.service}</h1>
                 <h1>Enregistrer une demande client</h1>
                 <Form className="form">
-                    <Grid container direction="row" justify="flex-start" alignItems="flex-start" spacing={1}>
-                        <h4 className="h4">Informations client</h4>
-                        <Grid container justify={"space-evenly"}>
-                            <Grid item>
-                                <TextField
-                                    label="Nom du client:"
-                                    id="outlined-margin-normal"
-                                    className="textField"
-                                    margin="normal"
-                                    variant="outlined"
-                                />
-                            </Grid>
-                            <Grid item>
-                                <TextField
-                                    label="Prénom du client:"
-                                    id="outlined-margin-normal"
-                                    className="textField"
-                                    margin="normal"
-                                    variant="outlined"
-                                />
-                            </Grid>
-                        </Grid>
-                        <Grid container justify={"space-evenly"}>
-                            <Grid item>
-                                <TextField
-                                    label="Téléphone client:"
-                                    id="outlined-margin-normal"
-                                    className="textField"
-                                    margin="normal"
-                                    variant="outlined"
-                                />
-                            </Grid>
-                            <Grid item>
-                                <TextField
-                                    label="Mail client:"
-                                    id="outlined-margin-normal"
-                                    className="textField"
-                                    margin="normal"
-                                    variant="outlined"
-                                />
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <Grid container direction="row" justify="flex-start" alignItems="flex-start" spacing={1}>
-                        <h4 className="h4">Adresse</h4>
-                        <Grid container justify={"space-evenly"}>
-                            <Grid item>
-                                <TextField
-                                    label="Adressse:"
-                                    id="outlined-margin-normal"
-                                    className="textField"
-                                    margin="normal"
-                                    variant="outlined"
-                                />
-                            </Grid>
-                            <Grid item>
-                                <TextField
-                                    label="Code Postal:"
-                                    id="outlined-margin-normal"
-                                    type="number"
-                                    className="textField"
-                                    margin="normal"
-                                    variant="outlined"
-                                />
-                            </Grid>
-                        </Grid>
-                        <Grid container justify={"space-evenly"}>
-                            <Grid item>
-                                <TextField
-                                    label="Ville"
-                                    id="outlined-margin-normal"
-                                    className="textField"
-                                    margin="normal"
-                                    variant="outlined"
-                                />
-                            </Grid>
-                        </Grid>
-                    </Grid>
+                    <FormClient></FormClient>
                     <Grid container direction="row" justify="flex-start" alignItems="flex-start" spacing={1}>
                         <h4 className="h4">Demande client</h4>
                         <Grid container justify={"space-evenly"}>
