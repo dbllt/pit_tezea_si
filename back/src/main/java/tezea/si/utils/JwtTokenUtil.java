@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -20,9 +23,21 @@ import io.jsonwebtoken.SignatureAlgorithm;
  */
 @Component
 public class JwtTokenUtil implements Serializable {
+    
+    Logger logger = LogManager.getLogger(getClass());
+    
     private static final long serialVersionUID = -7588967588818311029L;
     public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
     public static final long JWT_REFRESH_TOKEN_VALIDITY = 24 * 60 * 60;
+    
+    private enum TokenType {
+        ACCESS_TOKEN,
+        REFRESH_TOKEN
+    }
+    
+    private abstract class Claim {
+        private final static String TOKEN_TYPE = "token_type";
+    }
 
     @Value("${jwt.secret}")
     private String secret;
@@ -81,6 +96,7 @@ public class JwtTokenUtil implements Serializable {
      */
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put(Claim.TOKEN_TYPE, TokenType.ACCESS_TOKEN);
         return doGenerateToken(claims, userDetails.getUsername(), JWT_TOKEN_VALIDITY);
     }
 
@@ -92,6 +108,7 @@ public class JwtTokenUtil implements Serializable {
      */
     public String generateRefreshToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put(Claim.TOKEN_TYPE, TokenType.REFRESH_TOKEN);
         return doGenerateToken(claims, userDetails.getUsername(), JWT_REFRESH_TOKEN_VALIDITY);
     }
 
@@ -124,6 +141,9 @@ public class JwtTokenUtil implements Serializable {
      */
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);
+        final Claims claims = getAllClaimsFromToken(token);
+        if(!claims.containsKey(Claim.TOKEN_TYPE) || !claims.get(Claim.TOKEN_TYPE).equals(TokenType.ACCESS_TOKEN.name())) return false;
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
+    
 }
