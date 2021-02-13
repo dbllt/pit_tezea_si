@@ -15,6 +15,5 @@ public class TestController {
 	
 	@RequestMapping(("/test"))
     public void test() {
-	    clientDAO.save(new Client("Yoda"));
     }
 }
