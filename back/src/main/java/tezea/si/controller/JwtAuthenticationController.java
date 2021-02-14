@@ -130,11 +130,11 @@ public class JwtAuthenticationController {
      * Try to create new account using a unique username and password.
      * Succeed if username has not been used before.
      * 
-     * @param authenticationRequest represents selected username and password
+     * @param authenticationRequest represents specified username and password
      * @return
      * @throws Exception
      */
-    @Operation(summary = "Creating a new user then authenticate")
+    @Operation(summary = "Creating a new user")
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<?> createAccount(@RequestBody JwtAuthenticationRequest authenticationRequest) throws Exception {        
         try {
@@ -147,8 +147,6 @@ public class JwtAuthenticationController {
         }
         
         return ResponseEntity.ok("Successfully created username");
-
-        // register then connect ?
         //return createAuthenticationToken(authenticationRequest);
     }
 
