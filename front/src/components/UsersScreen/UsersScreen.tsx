@@ -13,11 +13,6 @@ import API from "../../network/API";
 
 
 const tableHeadNames = ["Identifiant", "Rôle"];
-const rows = [
-    createRequestData("Grogu", "Concierge"),
-    createRequestData("Serge", "Serge"),
-]
-
 function createRequestData(identifiant: string, role: string) {
     return {
         identifiant, role,

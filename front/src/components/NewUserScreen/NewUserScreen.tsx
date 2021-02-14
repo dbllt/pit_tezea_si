@@ -33,7 +33,7 @@ class NewUserScreen extends Component<IProps, IState> {
     }
 
     getIdentifiant(): string {
-        if (this.identifiant.current.value == null) {
+        if (this.identifiant.current == null) {
             return "";
         } else {
             return this.identifiant.current.value;
@@ -49,7 +49,7 @@ class NewUserScreen extends Component<IProps, IState> {
     };
 
     addUser() {
-        if (this.getIdentifiant() != "" && this.getRole() != "") {
+        if (this.getIdentifiant() !== "" && this.getRole() !== "") {
             API.addUtilisateur(this.getIdentifiant(), this.getRole()).then(() => this.setState({redirect: true}));
         }
     }

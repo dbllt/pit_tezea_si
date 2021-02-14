@@ -3,29 +3,39 @@ import {Link} from "react-router-dom";
 import {Button} from '@material-ui/core'
 import API from "../../network/API";
 
+interface Request {
+    id: string;
+    task: string;
+    address: string;
+}
 
 interface IProps {
 }
 
 interface IState{
-    test:string;
+    requests:Request[];
 }
 
 
 class RequestsList extends Component<IProps, IState> {
     state = {
-        test: ""
+        requests: []
     }
 
 
     componentDidMount() {
-        API.test().then((data=>{this.setState({test:data})}));
+        API.getRequests().then((data=>{this.setState({requests:data})}));
     }
 
     render() {
     return (
         <div>
-            Liste de Demandes {this.state.test}
+            Liste de Demandes
+
+            {this.state.requests.map((request:Request) => (
+            <p>{request.task}</p>
+                ))
+            }
 
             <Link to="/menu">
                 <Button color="primary">
