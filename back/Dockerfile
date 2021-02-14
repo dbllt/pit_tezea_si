@@ -5,7 +5,7 @@ COPY ./src ./src
 COPY ./mvnw ./mvnw
 COPY ./.mvn ./.mvn
 
-RUN ./mvnw install
+RUN ./mvnw install -Dmaven.test.skip=true
 
 
 FROM openjdk:11-jre-slim AS runtime
