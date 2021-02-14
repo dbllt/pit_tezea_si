@@ -32,6 +32,11 @@ class Menu extends React.Component<IProps, IState> {
                         Nouvelle demande
                     </Button>
                 </Link>
+                <Link to="/users" style={{margin: 20}}>
+                    <Button variant="contained">
+                        Liste utilisateurs
+                    </Button>
+                </Link>
 
             </div>
         );

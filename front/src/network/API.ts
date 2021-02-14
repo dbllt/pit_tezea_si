@@ -11,8 +11,23 @@ interface Client {
     mail: string
 }
 
+interface Utilisateur{
+    id:string;
+    identifiant:string;
+    role:string;
+}
+
+
+const grogu:Utilisateur ={
+    id:"0",
+    identifiant:"grogu",
+    role:"concierge"
+}
+
 let requests: Request[] = [];
 let clients: Client[] = [];
+let utilisateurs: Utilisateur[] = [];
+utilisateurs.push(grogu);
 const API = {
 
     test: async function():Promise<string> {
@@ -86,6 +101,45 @@ const API = {
         let index = clients.findIndex(x => x.id === id);
         if (index > -1) {
             clients.splice(index, 1);
+        }
+    },
+
+
+    getUtilisateurs: async function():Promise<Utilisateur[]>  {
+        return utilisateurs;
+    },
+
+    addUtilisateur: async function(identifiant:string,role:string):Promise<any>  {
+        const utilisateur: Utilisateur = {
+            id: utilisateurs.length.toString(),
+            identifiant: identifiant,
+            role:role
+        };
+
+        utilisateurs.push(utilisateur);
+    },
+
+    getUtilisateur: async function(id: string):Promise<any>  {
+        utilisateurs.forEach(function (utilisateur) {
+            if (utilisateur.id === id) {
+                return utilisateur;
+            }
+        });
+        return false;
+    },
+
+    editUtilisateur: async function(id: string, utilisateur: Utilisateur):Promise<any> {
+        let index = utilisateurs.findIndex(x => x.id === id);
+        if (index > -1) {
+            utilisateurs.splice(index, 1);
+            utilisateurs.push(utilisateur);
+        }
+    },
+
+    removeUtilisateur: async function(id: string):Promise<any> {
+        let index = utilisateurs.findIndex(x => x.id === id);
+        if (index > -1) {
+            utilisateurs.splice(index, 1);
         }
     },
 

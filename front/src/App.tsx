@@ -7,7 +7,8 @@ import NewRequest from "./components/NewRequest/NewRequest";
 import {AppBar, Toolbar} from "@material-ui/core";
 import ServiceList from "./components/ServiceList/ServiceList";
 import LoginScreen from "./components/LoginScreen/LoginScreen";
-import RegisterScreen from "./components/RegisterScreen/RegisterScreen";
+import NewUserScreen from "./components/NewUserScreen/NewUserScreen";
+import UsersScreen from "./components/UsersScreen/UsersScreen";
 
 
 class App extends Component {
@@ -35,7 +36,8 @@ class App extends Component {
                             <Route path="/newRequest" component={NewRequest}/>
                             <Route path="/serviceList" component={ServiceList}/>
                             <Route exact path="/" component={LoginScreen}/>
-                            <Route path="/register" component={RegisterScreen}/>
+                            <Route path="/addUser" component={NewUserScreen}/>
+                            <Route path="/users" component={UsersScreen}/>
                         </div>
                     </div>
                 </HashRouter>
