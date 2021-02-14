@@ -146,7 +146,7 @@ public class JwtAuthenticationController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("ALREADY_USED_USERNAME");
         }
         
-        return ResponseEntity.ok("Successfully created username");
+        return ResponseEntity.status(HttpStatus.CREATED).body("User successfully created");
         //return createAuthenticationToken(authenticationRequest);
     }
 
