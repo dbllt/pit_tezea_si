@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -20,13 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import tezea.si.model.JwtAuthenticationRequest;
+import tezea.si.model.JwtAuthenticationResponse;
+import tezea.si.model.JwtRefreshRequest;
+import tezea.si.model.JwtRefreshResponse;
 import tezea.si.service.JwtUserDetailsService;
 import tezea.si.service.RefreshTokenService;
 import tezea.si.utils.JwtTokenUtil;
-import tezea.si.model.JwtAuthenticationRequest;
-import tezea.si.model.JwtRefreshRequest;
-import tezea.si.model.JwtRefreshResponse;
-import tezea.si.model.JwtAuthenticationResponse;
 
 /**
  * Defines the authentication entry points
@@ -134,6 +133,7 @@ public class JwtAuthenticationController {
         } catch (Exception e) {
             // attempt failed
             return ResponseEntity.status(HttpStatus.CONFLICT).body("ALREADY_USED_USERNAME");
+            //throw new RuntimeException("ALREADY_USED_USERNAME");
         }
         
         // register then connect ?

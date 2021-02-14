@@ -37,7 +37,7 @@ public class JwtUserDetailsService implements UserDetailsService {
     
     public void save(String username, String password) throws Exception {
     	if (userTezeaDao.checkForExistanceUsername(username)) {
-            throw new Exception("USER ALREADY EXISTS");
+            throw new RuntimeException("USER_ALREADY_EXISTS");
         }
         
         UserTezea newUser = new UserTezea();
@@ -53,7 +53,7 @@ public class JwtUserDetailsService implements UserDetailsService {
             //chiffrer le mot de passe?
             return new User(modelUser.getUsername(), modelUser.getPassword(), new ArrayList<>());
         } else {
-
+            throw new UsernameNotFoundException("User not found with username: " + username);
         }
     	
     	//logger.debug(userTezeaDao.save(new UserTezea()));
@@ -61,11 +61,11 @@ public class JwtUserDetailsService implements UserDetailsService {
         // username : grogu
         // password : password (here it is hashed like if in db)
         // TODO call a real DAO class to access db
-        if ("grogu".equals(username)) {
+        /*if ("grogu".equals(username)) {
             return new User("grogu", "$2a$10$slYQmyNdGzTn7ZLBXBChFOC9f6kFjAqPhccnP6DxlWXx2lPk1C3G6", new ArrayList<>());
         } else {
             throw new UsernameNotFoundException("User not found with username: " + username);
-        }
+        }*/
     }
 
 }
