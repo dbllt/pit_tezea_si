@@ -123,6 +123,17 @@ public class JwtAuthenticationController {
         return ResponseEntity.noContent().build();
     }
     
+    /**
+     * Entry point to register, there is an exception in configuration to allow
+     * unauthenticated requests to this entry point.
+     * 
+     * Try to create new account using a unique username and password.
+     * Succeed if username has not been used before.
+     * 
+     * @param authenticationRequest represents selected username and password
+     * @return
+     * @throws Exception
+     */
     @Operation(summary = "Creating a new user then authenticate")
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<?> createAccount(@RequestBody JwtAuthenticationRequest authenticationRequest) throws Exception {        
@@ -133,11 +144,12 @@ public class JwtAuthenticationController {
         } catch (Exception e) {
             // attempt failed
             return ResponseEntity.status(HttpStatus.CONFLICT).body("ALREADY_USED_USERNAME");
-            //throw new RuntimeException("ALREADY_USED_USERNAME");
         }
         
+        return ResponseEntity.ok("Successfully created username");
+
         // register then connect ?
-        return createAuthenticationToken(authenticationRequest);
+        //return createAuthenticationToken(authenticationRequest);
     }
 
 }
