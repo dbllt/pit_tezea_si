@@ -1,6 +1,6 @@
 # pit_tezea_si
 
-Start the whole application inside Docker (access at port 80):
+Start the whole application inside Docker (access at port 80, http):
 
 ```
 docker-compose up --build
@@ -14,4 +14,10 @@ docker-compose up --build -d
 cd ../front
 npm install
 npm start
+```
+
+Start the whole application inside Docker (access at port 80/443, https):
+
+```
+docker-compose up -f docker-compose.production.yml --build
 ```
