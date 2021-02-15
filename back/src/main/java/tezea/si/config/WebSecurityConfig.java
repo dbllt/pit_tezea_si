@@ -37,8 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/swagger-ui/*",
             // -- TEST
             "/test",
-            "/clients",
-            "/createclient"
+            "/clients"
     };
 
 
