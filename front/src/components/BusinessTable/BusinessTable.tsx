@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { createStyles, withStyles, WithStyles } from "@material-ui/core/styles";
+import React from 'react';
+import {createStyles, lighten, Theme, withStyles, WithStyles} from "@material-ui/core/styles";
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -7,64 +7,133 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import {Box, Collapse, IconButton, Typography} from "@material-ui/core";
+import makeStyles from "@material-ui/core/styles/makeStyles";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 
-
-
-
-function createData(name: string, calories: string, fat: string, carbs: number, protein: number) {
-    return { name, calories, fat, carbs, protein };
-}
-
-
-function createRow(nb: string, date: string, heure: string, concierge: string, prestation_don: string, statut_client: string, entreprise: string, civilité: string, nom_contact: string, prenom_contact: string, telephone: string, e_mail: string, adresse: string, code_postal: string, ville : string, urgence: string, statut_demande : string, affectation_de_la_demande: string, rv_estimation_pris_commercial: string, rv_confirme_par_client_livraison_conciergerie_ou_commercial: string, positionné_planning: string) {
-    return {};
-}
-
-const rows = [
-    // { "1", "2018-01-25", "10:30", "Jouadé", "Prestation", "Particulier", "", "Mr", "", "", "", "", "", "35550", "PIPRIAC", "Haute", "Cloturée", "Gwen", "???""," ??? "", "???", "Conciergerie", "Taille Haie de sapins à Bruc/aff (HT)", "JOUADE ANTOINE TOUJOURS PAS FAIT DONC AUTRES PRESTATAIRES DONNE: JOUIN ET ARTHUR ELAGAGE", "", "Taille haie Tezea ne fait pas"}
-];
-
-const tableHeadName = ["N°", "Date", "Heure", "Concierge", "Prestation/Don", "Statut Client", "ENTREPRISE", "Civilité", "NOM contact", "PRENOM Contact", "Telephone", "E-mail", "Adresse", "Code postal", "Ville", "Urgence (0-5)", "Statut Demande", "Affectation de la demande", "RV Estimation pris(Commercial )", "RV Confirmé  par Client Livraison(Conciergerie ou Commercial)", "Positionné Planning(Conciergerie ou Commercial)", "Cloturé par", "Détail de la demande", "Nom prestataire", "Niveau satisfaction", "Notes supplémentaires"];
-
-const styles = () => createStyles({
-    table: {
-        maxWidth: 650,
-    },
+const useRowStyles = makeStyles({
+    root: {
+        "& > *": {
+            borderBottom: '1px solid black',
+        }
+    }
 });
 
-interface Props extends WithStyles<typeof styles> { }
+const tableHeadNames = ["N° Demande", "Date", "Heure", "Concierge", 'Site', "Prestation/Don", 'Statut Demande', "Affectation demande", 'Urgence'];
+const tableClientHeadNames = ["Statut Client", "Entreprise", "Civilité", "Nom", "Prénom", "Téléphone", "Email", "Adresse", "Code postal", "Ville"];
+const rows = [
+    createRequestData(1, "2018-01-25", "10:30", "Jouadé", "Menuiserie","Don", "En cours", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", 353535550, "email@email", "Rue rue", 55555, "Rennes"),
+    createRequestData(1, "2018-01-25", "10:30", "Jouadé", "Menuiserie","Don", "En cours", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", 353535550, "email@email", "Rue rue", 55555, "Rennes"),
+    createRequestData(1, "2018-01-25", "10:30", "Jouadé", "Menuiserie","Don", "En cours", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", 353535550, "email@email", "Rue rue", 55555, "Rennes"),
+    createRequestData(1, "2018-01-25", "10:30", "Jouadé", "Menuiserie","Don", "En cours", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", 353535550, "email@email", "Rue rue", 55555, "Rennes"),
+    createRequestData(1, "2018-01-25", "10:30", "Jouadé", "Menuiserie","Don", "En cours", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", 353535550, "email@email", "Rue rue", 55555, "Rennes"),
+    createRequestData(1, "2018-01-25", "10:30", "Jouadé", "Menuiserie","Don", "En cours", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", 353535550, "email@email", "Rue rue", 55555, "Rennes"),
+    createRequestData(1, "2018-01-25", "10:30", "Jouadé", "Menuiserie","Don", "En cours", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", 353535550, "email@email", "Rue rue", 55555, "Rennes"),
+    createRequestData(1, "2018-01-25", "10:30", "Jouadé", "Menuiserie","Don", "En cours", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", 353535550, "email@email", "Rue rue", 55555, "Rennes"),
+    createRequestData(1, "2018-01-25", "10:30", "Jouadé", "Menuiserie","Don", "En cours", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", 353535550, "email@email", "Rue rue", 55555, "Rennes")
+]
 
-class BusinessTable extends Component<Props> {
+function createRequestData(requestNumber: number, date: string, hour: string, concierge: string, site: string, serviceType: string, requestStatus: string, requestAssignment: string, emergency: string,
+                           clientStatus: string, company: string, gender: string, lName: string, fName: string, phone: number, email: string, address: string, cp: number, city: string) {
+    return {
+        requestNumber, date, hour, concierge, site, serviceType, requestStatus, requestAssignment, emergency,
+        clientStatus, company, gender, lName, fName, phone, email, address, cp, city
+    };
+}
 
+function Row(props: { row: ReturnType<typeof createRequestData> }) {
+    const { row } = props;
+    const [open, setOpen] = React.useState(false);
+    const classes = useRowStyles();
 
+    return (
+        <React.Fragment>
+            <TableRow hover>
+                <TableCell>
+                    <IconButton
+                        aria-label="expand row"
+                        size="small"
+                        onClick={() => setOpen(!open)}
+                    >
+                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                    </IconButton>
+                </TableCell>
+                <TableCell align="left">{row.requestNumber}</TableCell>
+                <TableCell align="left">{row.date}</TableCell>
+                <TableCell align="left">{row.hour}</TableCell>
+                <TableCell align="left">{row.concierge}</TableCell>
+                <TableCell align="left">{row.site}</TableCell>
+                <TableCell align="left">{row.serviceType}</TableCell>
+                <TableCell align="left">{row.requestStatus}</TableCell>
+                <TableCell align="left">{row.requestAssignment}</TableCell>
+                <TableCell align="left">{row.emergency}</TableCell>
+            </TableRow>
+            <TableRow className={classes.root}>
+                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
+                    <Collapse in={open} timeout="auto" unmountOnExit>
+                        <Box margin={1}>
+                            <Typography variant="h6" gutterBottom component="div">
+                                Contact client <button>ICI Bouton: Détails demande (ouvre popup ou page detaillée de la demande ??)</button>
+                            </Typography>
+                            <Table size="small" aria-label="purchases">
+                                <TableHead>
+                                    <TableRow style={{backgroundColor:'lightgray'}}>
+                                        {
+                                            tableClientHeadNames.map((value, index) => (
+                                                <TableCell key = { index } align="left">{ value }</TableCell>
+                                            ))
+                                        }
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    <TableRow hover>
+                                        <TableCell >{row.clientStatus}</TableCell>
+                                        <TableCell align="left">{row.company}</TableCell>
+                                        <TableCell align="left">{row.gender}</TableCell>
+                                        <TableCell align="left">{row.lName}</TableCell>
+                                        <TableCell align="left">{row.fName}</TableCell>
+                                        <TableCell align="left">{row.phone}</TableCell>
+                                        <TableCell align="left">{row.email}</TableCell>
+                                        <TableCell align="left">{row.address}</TableCell>
+                                        <TableCell align="left">{row.cp}</TableCell>
+                                        <TableCell align="left">{row.city}</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        </Box>
+                    </Collapse>
+                </TableCell>
+            </TableRow>
+        </React.Fragment>
+    );
+}
+
+class BusinessTable extends React.Component {
     render() {
-        const { classes } = this.props;
-
         return (
             <TableContainer component={Paper}>
-                <Table className={classes.table} aria-label="simple table">
+                <Table aria-label="collapsible table">
                     <TableHead>
-                        <TableRow>
-                            {tableHeadName.map((name) => (<TableCell>{name}</TableCell>))}
+                        <TableRow style={{backgroundColor:'gray'}}>
+                            <TableCell />
+                            {
+                                tableHeadNames.map((value, index) => (
+                                    <TableCell key = { index } align="left">{ value }</TableCell>
+                                ))
+                            }
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {/* {rows.map((row) => (
-                            <TableRow key={row.name}>
-                                <TableCell component="th" scope="row">
-                                    {row.name}
-                                </TableCell>
-                                <TableCell align="right">{row.calories}</TableCell>
-                                <TableCell align="right">{row.fat}</TableCell>
-                                <TableCell align="right">{row.carbs}</TableCell>
-                                <TableCell align="right">{row.protein}</TableCell>
-                            </TableRow>
-                        ))} */}
+                        {rows.map((row) => (
+                            <Row key={row.requestNumber} row={row} />
+                        ))}
                     </TableBody>
                 </Table>
             </TableContainer>
         );
     }
+
 }
 
-export default withStyles(styles, { withTheme: true })(BusinessTable);
+export default BusinessTable;

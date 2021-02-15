@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Link} from "react-router-dom";
 import {Button} from '@material-ui/core'
 import API from "../../network/API";
+import BusinessTable from "../BusinessTable/BusinessTable";
 
 interface Request {
     id: string;
@@ -30,18 +31,20 @@ class RequestsList extends Component<IProps, IState> {
     render() {
     return (
         <div>
-            Liste de Demandes
+            <div>Liste de Demandes</div>
 
-            {this.state.requests.map((request:Request) => (
-            <p>{request.task}</p>
-                ))
-            }
+            {/*{this.state.requests.map((request:Request) => (*/}
+            {/*<p>{request.task}</p>*/}
+            {/*    ))*/}
+            {/*}*/}
 
             <Link to="/menu">
                 <Button color="primary">
-                    Retour
+                    Retour au menu
                 </Button>
             </Link>
+
+            <BusinessTable/>
         </div>);
 }}
 export default RequestsList
