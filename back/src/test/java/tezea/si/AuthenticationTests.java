@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -21,6 +22,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+// ^ reinitialize database after each test
 class AuthenticationTests {
 
 	@Autowired
@@ -39,9 +42,25 @@ class AuthenticationTests {
 	}
 
 	@Test
-	public void authenticationReturnsTokens() throws Exception {
+	public void registerReturnsOK() throws Exception {
 		// Arrange
-		String authForm = "{\"username\":\"grogu\", \"password\":\"password\"}";
+		String registerForm = "{\"username\":\"newuser\", \"password\":\"thepassword\"}";
+		String url = "/auth/register";
+
+		// Act
+		this.mockMvc.perform(
+				post(url).contentType(MediaType.APPLICATION_JSON).content(registerForm))
+				.andExpect(status().isCreated());
+	}
+
+	@Test
+	public void authenticationAfterRegisterReturnsTokens() throws Exception {
+		// Arrange
+		String user = "grogu";
+		String password = "password";
+		register(user, password);
+		String authForm = "{\"username\":\"" + user + "\", \"password\":\"" + password
+				+ "\"}";
 		String url = "/auth/authenticate";
 
 		// Act
@@ -62,6 +81,9 @@ class AuthenticationTests {
 	@Test
 	public void authenticationFailsWrongPassword() throws Exception {
 		// Arrange
+		String user = "grogu";
+		String password = "password";
+		register(user, password);
 		String authForm = "{\"username\":\"grogu\", \"password\":\"wrongpassword\"}";
 		String url = "/auth/authenticate";
 
@@ -74,6 +96,9 @@ class AuthenticationTests {
 	@Test
 	public void authenticationFailsWrongUser() throws Exception {
 		// Arrange
+		String user = "grogu";
+		String password = "password";
+		register(user, password);
 		String authForm = "{\"username\":\"notgrogu\", \"password\":\"password\"}";
 		String url = "/auth/authenticate";
 
@@ -92,14 +117,16 @@ class AuthenticationTests {
 		this.mockMvc.perform(get(url).header("Authorization", validAuthorizationHeader()))
 				.andExpect(status().isOk());
 	}
-	
+
 	@Test
 	public void shouldNotAllowAccessUsingRfereshToken() throws Exception {
 		// Arrange
 		String url = "/hello";
 
 		// Act, assert
-		this.mockMvc.perform(get(url).header("Authorization", "Bearer " + validRefreshToken()))
+		this.mockMvc
+				.perform(
+						get(url).header("Authorization", "Bearer " + validRefreshToken()))
 				.andExpect(status().isUnauthorized());
 	}
 
@@ -173,7 +200,7 @@ class AuthenticationTests {
 				.perform(post(url).contentType(MediaType.APPLICATION_JSON).content(form))
 				.andExpect(status().isUnauthorized());
 	}
-	
+
 	@Test
 	public void cannotInvalidateInvalidRefreshToken() throws Exception {
 		// Arrange
@@ -193,7 +220,11 @@ class AuthenticationTests {
 	}
 
 	private Map<String, String> authenticate() throws Exception {
-		String authForm = "{\"username\":\"grogu\", \"password\":\"password\"}";
+		String user = "someone";
+		String password = "apassword";
+		register(user, password);
+		String authForm = "{\"username\":\"" + user + "\", \"password\":\"" + password
+				+ "\"}";
 		String url = "/auth/authenticate";
 
 		Map<String, String> tokenMap = getJsonAsMap(this.mockMvc
@@ -211,5 +242,15 @@ class AuthenticationTests {
 
 	private String validRefreshToken() throws Exception {
 		return authenticate().get("refreshToken");
+	}
+
+	private void register(String user, String password) throws Exception {
+		String registerForm = "{\"username\":\"" + user + "\", \"password\":\"" + password
+				+ "\"}";
+		String url = "/auth/register";
+
+		this.mockMvc.perform(
+				post(url).contentType(MediaType.APPLICATION_JSON).content(registerForm))
+				.andExpect(status().isCreated());
 	}
 }
