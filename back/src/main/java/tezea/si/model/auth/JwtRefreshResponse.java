@@ -1,4 +1,4 @@
-package tezea.si.model;
+package tezea.si.model.auth;
 
 import java.io.Serializable;
 /**
