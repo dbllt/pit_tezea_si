@@ -14,6 +14,16 @@ Content-Type: application/json
     "password":"password"
 }
 
+
+### Authentication
+POST http://localhost:8080/auth/register
+Content-Type: application/json
+
+{
+    "username":"grogu",
+    "password":"password"
+}
+
 ### Refresh token
 POST http://localhost:8080/auth/token
 Content-Type: application/json
@@ -33,7 +43,7 @@ Content-Type: application/json
 
 ### Replace the current bearer by the token from previous request
 GET http://localhost:8080/hello
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJncm9ndSIsImV4cCI6MTYxMzA1ODMzOSwiaWF0IjoxNjEzMDQwMzM5fQ.yyN5hsjh1x3lOnKwNIE0x8qYc1AMlbEfVjg1bJG5GnOjGeDPD3N31k1J0ilUpTjlP_lDj4eb1x9-w1cwI6d4tQ
+Authorization: Bearer eyJhbGciOiJUzUxMiJ9.eyJzdWIiOiJncm9ndSIsInRva2VuX3R5cGUiOiJBQ0NFU1NfVE9LRU4iLCJleHAiOjE2MTMzNjA0MjEsImlhdCI6MTYxMzM0MjQyMX0._TGmWNuwAx_qjC4n8l_zlFaEhvJr1l4S4Fiof2N_opC35jO5jfBdfjk-e1LSFk89cbyO0caZjITuK72sm1yPcg
 
 ### Unauthorized
 POST http://localhost:8080/test

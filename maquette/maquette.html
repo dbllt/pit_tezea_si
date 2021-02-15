@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="fr-fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Maquette</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+      crossorigin="anonymous"
+    />
+    <style>
+      .bg-tezea {
+        background-color: #8fbe40;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar bg-tezea">
+      <div class="container-fluid justify-content-start">
+        <a class="navbar-brand" href="#">
+          <img
+            src="https://tezea.fr/wp-content/uploads/2018/02/Logo-Tezea-Horizontal-sur-aplat-blanc-150-170x95-3997.png"
+            alt=""
+            width="auto"
+            height="50"
+          />
+        </a>
+        <h1 class="text-white">Site</h1>
+      </div>
+    </nav>
+    <section class="container-md">
+      <h1>Enregistrer une demande client</h1>
+      <form>
+        <fieldset>
+          <div class="row">
+            <div class="col-auto">
+              <input
+                type="radio"
+                class="btn-check"
+                name="options-outlined"
+                id="success-outlined"
+                autocomplete="off"
+                checked
+              />
+              <label class="btn btn-outline-success" for="success-outlined"
+                >Conciegerie</label
+              >
+            </div>
+            <div class="col-auto">
+              <input
+                type="radio"
+                class="btn-check"
+                name="options-outlined"
+                id="success-outlined"
+                autocomplete="off"
+                checked
+              />
+              <label class="btn btn-outline-success" for="success-outlined"
+                >Recyclerie</label
+              >
+            </div>
+            <div class="col-auto">
+              <input
+                type="radio"
+                class="btn-check"
+                name="options-outlined"
+                id="success-outlined"
+                autocomplete="off"
+                checked
+              />
+              <label class="btn btn-outline-success" for="success-outlined"
+                >Estimateur</label
+              >
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Informations client</legend>
+
+          <div class="row">
+            <div class="col-md-6">
+              <label for="client_fname" class="form-label"
+                >Nom du client:</label
+              >
+              <input
+                type="text"
+                id="client_fname"
+                name="client_fname"
+                class="form-control is-valid"
+              />
+            </div>
+            <div class="col-md-6">
+              <label for="client_lname" class="form-label"
+                >Prénom du client:</label
+              >
+              <input
+                type="text"
+                id="client_lname"
+                name="client_lname"
+                class="form-control is-invalid"
+              />
+              <div
+                id="validationServerUsernameFeedback"
+                class="invalid-feedback"
+              >
+                Le nom du client doit être renseigné
+              </div>
+            </div>
+          </div>
+          <br />
+          <div class="row">
+            <div class="col-md-6">
+              <label for="client_tel" class="form-label"
+                >Téléphone client:</label
+              >
+              <input
+                type="tel"
+                id="client_tel"
+                name="client_tel"
+                class="form-control"
+              />
+            </div>
+            <div class="col-md-6">
+              <label for="client_mail" class="form-label">Mail client:</label>
+              <input
+                type="email"
+                id="client_mail"
+                name="client_mail"
+                class="form-control"
+              />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Adresse</legend>
+          <div class="row">
+            <div class="col-md-6">
+              <label for="client_addr" class="form-label">Adresse:</label>
+              <input
+                type="text"
+                id="client_addr"
+                name="client_addr"
+                class="form-control"
+              />
+            </div>
+            <div class="col-md-2">
+              <label for="client_pcode" class="form-label">Code postal:</label>
+              <input
+                type="number"
+                id="client_pcode"
+                name="client_pcode"
+                class="form-control"
+                placeholder="35000"
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="client_city" class="form-label">Ville:</label>
+              <input
+                type="text"
+                id="client_city"
+                name="client_city"
+                class="form-control"
+                placeholder="RENNES"
+              />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Demande client</legend>
+          <textarea id="task_ask" class="form-control" rows="3"></textarea>
+        </fieldset>
+
+        <fieldset>
+          <legend>Matériel attendu</legend>
+          <textarea
+            id="task_material"
+            class="form-control"
+            rows="3"
+            class="form-control"
+          ></textarea>
+        </fieldset>
+
+        <fieldset>
+          <legend>Estimation du temps</legend>
+          <div class="row g-6">
+            <div class="col-auto">
+              <input
+                type="number"
+                id="task_time_day"
+                name="task_time_day"
+                class="form-control"
+                placeholder="0"
+              />
+            </div>
+            <div class="col-auto">
+              <label class="col-form-label">jours</label>
+            </div>
+            <div class="col-auto">
+              <input
+                type="number"
+                id="task_time_hour"
+                name="task_time_hour"
+                class="col-1 form-control"
+                placeholder="4"
+              />
+            </div>
+            <div class="col-auto">
+              <label class="col-form-label">heures</label>
+            </div>
+            <div class="col-auto">
+              <input
+                type="number"
+                id="task_time_min"
+                name="task_time_min"
+                class="form-control"
+                placeholder="00"
+              />
+            </div>
+            <div class="col-auto">
+              <label class="col-form-label">minutes</label>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Régularité</legend>
+          <div class="row g-3">
+            <div class="col-auto">
+              <input
+                type="number"
+                id="task_nb_regularity"
+                name="task_nb_regularity"
+                class="form-control"
+                placeholder="0"
+              />
+            </div>
+            <div class="col-auto form-label">par</div>
+            <div class="col-auto">
+              <select class="form-select" id="task_unit_regularity">
+                <option value="day">jour</option>
+                <option value="week">semaine</option>
+                <option value="month">mois</option>
+                <option value="year">année</option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Particularité</legend>
+          <textarea
+            id="task_particularity"
+            class="form-control"
+            rows="3"
+            class="form-control"
+          ></textarea>
+        </fieldset>
+
+        <fieldset>
+          <legend>Informations internes</legend>
+          <textarea
+            id="task_info"
+            class="form-control"
+            rows="3"
+            class="form-control"
+          ></textarea>
+        </fieldset>
+        <br />
+        <button type="submit" class="btn btn-outline-success">
+          Enregistrer la demande
+        </button>
+      </form>
+    </section>
+    <br />
+    <br />
+  </body>
+</html>
