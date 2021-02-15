@@ -3,8 +3,8 @@ package tezea.si.controller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import tezea.si.model.JwtAuthenticationRequest;
+import tezea.si.model.JwtAuthenticationResponse;
+import tezea.si.model.JwtRefreshRequest;
+import tezea.si.model.JwtRefreshResponse;
 import tezea.si.service.JwtUserDetailsService;
 import tezea.si.service.RefreshTokenService;
 import tezea.si.utils.JwtTokenUtil;
-import tezea.si.model.JwtAuthenticationRequest;
-import tezea.si.model.JwtRefreshRequest;
-import tezea.si.model.JwtRefreshResponse;
-import tezea.si.model.JwtAuthenticationResponse;
 
 /**
  * Defines the authentication entry points
@@ -121,6 +121,33 @@ public class JwtAuthenticationController {
         refreshTokenService.invalidate(refreshRequest.getRefreshToken());
 
         return ResponseEntity.noContent().build();
+    }
+    
+    /**
+     * Entry point to register, there is an exception in configuration to allow
+     * unauthenticated requests to this entry point.
+     * 
+     * Try to create new account using a unique username and password.
+     * Succeed if username has not been used before.
+     * 
+     * @param authenticationRequest represents specified username and password
+     * @return
+     * @throws Exception
+     */
+    @Operation(summary = "Creating a new user")
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ResponseEntity<?> createAccount(@RequestBody JwtAuthenticationRequest authenticationRequest) throws Exception {        
+        try {
+            userDetailsService.save(
+            		authenticationRequest.getUsername(),
+            		authenticationRequest.getPassword());
+        } catch (Exception e) {
+            // attempt failed
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("ALREADY_USED_USERNAME");
+        }
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body("User successfully created");
+        //return createAuthenticationToken(authenticationRequest);
     }
 
 }

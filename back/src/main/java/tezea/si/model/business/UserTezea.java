@@ -1,26 +1,34 @@
 package tezea.si.model.business;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="user")
 public class UserTezea {
 
     private long id;
     private String username;
     private String password;
-
+    
+    
+    public UserTezea() {}
+    
     @Id
     @GeneratedValue
+    @Column(name="id")
     public long getId() {
         return id;
     }
 
+    @Column(name="password")
     public String getPassword() {
         return password;
     }
-
+    @Column(name="username")
     public String getUsername() {
         return username;
     }
