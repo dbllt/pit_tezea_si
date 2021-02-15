@@ -31,20 +31,20 @@ class RequestsList extends Component<IProps, IState> {
     render() {
     return (
         <div>
-            <div>Liste de Demandes</div>
+            <h1>Liste de Demandes</h1>
 
             {/*{this.state.requests.map((request:Request) => (*/}
             {/*<p>{request.task}</p>*/}
             {/*    ))*/}
             {/*}*/}
 
+            <BusinessTable/>
             <Link to="/menu">
                 <Button color="primary">
                     Retour au menu
                 </Button>
             </Link>
 
-            <BusinessTable/>
         </div>);
 }}
 export default RequestsList

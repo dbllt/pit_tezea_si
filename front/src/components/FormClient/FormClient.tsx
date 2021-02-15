@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Component } from 'react';
+import React, { Component } from 'react';
 import {Container, TextField} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import MenuItem from '@material-ui/core/MenuItem';
@@ -52,7 +52,7 @@ class FormClient extends Component<Props,State> {
                             </Grid>
                         </Grid>
 
-                        { this.state.statut == 'P'
+                        { this.state.statut === 'P'
                             ?<Grid container className={styles.Gridlabelfield} >
                                 <Grid item className={styles.Label}>
                                     Civilité :
@@ -76,7 +76,7 @@ class FormClient extends Component<Props,State> {
 
                         <Grid container> {/* grill row */}
                             <Grid item xs={6}> {/* 1ère Grille gauche */}
-                                { this.state.statut == 'P'  &&
+                                { this.state.statut === 'P'  &&
                                 <Grid container className={styles.Gridlabelfield}>
                                     <Grid item className={styles.Label}>
                                         Nom :
@@ -115,7 +115,7 @@ class FormClient extends Component<Props,State> {
                             </Grid>
 
                             <Grid item xs={6}> {/* 2éme Grille droite */}
-                                { this.state.statut == 'P' &&
+                                { this.state.statut === 'P' &&
                                 <Grid container className={styles.Gridlabelfield}>
 
                                     <Grid item className={styles.Label}>

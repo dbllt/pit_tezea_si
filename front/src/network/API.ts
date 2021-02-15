@@ -23,16 +23,16 @@ const serge: Utilisateur = {
     role: "serge"
 }
 
-const grogu: Utilisateur = {
+const pierre: Utilisateur = {
     id: "1",
-    identifiant: "grogu",
+    identifiant: "pierre",
     role: "concierge"
 }
 
-const kylo: Client = {
+const paul: Client = {
     id: "0",
-    name: "kylo",
-    mail: "kylo@ren.sw"
+    name: "paul",
+    mail: "paul@mail.fr"
 }
 
 
@@ -46,9 +46,11 @@ let requests: Request[] = [];
 let clients: Client[] = [];
 let utilisateurs: Utilisateur[] = [];
 utilisateurs.push(serge);
-utilisateurs.push(grogu);
-clients.push(kylo);
+utilisateurs.push(pierre);
+clients.push(paul);
 requests.push(request);
+
+let role="";
 
 const API = {
 
@@ -65,10 +67,15 @@ const API = {
     login: async function (id: string, password: string): Promise<any> {
         utilisateurs.forEach(utilisateur => {
             if (utilisateur.identifiant === id) {
+                role=utilisateur.role;
                 return true;
             }
         });
         return false;
+    },
+
+    getRole: function():string{
+        return role;
     },
 
     getRequests: async function (): Promise<Request[]> {
