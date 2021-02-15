@@ -64,14 +64,15 @@ const API = {
     },
 
 
-    login: async function (id: string, password: string): Promise<any> {
+    login: async function (id: string, password: string): Promise<boolean> {
+        var found=false;
         utilisateurs.forEach(utilisateur => {
             if (utilisateur.identifiant === id) {
                 role=utilisateur.role;
-                return true;
+                found=true;
             }
         });
-        return false;
+        return found;
     },
 
     getRole: function():string{
