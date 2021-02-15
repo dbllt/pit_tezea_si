@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,10 +28,9 @@ public class ClientController {
 	@Operation(summary = "get clients based on json filter")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "get clients based on json filter") })
     @RequestMapping(value = "/clients", method = RequestMethod.POST)
-    public Iterable<Client> getClients() {
-		JSONArray json = new JSONArray();
+    public ResponseEntity<Iterable<Client>> getClients() {
 	     Iterable<Client> clientsIt = clientDAO.findAll();
-	     return clientsIt;
+	     return ResponseEntity.ok(clientsIt);
     }
 	
 	
