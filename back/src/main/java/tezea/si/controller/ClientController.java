@@ -18,6 +18,7 @@ import net.minidev.json.JSONArray;
 import tezea.si.dao.ClientDAO;
 import tezea.si.model.business.Client;
 import tezea.si.model.business.Entreprise;
+import tezea.si.model.business.Particulier;
 
 @RestController
 public class ClientController {
@@ -35,9 +36,17 @@ public class ClientController {
 	
 	
 	@Operation(summary = "save client")
-    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "get clients based on json filter") })
-    @RequestMapping(value = "/createclient", method = RequestMethod.POST)
-    public void saveClient(@RequestBody Entreprise c) {
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "create entreprise client based on json") })
+    @RequestMapping(value = "/createentreprise", method = RequestMethod.POST)
+    public void saveEntreprise(@RequestBody Entreprise c) {
+	     clientDAO.save(c);
+	     
+    }
+	
+	@Operation(summary = "save client")
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "create client based on json") })
+    @RequestMapping(value = "/createparticulier", method = RequestMethod.POST)
+    public void saveClient(@RequestBody Particulier c) {
 	     clientDAO.save(c);
 	     
     }

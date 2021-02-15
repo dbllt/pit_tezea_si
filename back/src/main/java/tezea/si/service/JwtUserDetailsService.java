@@ -32,7 +32,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        logger.debug(userTezeaDao.save(new UserTezea()));
+        
         // Just a temporary version with no db and with a single user possible
         // username : grogu
         // password : password (here it is hashed like if in db)

@@ -86,8 +86,5 @@ public abstract class Client implements Serializable{
 	}
 	
 	
-	public abstract JSONObject toJSON();
-	
-	
 	
 }
