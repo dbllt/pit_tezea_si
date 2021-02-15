@@ -1,10 +1,48 @@
-import React, {Component} from 'react';
+import React, {Component, createRef} from 'react';
 import styles from './LoginScreen.module.css';
 import {Button, TextField} from "@material-ui/core";
-import {Link} from "react-router-dom";
+import {Redirect} from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
+import API from "../../network/API";
 
-class LoginScreen extends Component {
+
+interface IProps {
+}
+interface IState {
+    redirect: boolean
+}
+
+class LoginScreen extends Component<IProps, IState> {
+    private identifiant: React.RefObject<any>;
+
+    state = {
+        redirect: false,
+    }
+
+    constructor(props: IProps) {
+        super(props);
+        this.identifiant = createRef();
+
+
+        this.getIdentifiant = this.getIdentifiant.bind(this);
+        this.login = this.login.bind(this);
+    }
+
+    login() {
+        if (this.getIdentifiant() !== "") {
+            API.login(this.getIdentifiant(), "").then(() => this.setState({redirect: true}));
+        }
+    }
+
+
+    getIdentifiant(): string {
+        if (this.identifiant.current == null) {
+            return "";
+        } else {
+            return this.identifiant.current.value;
+        }
+    };
+
 
     render() {
         return (
@@ -14,6 +52,7 @@ class LoginScreen extends Component {
             <Grid item>
                 <TextField
                     label="Identifiant:"
+                    inputRef={this.identifiant}
                     id="outlined-margin-normal"
                     margin="normal"
                     variant="outlined"
@@ -29,26 +68,12 @@ class LoginScreen extends Component {
                 />
             </Grid>
             <Grid>
-                <Link to="/menu">
-                    <Button type="button">
-                        Se connecter
-                    </Button>
-                </Link>
-            </Grid>
-            <Grid>
-                <Link to="/register">
-                    <Button type="button">
-                        S'inscrire
-                    </Button>
-                </Link>
-                <Button type="button" onClick={async ()=>{await fetch("/api/ints")
-            .then(res => res.json()).then((data) => {
-                console.log(data)
-            }).catch(console.log);}}>
-                        Appel api
-                    </Button>
+                <Button type="button" onClick={this.login}>
+                    Se connecter
+                </Button>
             </Grid>
         </Grid>
+                {this.state.redirect ? (<Redirect push to="/menu"/>) : null}
     </div>
         )
     }

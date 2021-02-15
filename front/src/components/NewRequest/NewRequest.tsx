@@ -1,36 +1,61 @@
-import React, {Component} from "react";
+import React, {Component, createRef} from "react";
 import {Button, Container, TextField} from "@material-ui/core";
 import Form from "@material-ui/core/FormControl";
 import Grid from "@material-ui/core/Grid";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import "./NewRequest.css";
 import {RouteComponentProps} from "react-router-dom";
 import FormClient from "../FormClient/FormClient";
+import API from "../../network/API";
 
 
 type StateType = {
     service: string
 }
 
+
 interface IState {
-    service: string
+    service: string,
+    redirect: boolean
 }
 
 type IndexProps = RouteComponentProps<{}, {}, StateType>;
 
 class NewRequest extends Component<IndexProps, IState> {
+    private task: React.RefObject<any>;
+
 
     constructor(props: IndexProps) {
         super(props);
-        this.state = {service:""};
+        this.state = {service: "", redirect: false};
+
+        this.task = createRef();
+        this.getTask = this.getTask.bind(this);
+        this.addRequest = this.addRequest.bind(this);
     }
+
+    getTask(): string {
+        if (this.task.current == null) {
+            return "";
+        } else {
+            return this.task.current.value;
+        }
+    };
+
+    addRequest() {
+        if (this.getTask() !== "" || true) {//TODO remove true
+            API.addRequest(this.getTask(), "").then(() => this.setState({redirect: true}));
+        }
+    }
+
+
     componentDidMount() {
 
         var res = this.props.location.state;
-        if(res)
+        if (res)
             this.setState({service: res.service});
     }
 
@@ -176,7 +201,7 @@ class NewRequest extends Component<IndexProps, IState> {
                 </Form>
 
 
-                <Button className={"truc"} variant="contained" type="submit">
+                <Button className={"truc"} variant="contained" onClick={this.addRequest}>
                     Enregistrer la demande
                 </Button>
 
@@ -185,6 +210,7 @@ class NewRequest extends Component<IndexProps, IState> {
                         Retour
                     </Button>
                 </Link>
+                {this.state.redirect ? (<Redirect push to="/menu"/>) : null}
             </Container>
 
         );

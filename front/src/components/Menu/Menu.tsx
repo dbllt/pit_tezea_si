@@ -3,6 +3,7 @@ import {
     Link
 } from "react-router-dom";
 import {Button} from '@material-ui/core';
+import API from "../../network/API";
 
 interface IProps {
 
@@ -18,8 +19,20 @@ class Menu extends React.Component<IProps, IState> {
 
     }
 
-
     render() {
+        var usersList;
+        if (API.getRole() === "serge") {
+            usersList = <Link to="/users" style={{margin: 20}}>
+                <Button variant="contained">
+                    Liste utilisateurs
+                </Button>
+            </Link>
+            ;
+        } else {
+            usersList = <div/>;
+        }
+
+
         return (
             <div style={{margin: 50}}>
                 <Link to="/requestsList" style={{margin: 20}}>
@@ -32,6 +45,7 @@ class Menu extends React.Component<IProps, IState> {
                         Nouvelle demande
                     </Button>
                 </Link>
+                {usersList}
 
             </div>
         );

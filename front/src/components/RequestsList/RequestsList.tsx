@@ -2,36 +2,49 @@ import React, {Component} from 'react';
 import {Link} from "react-router-dom";
 import {Button} from '@material-ui/core'
 import API from "../../network/API";
+import BusinessTable from "../BusinessTable/BusinessTable";
 
+interface Request {
+    id: string;
+    task: string;
+    address: string;
+}
 
 interface IProps {
 }
 
 interface IState{
-    test:string;
+    requests:Request[];
 }
 
 
 class RequestsList extends Component<IProps, IState> {
     state = {
-        test: ""
+        requests: []
     }
 
 
     componentDidMount() {
-        API.test().then((data=>{this.setState({test:data})}));
+        API.getRequests().then((data=>{this.setState({requests:data})}));
     }
 
     render() {
     return (
         <div>
-            Liste de Demandes {this.state.test}
+            <h1>Liste de Demandes</h1>
 
+            {/*{this.state.requests.map((request:Request) => (*/}
+            {/*<p>{request.task}</p>*/}
+            {/*    ))*/}
+            {/*}*/}
+
+            <BusinessTable/>
             <Link to="/menu">
                 <Button color="primary">
-                    Retour
+                    Retour au menu
                 </Button>
             </Link>
+
         </div>);
 }}
 export default RequestsList
