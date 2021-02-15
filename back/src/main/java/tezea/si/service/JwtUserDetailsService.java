@@ -21,7 +21,7 @@ import tezea.si.model.business.UserTezea;
  * by the user. It overrides the loadUserByUsername for fetching user details
  * from the database using the username.
  * 
- * @author Nils Richard
+ * @author Nils Richard, Maxime Beucher
  *
  */
 @Service
