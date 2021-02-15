@@ -2,13 +2,10 @@ package tezea.si.model.business;
 
 import java.io.Serializable;
 import java.sql.Date;
-import java.util.HashMap;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-
-import net.minidev.json.JSONObject;
 
 @Entity
 public abstract class Client implements Serializable{

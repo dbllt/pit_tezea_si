@@ -1,10 +1,6 @@
 package tezea.si.model.business;
 
-import java.util.HashMap;
-
 import javax.persistence.Entity;
-
-import net.minidev.json.JSONObject;
 
 @Entity
 public class Entreprise extends Client{

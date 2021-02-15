@@ -7,12 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import tezea.si.dao.UserTezeaDAO;
-
 @Entity
 public class Site implements Serializable{
 

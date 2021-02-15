@@ -11,9 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import tezea.si.dao.SiteDAO;
-import tezea.si.dao.UserTezeaDAO;
 import tezea.si.model.business.Site;
-import tezea.si.model.business.UserTezea;
 
 @RestController
 public class SiteController {
