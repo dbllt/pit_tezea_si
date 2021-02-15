@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,22 +27,17 @@ public class ClientController {
 	@Operation(summary = "get clients based on json filter")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "get clients based on json filter") })
     @RequestMapping(value = "/clients", method = RequestMethod.POST)
-    public JSONArray getClients(@RequestParam String jsonfilter) {
+    public Iterable<Client> getClients() {
 		JSONArray json = new JSONArray();
 	     Iterable<Client> clientsIt = clientDAO.findAll();
-	     clientsIt.forEach((Client c ) ->{
-	    	 json.add(c.toJSON());
-	     });
-	     return json;
+	     return clientsIt;
     }
 	
 	
 	@Operation(summary = "save client")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "get clients based on json filter") })
     @RequestMapping(value = "/createclient", method = RequestMethod.POST)
-    public void saveClient(@RequestParam String jsonfilter) {
-	     
-	     Client c = new Entreprise("fezr","hui", "hguifa", "fjheiazo", "qdf", "njk");
+    public void saveClient(@RequestBody Entreprise c) {
 	     clientDAO.save(c);
 	     
     }
