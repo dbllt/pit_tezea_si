@@ -9,10 +9,6 @@ import net.minidev.json.JSONObject;
 @Entity
 public class Entreprise extends Client{
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2675066872546116276L;
 	private String nom;
 	
 	public Entreprise() {}
@@ -21,6 +17,20 @@ public class Entreprise extends Client{
 		this.nom = nom;
 	}
 
+	@Override
+	public JSONObject toJSON() {
+		HashMap<String,String> map = new HashMap<String,String>();
+		map.put("adresse", this.adresse);
+		map.put("codePostal", this.codePostal);
+		map.put("dateAjout", this.dateAjout.toString());
+		map.put("email", this.email);
+		map.put("telephone", this.telephone);
+		map.put("ville", this.ville);
+		map.put("id", String.valueOf(this.id));
+		map.put("nom", String.valueOf(this.nom));
+		
+		return new JSONObject(map);
+	}
 
 	public String getNom() {
 		return nom;
