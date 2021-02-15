@@ -30,7 +30,7 @@ class NewRequest extends Component<IndexProps, IState> {
 
     constructor(props: IndexProps) {
         super(props);
-        this.state = {service: "", redirect: false};
+        this.state = {service: localStorage.getItem('service') || "", redirect: false};
 
         this.task = createRef();
         this.getTask = this.getTask.bind(this);
@@ -55,8 +55,10 @@ class NewRequest extends Component<IndexProps, IState> {
     componentDidMount() {
 
         var res = this.props.location.state;
-        if (res)
+        if (res) {
             this.setState({service: res.service});
+            localStorage.setItem('service', res.service);
+        }
     }
 
     render() {
