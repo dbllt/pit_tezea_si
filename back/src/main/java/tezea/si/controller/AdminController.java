@@ -23,6 +23,12 @@ import tezea.si.service.JwtUserDetailsService;
 import tezea.si.utils.auth.GrantedAutorities;
 import tezea.si.utils.errors.UserAlreadyExistsException;
 
+/**
+ * Defines the admin entry points
+ * 
+ * @author Nils Richard, Maxime Beucher
+ *
+ */
 @RestController
 public class AdminController {
     Logger logger = LogManager.getLogger(getClass());
