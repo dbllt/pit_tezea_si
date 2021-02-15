@@ -10,17 +10,18 @@ POST http://localhost:8080/auth/authenticate
 Content-Type: application/json
 
 {
-    "username":"grogu",
+    "username":"tes2t",
     "password":"password"
 }
 
 
-### Authentication
-POST http://localhost:8080/auth/register
+### Adding an account
+POST http://localhost:8080/register
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJncm9ndSIsInRva2VuX3R5cGUiOiJBQ0NFU1NfVE9LRU4iLCJleHAiOjE2MTM0MTUwNjAsImlhdCI6MTYxMzM5NzA2MH0.ATzDsq5h8aW6z_AGoYbliHLF7zwC9OqSdN8noi37XEpMqS9KF71FogQ7Gsp-zQ_iwM5QL71aZh98Ltafvt30Jw
 Content-Type: application/json
 
 {
-    "username":"grogu",
+    "username":"tes2t",
     "password":"password"
 }
 
@@ -43,7 +44,8 @@ Content-Type: application/json
 
 ### Replace the current bearer by the token from previous request
 GET http://localhost:8080/hello
-Authorization: Bearer eyJhbGciOiJUzUxMiJ9.eyJzdWIiOiJncm9ndSIsInRva2VuX3R5cGUiOiJBQ0NFU1NfVE9LRU4iLCJleHAiOjE2MTMzNjA0MjEsImlhdCI6MTYxMzM0MjQyMX0._TGmWNuwAx_qjC4n8l_zlFaEhvJr1l4S4Fiof2N_opC35jO5jfBdfjk-e1LSFk89cbyO0caZjITuK72sm1yPcg
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJncm9ndSIsInRva2VuX3R5cGUiOiJBQ0NFU1NfVE9LRU4iLCJleHAiOjE2MTMzNjE4MzksImlhdCI6MTYxMzM0MzgzOX0.gt0I0lquxR27JCu5leKWouUkz_fuw7Mz6SG3gc9CaR243iy6PoPApLnnuQ-7lUklTxetIJz1z7U7Q3EAK4shfw
+
 
 ### Unauthorized
 POST http://localhost:8080/test
