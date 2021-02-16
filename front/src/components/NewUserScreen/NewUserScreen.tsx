@@ -14,7 +14,8 @@ interface IState {
 }
 
 class NewUserScreen extends Component<IProps, IState> {
-    private identifiant: React.RefObject<any>;
+    private username: React.RefObject<any>;
+    private password: React.RefObject<any>;
     private role: React.RefObject<any>;
 
     state = {
@@ -23,20 +24,22 @@ class NewUserScreen extends Component<IProps, IState> {
 
     constructor(props: IProps) {
         super(props);
-        this.identifiant = createRef();
+        this.username = createRef();
         this.role = createRef();
+        this.password = createRef();
 
 
-        this.getIdentifiant = this.getIdentifiant.bind(this);
+        this.getUsername = this.getUsername.bind(this);
         this.getRole = this.getRole.bind(this);
+        this.getPassword = this.getPassword.bind(this);
         this.addUser = this.addUser.bind(this);
     }
 
-    getIdentifiant(): string {
-        if (this.identifiant.current == null) {
+    getUsername(): string {
+        if (this.username.current == null) {
             return "";
         } else {
-            return this.identifiant.current.value;
+            return this.username.current.value;
         }
     };
 
@@ -48,9 +51,17 @@ class NewUserScreen extends Component<IProps, IState> {
         }
     };
 
+    getPassword(): string {
+        if (this.password.current.value == null) {
+            return "";
+        } else {
+            return this.password.current.value;
+        }
+    };
+
     addUser() {
-        if (this.getIdentifiant() !== "" && this.getRole() !== "") {
-            API.addUtilisateur(this.getIdentifiant(), this.getRole()).then(() => this.setState({redirect: true}));
+        if (this.getUsername() !== "" && this.getRole() !== ""&& this.getPassword() !== "") {
+            API.addUser(this.getUsername(),this.getPassword(), this.getRole()).then(() => this.setState({redirect: true}));
         }
     }
 
@@ -62,7 +73,7 @@ class NewUserScreen extends Component<IProps, IState> {
                     <h1>Nouvel utilisateur</h1>
                     <Grid item>
                         <TextField
-                            inputRef={this.identifiant}
+                            inputRef={this.username}
                             label="Identifiant:"
                             id="outlined-margin-normal"
                             margin="normal"
@@ -71,6 +82,7 @@ class NewUserScreen extends Component<IProps, IState> {
                     </Grid>
                     <Grid item>
                         <TextField
+                            inputRef={this.password}
                             label="Mot de passe"
                             type="password"
                             id="outlined-margin-normal"

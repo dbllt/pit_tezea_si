@@ -21,7 +21,7 @@ class Menu extends React.Component<IProps, IState> {
 
     render() {
         var usersList;
-        if (API.getRole() === "serge") {
+        if (API.getRole() === "serge"||true) {//TODO remove true
             usersList = <Link to="/users" style={{margin: 20}}>
                 <Button variant="contained">
                     Liste utilisateurs

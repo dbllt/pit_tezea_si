@@ -10,22 +10,22 @@ interface Client {
     mail: string
 }
 
-interface Utilisateur {
+interface User {
     id: string;
-    identifiant: string;
+    username: string;
     role: string;
 }
 
 
-const serge: Utilisateur = {
+const serge: User = {
     id: "0",
-    identifiant: "serge",
+    username: "serge",
     role: "serge"
 }
 
-const pierre: Utilisateur = {
+const pierre: User = {
     id: "1",
-    identifiant: "pierre",
+    username: "pierre",
     role: "concierge"
 }
 
@@ -44,38 +44,45 @@ const request: Request = {
 
 let requests: Request[] = [];
 let clients: Client[] = [];
-let utilisateurs: Utilisateur[] = [];
-utilisateurs.push(serge);
-utilisateurs.push(pierre);
+let users: User[] = [];
+users.push(serge);
+users.push(pierre);
 clients.push(paul);
 requests.push(request);
-
-let role="";
+const role="";
 
 const API = {
 
-    demoCallAPI: async function (): Promise<string> {
-        let res: string = "";
-        await fetch("https://pokeapi.co/api/v2/pokemon/ditto")
-            .then(res => res.json()).then((data) => {
-                res = data["id"]
-            }).catch(console.log);
-        return res;
-    },
 
+    login: async function (username: string, password: string): Promise<boolean> {
+        var found = false;
 
-    login: async function (id: string, password: string): Promise<boolean> {
-        var found=false;
-        utilisateurs.forEach(utilisateur => {
-            if (utilisateur.identifiant === id) {
-                role=utilisateur.role;
-                found=true;
-            }
-        });
+        const requestOptions = {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({username: username, password: password})
+        };
+        await fetch('/auth/authenticate', requestOptions)
+            .then(async response => {
+                const data = await response.json();
+                if (!response.ok) {
+                    const error = (data && data.message) || response.status;
+                    found = false;
+                    return Promise.reject(error);
+                } else {
+                    const token = data.token
+                    localStorage.setItem('token', token)
+                    const refreshToken = data.refreshtoken
+                    localStorage.setItem('refreshToken', refreshToken)
+                    found = true;
+                }
+            }).catch(error => {
+                console.error('There was an error!', error);
+            })
         return found;
     },
 
-    getRole: function():string{
+    getRole: function (): string {
         return role;
     },
 
@@ -125,6 +132,7 @@ const API = {
         };
 
         clients.push(client);
+
     },
 
     getClient: async function (id: string): Promise<any> {
@@ -152,41 +160,59 @@ const API = {
     },
 
 
-    getUtilisateurs: async function (): Promise<Utilisateur[]> {
-        return utilisateurs;
+    getUsers: async function (): Promise<User[]> {
+        return users;
     },
 
-    addUtilisateur: async function (identifiant: string, role: string): Promise<any> {
-        const utilisateur: Utilisateur = {
-            id: utilisateurs.length.toString(),
-            identifiant: identifiant,
-            role: role
+    addUser: async function (username: string, password: string, role: string): Promise<any> {
+
+        let temp = localStorage.getItem('token');
+        if(temp===null){
+            temp="";
+        }
+        let token: string = temp;
+        const requestOptions = {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json',
+                      'Authorization': "Bearer " +token},
+            body: JSON.stringify({username: username, password: password})
         };
 
-        utilisateurs.push(utilisateur);
+        await fetch('/register', requestOptions)
+            .then(async response => {
+                if (!response.ok) {
+                    return Promise.reject(response);
+                } else {
+                    console.log('user created');
+                }
+            }).catch(error => {
+                console.error('There was an error!', error);
+            })
+
+
     },
 
-    getUtilisateur: async function (id: string): Promise<any> {
-        utilisateurs.forEach(function (utilisateur) {
-            if (utilisateur.id === id) {
-                return utilisateur;
+    getUser: async function (id: string): Promise<any> {
+        users.forEach(function (user) {
+            if (user.id === id) {
+                return user;
             }
         });
         return false;
     },
 
-    editUtilisateur: async function (id: string, utilisateur: Utilisateur): Promise<any> {
-        let index = utilisateurs.findIndex(x => x.id === id);
+    editUser: async function (id: string, user: User): Promise<any> {
+        let index = users.findIndex(x => x.id === id);
         if (index > -1) {
-            utilisateurs.splice(index, 1);
-            utilisateurs.push(utilisateur);
+            users.splice(index, 1);
+            users.push(user);
         }
     },
 
-    removeUtilisateur: async function (id: string): Promise<any> {
-        let index = utilisateurs.findIndex(x => x.id === id);
+    removeUser: async function (id: string): Promise<any> {
+        let index = users.findIndex(x => x.id === id);
         if (index > -1) {
-            utilisateurs.splice(index, 1);
+            users.splice(index, 1);
         }
     },
 

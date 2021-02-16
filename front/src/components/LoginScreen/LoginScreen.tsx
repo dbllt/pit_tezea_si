@@ -14,7 +14,7 @@ interface IState {
 }
 
 class LoginScreen extends Component<IProps, IState> {
-    private identifiant: React.RefObject<any>;
+    private username: React.RefObject<any>;
     private password: React.RefObject<any>;
 
     state = {
@@ -23,17 +23,17 @@ class LoginScreen extends Component<IProps, IState> {
 
     constructor(props: IProps) {
         super(props);
-        this.identifiant = createRef();
+        this.username = createRef();
         this.password = createRef();
 
-        this.getIdentifiant = this.getIdentifiant.bind(this);
+        this.getUsername = this.getUsername.bind(this);
         this.getPassword = this.getPassword.bind(this);
         this.login = this.login.bind(this);
     }
 
     login() {
-        if (this.getIdentifiant() !== "" && this.getPassword() !== "") {
-            API.login(this.getIdentifiant(), this.getPassword()).then((b) => {
+        if (this.getUsername() !== "" && this.getPassword() !== "") {
+            API.login(this.getUsername(), this.getPassword()).then((b) => {
                     if (b) {
                         this.setState({redirect: true})
                     }
@@ -51,11 +51,11 @@ class LoginScreen extends Component<IProps, IState> {
         }
     };
 
-    getIdentifiant(): string {
-        if (this.identifiant.current == null) {
+    getUsername(): string {
+        if (this.username.current == null) {
             return "";
         } else {
-            return this.identifiant.current.value;
+            return this.username.current.value;
         }
     };
 
@@ -68,7 +68,7 @@ class LoginScreen extends Component<IProps, IState> {
                     <Grid item>
                         <TextField
                             label="Identifiant:"
-                            inputRef={this.identifiant}
+                            inputRef={this.username}
                             id="outlined-margin-normal"
                             margin="normal"
                             variant="outlined"

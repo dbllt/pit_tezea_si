@@ -12,20 +12,20 @@ interface Props {
 };
 
 interface State {
-    statut : string
+    status : string
 };
 
 class FormClient extends Component<Props,State> {
 
     constructor(props: Props) {
         super(props);
-        this.state = {statut : "P"};
+        this.state = {status : "P"};
 
         this.handleChange = this.handleChange.bind(this);
     }
 
     handleChange(event:any) {
-        this.setState({statut: event.target.value});
+        this.setState({status: event.target.value});
     }
 
     render(){
@@ -52,7 +52,7 @@ class FormClient extends Component<Props,State> {
                             </Grid>
                         </Grid>
 
-                        { this.state.statut === 'P'
+                        { this.state.status === 'P'
                             ?<Grid container className={styles.Gridlabelfield} >
                                 <Grid item className={styles.Label}>
                                     Civilité :
@@ -76,7 +76,7 @@ class FormClient extends Component<Props,State> {
 
                         <Grid container> {/* grill row */}
                             <Grid item xs={6}> {/* 1ère Grille gauche */}
-                                { this.state.statut === 'P'  &&
+                                { this.state.status === 'P'  &&
                                 <Grid container className={styles.Gridlabelfield}>
                                     <Grid item className={styles.Label}>
                                         Nom :
@@ -115,7 +115,7 @@ class FormClient extends Component<Props,State> {
                             </Grid>
 
                             <Grid item xs={6}> {/* 2éme Grille droite */}
-                                { this.state.statut === 'P' &&
+                                { this.state.status === 'P' &&
                                 <Grid container className={styles.Gridlabelfield}>
 
                                     <Grid item className={styles.Label}>

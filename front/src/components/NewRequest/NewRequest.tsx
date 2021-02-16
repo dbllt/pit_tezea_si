@@ -67,7 +67,7 @@ class NewRequest extends Component<IndexProps, IState> {
                 <h1>Service {this.state.service}</h1>
                 <h1>Enregistrer une demande client</h1>
                 <Form className="form">
-                    <FormClient></FormClient>
+                    <FormClient/>
                     <Grid container direction="row" justify="flex-start" alignItems="flex-start" spacing={1}>
                         <h4 className="h4">Demande client</h4>
                         <Grid container justify={"space-evenly"}>
@@ -203,12 +203,12 @@ class NewRequest extends Component<IndexProps, IState> {
                 </Form>
 
 
-                <Button className={"truc"} variant="contained" onClick={this.addRequest}>
+                <Button className={"MyButton"} variant="contained" onClick={this.addRequest}>
                     Enregistrer la demande
                 </Button>
 
                 <Link to="/menu">
-                    <Button className={"truc"} type="button">
+                    <Button className={"MyButton"} type="button">
                         Retour
                     </Button>
                 </Link>

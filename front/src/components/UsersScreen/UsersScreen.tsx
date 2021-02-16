@@ -13,9 +13,9 @@ import API from "../../network/API";
 
 
 const tableHeadNames = ["Identifiant", "Rôle"];
-function createRequestData(identifiant: string, role: string) {
+function createRequestData(username: string, role: string) {
     return {
-        identifiant, role,
+        username, role,
     };
 }
 
@@ -25,7 +25,7 @@ function Row(props: { row: ReturnType<typeof createRequestData> }) {
     return (
         <React.Fragment>
             <TableRow hover>
-                <TableCell align="center">{row.identifiant}</TableCell>
+                <TableCell align="center">{row.username}</TableCell>
                 <TableCell align="center">{row.role}</TableCell>
             </TableRow>
         </React.Fragment>
@@ -33,9 +33,9 @@ function Row(props: { row: ReturnType<typeof createRequestData> }) {
 }
 
 
-interface Utilisateur {
+interface User {
     id: string;
-    identifiant: string;
+    username: string;
     role: string;
 }
 
@@ -44,18 +44,18 @@ interface IProps {
 }
 
 interface IState {
-    utilisateurs: Utilisateur[];
+    users: User[];
 }
 
 
 class UsersScreen extends Component<IProps, IState> {
     state = {
-        utilisateurs: []
+        users: []
     }
 
     componentDidMount() {
-        API.getUtilisateurs().then((data => {
-            this.setState({utilisateurs: data})
+        API.getUsers().then((data => {
+            this.setState({users: data})
         }));
     }
 
@@ -74,8 +74,8 @@ class UsersScreen extends Component<IProps, IState> {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {this.state.utilisateurs.map((utilisateur:Utilisateur) => (
-                                <Row key={utilisateur.id} row={utilisateur} />
+                            {this.state.users.map((user:User) => (
+                                <Row key={user.id} row={user} />
                             ))}
                         </TableBody>
                     </Table>
