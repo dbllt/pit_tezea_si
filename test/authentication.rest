@@ -2,34 +2,34 @@
 GET http://localhost:8080/hello
 
 ### Test
-GET http://localhost:8080/test
+POST http://localhost:8080/clients
 
+### Adding an account
+POST http://localhost:8080/register
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJncm9ndSIsInRva2VuX3R5cGUiOiJBQ0NFU1NfVE9LRU4iLCJleHAiOjE2MTM0MTUwNjAsImlhdCI6MTYxMzM5NzA2MH0.ATzDsq5h8aW6z_AGoYbliHLF7zwC9OqSdN8noi37XEpMqS9KF71FogQ7Gsp-zQ_iwM5QL71aZh98Ltafvt30Jw
+Content-Type: application/json
+
+{
+    "username":"tes2t",
+    "password":"password"
+}
 
 ### Authentication
 POST http://localhost:8080/auth/authenticate
 Content-Type: application/json
 
 {
-    "username":"grogu",
+    "username":"tes2t",
     "password":"password"
 }
 
-
-### Authentication
-POST http://localhost:8080/auth/register
-Content-Type: application/json
-
-{
-    "username":"grogu",
-    "password":"password"
-}
 
 ### Refresh token
 POST http://localhost:8080/auth/token
 Content-Type: application/json
 
 {
-    "refreshToken":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJncm9ndSIsImV4cCI6MTYxMzA2MzA0NiwiaWF0IjoxNjEyOTc2NjQ2fQ.k3u_MdbE6BSiELxtZ4z6cRlX8OnG9Mu7CnsjZujMC71QH4KIjRpTHBNCNtLSNnxu3i87YQesT-ovPh4ZfJn8dQ"
+    "refreshToken":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXMydCIsInRva2VuX3R5cGUiOiJSRUZSRVNIX1RPS0VOIiwiaWF0IjoxNjEzNDczNjk4fQ.uNPxJ_zBxoTr58wY3tanduvREu7XGLa9gPXCG1l07r2FkSTDsE4WCfCek-FZVH2oz0Vj0iS1FTN7_q6si1fJ1w"
 }
 
 
@@ -43,7 +43,7 @@ Content-Type: application/json
 
 ### Replace the current bearer by the token from previous request
 GET http://localhost:8080/hello
-Authorization: Bearer eyJhbGciOiJUzUxMiJ9.eyJzdWIiOiJncm9ndSIsInRva2VuX3R5cGUiOiJBQ0NFU1NfVE9LRU4iLCJleHAiOjE2MTMzNjA0MjEsImlhdCI6MTYxMzM0MjQyMX0._TGmWNuwAx_qjC4n8l_zlFaEhvJr1l4S4Fiof2N_opC35jO5jfBdfjk-e1LSFk89cbyO0caZjITuK72sm1yPcg
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXMydCIsInRva2VuX3R5cGUiOiJBQ0NFU1NfVE9LRU4iLCJleHAiOjE2MTM0NzM3MjgsImlhdCI6MTYxMzQ3MzY5OH0.SY3JoM8Yq2AxZ_3f1lSLHRprmq198MxoX18FWY1qJaS8wnDaDstm9QFnHnNW54t9o5pCivd8-ZNdMPr_AqZ-MA
 
 ### Unauthorized
 POST http://localhost:8080/test
