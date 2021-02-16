@@ -38,8 +38,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/auth/*",
             // -- Swagger
             "/api-docs", "/api-docs/*", "/swagger-ui", "/swagger-ui/*",
-            // -- TEST
-            "/test", "/clients", "/createclient" };
+            // TEST
+    };
 
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;

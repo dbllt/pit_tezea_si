@@ -8,6 +8,12 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service used to save and check validity of refresh tokens
+ * 
+ * @author Nils Richard
+ *
+ */
 @Service
 public class SimpleRefreshTokenService implements RefreshTokenService {
 
@@ -17,7 +23,6 @@ public class SimpleRefreshTokenService implements RefreshTokenService {
 
     @Value("${jwt.refresh-token-expiration}")
     private Long REFRESH_TOKEN_EXPIRATION;
-//    private static final long REFRESH_TOKEN_EXPIRATION = 3 * 60 * 60 * 1000; // 3hours
 
     @Override
     public void saveRefreshToken(String refreshToken) {
