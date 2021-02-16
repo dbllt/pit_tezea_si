@@ -29,8 +29,6 @@ public class JwtTokenUtil implements Serializable {
 
     private static final long serialVersionUID = -7588967588818311029L;
 //    public static final long JWT_TOKEN_VALIDITY = 15 * 60 * 1000; // 15min
-    public static final long JWT_TOKEN_VALIDITY = 30 * 1000; // 
-    public static final long JWT_REFRESH_TOKEN_VALIDITY = -1;
 
     private enum TokenType {
         ACCESS_TOKEN, REFRESH_TOKEN
@@ -42,7 +40,10 @@ public class JwtTokenUtil implements Serializable {
 
     @Value("${jwt.secret}")
     private String secret;
-
+    
+    @Value("${jwt.access-token-expiration}")
+    private Long JWT_TOKEN_VALIDITY;
+    
     /**
      * Retrieves username from JWT token
      * 
@@ -110,7 +111,7 @@ public class JwtTokenUtil implements Serializable {
     public String generateRefreshToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(Claim.TOKEN_TYPE, TokenType.REFRESH_TOKEN);
-        return doGenerateToken(claims, userDetails.getUsername(), JWT_REFRESH_TOKEN_VALIDITY);
+        return doGenerateToken(claims, userDetails.getUsername(), -1);
     }
 
     /**

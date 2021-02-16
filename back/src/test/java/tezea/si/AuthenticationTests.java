@@ -6,13 +6,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,237 +24,254 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import tezea.si.dao.UserTezeaDAO;
+import tezea.si.model.business.UserTezea;
+import tezea.si.utils.auth.GrantedAutorities;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 // ^ reinitialize database after each test
 class AuthenticationTests {
 
-	@Autowired
-	private MockMvc mockMvc;
+    private static final String REGISTER_URL = "/register";
+    private static final String AUTH_URL = "/auth/authenticate";
+    private static final String REFRESH_URL = "/auth/token";
 
-	@Autowired
-	private ObjectMapper objectMapper;
+    @Autowired
+    private MockMvc mockMvc;
 
-	@Test
-	public void shouldNotAllowAccessWithoutRegistering() throws Exception {
-		// Arrange
-		String url = "/hello";
+    @Autowired
+    private ObjectMapper objectMapper;
 
-		// Act, assert
-		this.mockMvc.perform(get(url)).andExpect(status().isUnauthorized());
-	}
+    @Autowired
+    UserTezeaDAO userDao;
 
-	@Test
-	public void registerReturnsOK() throws Exception {
-		// Arrange
-		String registerForm = "{\"username\":\"newuser\", \"password\":\"thepassword\"}";
-		String url = "/auth/register";
+    @BeforeEach
+    public void before() {
+        UserTezea admin = new UserTezea();
+        admin.setUsername("grogu");
+        admin.setPassword("$2a$10$sDP3s/p0M1TCOW6FizwLWulsnwT2BryFkLHqKusRRljaYKYOWVE7u");
+        admin.setAuthorities(List.of(GrantedAutorities.ADMIN));
 
-		// Act
-		this.mockMvc.perform(
-				post(url).contentType(MediaType.APPLICATION_JSON).content(registerForm))
-				.andExpect(status().isCreated());
-	}
+        userDao.save(admin);
+        
+        UserTezea user = new UserTezea();
+        user.setUsername("jean");
+        user.setPassword("$2a$10$sDP3s/p0M1TCOW6FizwLWulsnwT2BryFkLHqKusRRljaYKYOWVE7u");
+        
+        userDao.save(user);
+    }
 
-	@Test
-	public void authenticationAfterRegisterReturnsTokens() throws Exception {
-		// Arrange
-		String user = "grogu";
-		String password = "password";
-		register(user, password);
-		String authForm = "{\"username\":\"" + user + "\", \"password\":\"" + password
-				+ "\"}";
-		String url = "/auth/authenticate";
+    @Test
+    public void shouldNotAllowAccessWithoutAuth() throws Exception {
+        // Arrange
+        String url = "/hello";
 
-		// Act
-		String result = this.mockMvc
-				.perform(post(url).contentType(MediaType.APPLICATION_JSON)
-						.content(authForm))
-				.andExpect(status().isOk()).andReturn().getResponse()
-				.getContentAsString();
+        // Act, assert
+        this.mockMvc.perform(get(url)).andExpect(status().isUnauthorized());
+    }
 
-		// Assert
-		Map<String, String> resultMap = getJsonAsMap(result);
-		assertThat(resultMap).hasFieldOrProperty("refreshToken");
-		assertThat(resultMap.get("refreshToken")).hasSizeGreaterThan(0);
-		assertThat(resultMap).hasFieldOrProperty("token");
-		assertThat(resultMap.get("token")).hasSizeGreaterThan(0);
-	}
+    @Test
+    public void registerAllowsOnlyAdmin() throws Exception {
+        // Arrange
+        String form = createJsonString("username", "newuser", "password", "thepassword");
 
-	@Test
-	public void authenticationFailsWrongPassword() throws Exception {
-		// Arrange
-		String user = "grogu";
-		String password = "password";
-		register(user, password);
-		String authForm = "{\"username\":\"grogu\", \"password\":\"wrongpassword\"}";
-		String url = "/auth/authenticate";
+        // Act, assert
+        
+        // No auth
+        this.mockMvc.perform(post(REGISTER_URL).contentType(MediaType.APPLICATION_JSON).content(form))
+                .andExpect(status().isUnauthorized());
+        
+        // Simple user
+        this.mockMvc.perform(post(REGISTER_URL).headers(userAuthorizationHeader())
+                .contentType(MediaType.APPLICATION_JSON).content(form)).andExpect(status().isUnauthorized());
 
-		// Act
-		this.mockMvc.perform(
-				post(url).contentType(MediaType.APPLICATION_JSON).content(authForm))
-				.andExpect(status().isUnauthorized());
-	}
+        // Admin
+        this.mockMvc.perform(post(REGISTER_URL).headers(adminAuthorizationHeader())
+                .contentType(MediaType.APPLICATION_JSON).content(form)).andExpect(status().isCreated());
+    }
 
-	@Test
-	public void authenticationFailsWrongUser() throws Exception {
-		// Arrange
-		String user = "grogu";
-		String password = "password";
-		register(user, password);
-		String authForm = "{\"username\":\"notgrogu\", \"password\":\"password\"}";
-		String url = "/auth/authenticate";
+    @Test
+    public void authenticationReturnsTokens() throws Exception {
+        // Arrange
+        String form = createJsonString("username", "grogu", "password", "password");
 
-		// Act
-		this.mockMvc.perform(
-				post(url).contentType(MediaType.APPLICATION_JSON).content(authForm))
-				.andExpect(status().isUnauthorized());
-	}
+        // Act
+        String result = this.mockMvc.perform(post(AUTH_URL).contentType(MediaType.APPLICATION_JSON).content(form))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
-	@Test
-	public void shouldAllowAccessUsingToken() throws Exception {
-		// Arrange
-		String url = "/hello";
+        // Assert
+        Map<String, String> resultMap = getJsonAsMap(result);
+        assertThat(resultMap).hasFieldOrProperty("refreshToken");
+        assertThat(resultMap.get("refreshToken")).hasSizeGreaterThan(0);
+        assertThat(resultMap).hasFieldOrProperty("token");
+        assertThat(resultMap.get("token")).hasSizeGreaterThan(0);
+    }
 
-		// Act, assert
-		this.mockMvc.perform(get(url).header("Authorization", validAuthorizationHeader()))
-				.andExpect(status().isOk());
-	}
+    @Test
+    public void authenticationFailsWrongPassword() throws Exception {
+        // Arrange
+        String form = createJsonString("username", "grogu", "password", "wrongpassword");
+        // Act
+        this.mockMvc.perform(post(AUTH_URL).contentType(MediaType.APPLICATION_JSON).content(form))
+                .andExpect(status().isUnauthorized());
+    }
 
-	@Test
-	public void shouldNotAllowAccessUsingRfereshToken() throws Exception {
-		// Arrange
-		String url = "/hello";
+    @Test
+    public void authenticationFailsWrongUser() throws Exception {
+        // Arrange
+        String form = createJsonString("username", "notgrogu", "password", "password");
 
-		// Act, assert
-		this.mockMvc
-				.perform(
-						get(url).header("Authorization", "Bearer " + validRefreshToken()))
-				.andExpect(status().isUnauthorized());
-	}
+        // Act
+        this.mockMvc.perform(post(AUTH_URL).contentType(MediaType.APPLICATION_JSON).content(form))
+                .andExpect(status().isUnauthorized());
+    }
 
-	@Test
-	public void canRefreshToken() throws Exception {
-		// Arrange
-		Map<String, String> authentication = authenticate();
-		String refreshToken = authentication.get("refreshToken");
-		String oldToken = authentication.get("token");
-		String form = "{\"refreshToken\":\"" + refreshToken + "\"}";
-		String url = "/auth/token";
-		Thread.sleep(1000); // the new token is same as old one if refreshing too fast
+    @Test
+    public void shouldAllowAccessUsingToken() throws Exception {
+        // Arrange
+        String url = "/hello";
 
-		// Act
-		String result = this.mockMvc
-				.perform(post(url).contentType(MediaType.APPLICATION_JSON).content(form))
-				.andExpect(status().isOk()).andReturn().getResponse()
-				.getContentAsString();
+        // Act, assert
+        this.mockMvc.perform(get(url).headers(adminAuthorizationHeader())).andExpect(status().isOk());
+    }
 
-		// Assert
-		Map<String, String> resultMap = getJsonAsMap(result);
-		assertThat(resultMap).hasFieldOrProperty("token");
-		String newToken = resultMap.get("token");
-		assertThat(newToken).hasSizeGreaterThan(0);
-		assertThat(newToken).isNotEqualTo(oldToken);
-	}
+    @Test
+    public void shouldNotAllowAccessUsingRefreshToken() throws Exception {
+        // Arrange
+        String url = "/hello";
 
-	@Test
-	public void cannotRefreshInvalidToken() throws Exception {
-		// Arrange
-		String form = "{\"refreshToken\":\"invalidToken\"}";
-		String url = "/auth/token";
+        // Act, assert
+        this.mockMvc.perform(get(url).header("Authorization", "Bearer " + adminRefreshToken()))
+                .andExpect(status().isUnauthorized());
+    }
 
-		// Act
-		this.mockMvc
-				.perform(post(url).contentType(MediaType.APPLICATION_JSON).content(form))
-				.andExpect(status().isUnauthorized());
-	}
+    @Test
+    public void canRefreshToken() throws Exception {
+        // Arrange
+        Map<String, String> authentication = authenticateAdmin();
+        String refreshToken = authentication.get("refreshToken");
+        String oldToken = authentication.get("token");
+        String form = createJsonString("refreshToken", refreshToken);
+        Thread.sleep(1000); // the new token is same as old one if refreshing too fast
 
-	@Test
-	public void canUseNewToken() throws Exception {
-		// Arrange
-		String refreshToken = validRefreshToken();
-		String form = "{\"refreshToken\":\"" + refreshToken + "\"}";
-		String newToken = getJsonAsMap(this.mockMvc
-				.perform(post("/auth/token").contentType(MediaType.APPLICATION_JSON)
-						.content(form))
-				.andExpect(status().isOk()).andReturn().getResponse()
-				.getContentAsString()).get("token");
-		String url = "/hello";
+        // Act
+        String result = this.mockMvc.perform(post(REFRESH_URL).contentType(MediaType.APPLICATION_JSON).content(form))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
-		// Act, assert
-		this.mockMvc.perform(get(url).header("Authorization", "Bearer " + newToken))
-				.andExpect(status().isOk());
-	}
+        // Assert
+        Map<String, String> resultMap = getJsonAsMap(result);
+        assertThat(resultMap).hasFieldOrProperty("token");
+        String newToken = resultMap.get("token");
+        assertThat(newToken).hasSizeGreaterThan(0);
+        assertThat(newToken).isNotEqualTo(oldToken);
+    }
 
-	@Test
-	public void invalidateRefreshToken() throws Exception {
-		// Arrange
-		String refreshToken = validRefreshToken();
-		String form = "{\"refreshToken\":\"" + refreshToken + "\"}";
-		String url = "/auth/token";
+    @Test
+    public void cannotRefreshInvalidToken() throws Exception {
+        // Arrange
+        String form = createJsonString("refreshToken", "invalidToken");
 
-		// Act
-		this.mockMvc
-				.perform(put(url).contentType(MediaType.APPLICATION_JSON).content(form))
-				.andExpect(status().isNoContent());
+        // Act
+        this.mockMvc.perform(post(REFRESH_URL).contentType(MediaType.APPLICATION_JSON).content(form))
+                .andExpect(status().isUnauthorized());
+    }
 
-		// Assert: cannot refresh again
-		this.mockMvc
-				.perform(post(url).contentType(MediaType.APPLICATION_JSON).content(form))
-				.andExpect(status().isUnauthorized());
-	}
+    @Test
+    public void canUseNewToken() throws Exception {
+        // Arrange
+        String refreshToken = adminRefreshToken();
+        String form = createJsonString("refreshToken", refreshToken);
+        String newToken = getJsonAsMap(
+                this.mockMvc.perform(post(REFRESH_URL).contentType(MediaType.APPLICATION_JSON).content(form))
+                        .andExpect(status().isOk()).andReturn().getResponse().getContentAsString()).get("token");
+        String url = "/hello";
 
-	@Test
-	public void cannotInvalidateInvalidRefreshToken() throws Exception {
-		// Arrange
-		String form = "{\"refreshToken\":\"invalidToken\"}";
-		String url = "/auth/token";
+        // Act, assert
+        this.mockMvc.perform(get(url).header("Authorization", "Bearer " + newToken)).andExpect(status().isOk());
+    }
 
-		// Act, assert
-		this.mockMvc
-				.perform(post(url).contentType(MediaType.APPLICATION_JSON).content(form))
-				.andExpect(status().isUnauthorized());
-	}
+    @Test
+    public void invalidateRefreshToken() throws Exception {
+        // Arrange
+        String refreshToken = adminRefreshToken();
+        String form = createJsonString("refreshToken", refreshToken);
 
-	private Map<String, String> getJsonAsMap(String json) throws Exception {
-		TypeReference<HashMap<String, String>> typeRef = new TypeReference<HashMap<String, String>>() {
-		};
-		return objectMapper.readValue(json, typeRef);
-	}
+        // Act
+        this.mockMvc.perform(put(REFRESH_URL).contentType(MediaType.APPLICATION_JSON).content(form))
+                .andExpect(status().isNoContent());
 
-	private Map<String, String> authenticate() throws Exception {
-		String user = "someone";
-		String password = "apassword";
-		register(user, password);
-		String authForm = "{\"username\":\"" + user + "\", \"password\":\"" + password
-				+ "\"}";
-		String url = "/auth/authenticate";
+        // Assert: cannot refresh again
+        this.mockMvc.perform(post(REFRESH_URL).contentType(MediaType.APPLICATION_JSON).content(form))
+                .andExpect(status().isUnauthorized());
+    }
 
-		Map<String, String> tokenMap = getJsonAsMap(this.mockMvc
-				.perform(post(url).contentType(MediaType.APPLICATION_JSON)
-						.content(authForm))
-				.andExpect(status().isOk()).andReturn().getResponse()
-				.getContentAsString());
-		return tokenMap;
-	}
+    @Test
+    public void cannotInvalidateInvalidRefreshToken() throws Exception {
+        // Arrange
+        String form = createJsonString("refreshToken", "invalidToken");
 
-	private String validAuthorizationHeader() throws Exception {
-		String token = authenticate().get("token");
-		return "Bearer " + token;
-	}
+        // Act, assert
+        this.mockMvc.perform(post(REFRESH_URL).contentType(MediaType.APPLICATION_JSON).content(form))
+                .andExpect(status().isUnauthorized());
+    }
 
-	private String validRefreshToken() throws Exception {
-		return authenticate().get("refreshToken");
-	}
+    // PRIVATE METHODS
 
-	private void register(String user, String password) throws Exception {
-		String registerForm = "{\"username\":\"" + user + "\", \"password\":\"" + password
-				+ "\"}";
-		String url = "/auth/register";
+    private String createJsonString(String... strings) throws IllegalArgumentException {
+        if (strings.length % 2 != 0)
+            throw new IllegalArgumentException("Should have even number of parameter");
 
-		this.mockMvc.perform(
-				post(url).contentType(MediaType.APPLICATION_JSON).content(registerForm))
-				.andExpect(status().isCreated());
-	}
+        List<String> jsonData = new ArrayList<>();
+        for (int i = 0; i < strings.length; i += 2) {
+            jsonData.add("\"" + strings[i] + "\":\"" + strings[i + 1] + "\"");
+        }
+
+        return "{" + String.join(",", jsonData) + "}";
+    }
+
+    private Map<String, String> getJsonAsMap(String json) throws Exception {
+        TypeReference<HashMap<String, String>> typeRef = new TypeReference<HashMap<String, String>>() {
+        };
+        return objectMapper.readValue(json, typeRef);
+    }
+
+    private Map<String, String> authenticateAdmin() throws Exception {
+        return authenticate("grogu", "password");
+    }
+
+    private Map<String, String> authenticateUser() throws Exception {
+        return authenticate("jean", "password");
+    }
+
+    private Map<String, String> authenticate(String username, String password) throws Exception {
+        String authForm = createJsonString("username", username, "password", password);
+
+        Map<String, String> tokenMap = getJsonAsMap(
+                this.mockMvc.perform(post(AUTH_URL).contentType(MediaType.APPLICATION_JSON).content(authForm))
+                        .andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
+        return tokenMap;
+    }
+
+    private HttpHeaders adminAuthorizationHeader() throws Exception {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + authenticateAdmin().get("token"));
+        return headers;
+    }
+
+    private HttpHeaders userAuthorizationHeader() throws Exception {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + authenticateUser().get("token"));
+        return headers;
+    }
+
+    private String adminRefreshToken() throws Exception {
+        return authenticateAdmin().get("refreshToken");
+    }
+
+//    private String userRefreshToken() throws Exception {
+//        return authenticateUser().get("refreshToken");
+//    }
+
 }

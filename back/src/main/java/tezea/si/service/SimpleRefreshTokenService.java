@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,7 +15,8 @@ public class SimpleRefreshTokenService implements RefreshTokenService {
 
     Map<String, Long> refreshTokens = new HashMap<>();
 
-    private static final long REFRESH_TOKEN_EXPIRATION = 60 * 1000; // 60seconds
+    @Value("${jwt.refresh-token-expiration}")
+    private Long REFRESH_TOKEN_EXPIRATION;
 //    private static final long REFRESH_TOKEN_EXPIRATION = 3 * 60 * 60 * 1000; // 3hours
 
     @Override
