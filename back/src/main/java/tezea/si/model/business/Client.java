@@ -1,5 +1,6 @@
 package tezea.si.model.business;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 import javax.persistence.Entity;
@@ -7,8 +8,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public abstract class Client {
+public abstract class Client implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6515822297439920891L;
 	protected long id;
 	protected String email;
 	protected String telephone;
@@ -76,9 +81,6 @@ public abstract class Client {
 	public void setVille(String ville) {
 		this.ville = ville;
 	}
-	
-	
-	public abstract JSONObject toJSON();
 	
 	
 	

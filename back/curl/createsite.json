@@ -1,0 +1,8 @@
+{
+	"nom": "conciergerie",
+	"telephone": "06274564",
+	"description": "c'est le truc qui fait que les concierges ils font des trucs, voila",
+	"responsable":{
+		"id": 2
+	}
+}
