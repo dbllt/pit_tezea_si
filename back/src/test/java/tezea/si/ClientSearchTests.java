@@ -50,7 +50,7 @@ public class ClientSearchTests {
 	}
 
 	@Test
-	public void findByPostCodeContains() throws Exception {
+	public void findByPostCodeContains() {
 		// Arrange
 		ClientSpecification spec = new ClientSpecification(
 				new SearchCriteria("codePostal", "contains", "7"));
@@ -63,7 +63,7 @@ public class ClientSearchTests {
 	}
 	
 	@Test
-	public void findByPostCodeStartsWith() throws Exception {
+	public void findByPostCodeStartsWith() {
 		// Arrange
 		ClientSpecification spec = new ClientSpecification(
 				new SearchCriteria("codePostal", "startswith", "35"));
@@ -76,7 +76,7 @@ public class ClientSearchTests {
 	}
 	
 	@Test
-	public void findEmptyByPostCodeContains() throws Exception {
+	public void findEmptyByPostCodeContains() {
 		// Arrange
 		ClientSpecification spec = new ClientSpecification(
 				new SearchCriteria("codePostal", "contains", "5"));
@@ -89,7 +89,7 @@ public class ClientSearchTests {
 	}
 	
 	@Test
-	public void findEmptyByPostCodeEquals() throws Exception {
+	public void findEmptyByPostCodeEquals() {
 		// Arrange
 		ClientSpecification spec = new ClientSpecification(
 				new SearchCriteria("codePostal", "equals", "700"));
@@ -102,7 +102,7 @@ public class ClientSearchTests {
 	}
 	
 	@Test
-	public void findByPostCodeEquals() throws Exception {
+	public void findByPostCodeEquals() {
 		// Arrange
 		ClientSpecification spec = new ClientSpecification(
 				new SearchCriteria("codePostal", "equals", "35700"));

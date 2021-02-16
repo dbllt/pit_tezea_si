@@ -12,7 +12,7 @@ public class ClientSearchService {
 	ClientSpecificationBuilder builder;
 	
 	public Specification<Client> convert(ClientSearchDTO client) {
-		return builder.with("ville", ":", client.getAddress()).build();
+		return builder.with("ville", "contains", client.getAddress()).build();
 	}
 
 }
