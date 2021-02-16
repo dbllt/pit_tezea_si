@@ -103,6 +103,8 @@ public class JwtAuthenticationController {
             final String username = jwtTokenUtil.getUsernameFromToken(refreshRequest.getRefreshToken());
             final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             final String token = jwtTokenUtil.generateToken(userDetails);
+            
+            refreshTokenService.refreshValidity(refreshRequest.getRefreshToken());
 
             return ResponseEntity.ok(new JwtRefreshResponse(token));
         } else {

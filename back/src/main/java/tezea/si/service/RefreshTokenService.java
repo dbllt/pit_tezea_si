@@ -28,7 +28,14 @@ public interface RefreshTokenService {
     /**
      * Removes the refresh token from the valid refresh tokens
      * 
-     * @param refrehToken
+     * @param refreshToken
      */
-    void invalidate(String refrehToken);
+    void invalidate(String refreshToken);
+    
+    /**
+     * Refreshes the validity of the refresh token 
+     * 
+     * @param refreshToken
+     */
+    void refreshValidity(String refreshToken);
 }

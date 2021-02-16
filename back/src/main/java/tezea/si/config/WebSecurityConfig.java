@@ -1,7 +1,9 @@
 package tezea.si.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,6 +18,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import tezea.si.dao.UserTezeaDAO;
+import tezea.si.model.business.UserTezea;
+import tezea.si.utils.auth.GrantedAutorities;
+
 /**
  * Global configurations for the API
  * 
@@ -26,21 +32,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    
+
     private static final String[] AUTH_WHITELIST = {
             // Authentication end points
             "/auth/*",
             // -- Swagger
-            "/api-docs",
-            "/api-docs/*",
-            "/swagger-ui",
-            "/swagger-ui/*",
+            "/api-docs", "/api-docs/*", "/swagger-ui", "/swagger-ui/*",
             // -- TEST
-            "/test",
-            "/clients",
-            "/createclient"
-    };
-
+            "/test", "/clients", "/createclient" };
 
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -50,6 +49,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService jwtUserDetailsService;
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
+    @Autowired
+    private UserTezeaDAO userDao;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -69,7 +70,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-    
+
+    @Bean
+    public ApplicationRunner initAdminInDatabase() {
+        return args -> {
+            if (!userDao.checkForExistanceUsername("serge")) {
+                UserTezea admin = new UserTezea();
+                admin.setUsername("serge");
+                admin.setPassword("$2a$10$sDP3s/p0M1TCOW6FizwLWulsnwT2BryFkLHqKusRRljaYKYOWVE7u");
+                admin.setAuthorities(List.of(GrantedAutorities.ADMIN));
+
+                userDao.save(admin);
+            }
+        };
+    }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -81,10 +95,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated().and()
                 // make sure we use stateless session; session won't be used to
                 // store user's state.
-                .exceptionHandling()
-                	.accessDeniedHandler(jwtAccessDeniedHandler)
-                	.authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
-                .sessionManagement()
+                .exceptionHandling().accessDeniedHandler(jwtAccessDeniedHandler)
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         // Add a filter to validate the tokens with every request
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

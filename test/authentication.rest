@@ -2,18 +2,7 @@
 GET http://localhost:8080/hello
 
 ### Test
-GET http://localhost:8080/test
-
-
-### Authentication
-POST http://localhost:8080/auth/authenticate
-Content-Type: application/json
-
-{
-    "username":"tes2t",
-    "password":"password"
-}
-
+POST http://localhost:8080/clients
 
 ### Adding an account
 POST http://localhost:8080/register
@@ -25,12 +14,22 @@ Content-Type: application/json
     "password":"password"
 }
 
+### Authentication
+POST http://localhost:8080/auth/authenticate
+Content-Type: application/json
+
+{
+    "username":"tes2t",
+    "password":"password"
+}
+
+
 ### Refresh token
 POST http://localhost:8080/auth/token
 Content-Type: application/json
 
 {
-    "refreshToken":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJncm9ndSIsImV4cCI6MTYxMzA2MzA0NiwiaWF0IjoxNjEyOTc2NjQ2fQ.k3u_MdbE6BSiELxtZ4z6cRlX8OnG9Mu7CnsjZujMC71QH4KIjRpTHBNCNtLSNnxu3i87YQesT-ovPh4ZfJn8dQ"
+    "refreshToken":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXMydCIsInRva2VuX3R5cGUiOiJSRUZSRVNIX1RPS0VOIiwiaWF0IjoxNjEzNDczNjk4fQ.uNPxJ_zBxoTr58wY3tanduvREu7XGLa9gPXCG1l07r2FkSTDsE4WCfCek-FZVH2oz0Vj0iS1FTN7_q6si1fJ1w"
 }
 
 
@@ -44,8 +43,7 @@ Content-Type: application/json
 
 ### Replace the current bearer by the token from previous request
 GET http://localhost:8080/hello
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJncm9ndSIsInRva2VuX3R5cGUiOiJBQ0NFU1NfVE9LRU4iLCJleHAiOjE2MTMzNjE4MzksImlhdCI6MTYxMzM0MzgzOX0.gt0I0lquxR27JCu5leKWouUkz_fuw7Mz6SG3gc9CaR243iy6PoPApLnnuQ-7lUklTxetIJz1z7U7Q3EAK4shfw
-
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXMydCIsInRva2VuX3R5cGUiOiJBQ0NFU1NfVE9LRU4iLCJleHAiOjE2MTM0NzM3MjgsImlhdCI6MTYxMzQ3MzY5OH0.SY3JoM8Yq2AxZ_3f1lSLHRprmq198MxoX18FWY1qJaS8wnDaDstm9QFnHnNW54t9o5pCivd8-ZNdMPr_AqZ-MA
 
 ### Unauthorized
 POST http://localhost:8080/test
