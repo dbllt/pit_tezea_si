@@ -1,5 +1,8 @@
 package tezea.si.model.business;
 
+import javax.persistence.Entity;
+
+@Entity
 public class Particulier extends Client{
 	
 	/**
