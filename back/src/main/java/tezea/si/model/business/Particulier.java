@@ -1,6 +1,13 @@
 package tezea.si.model.business;
 
-public class Particulier extends Client{
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
+@Entity
+@DiscriminatorValue("Particulier")
+public class Particulier extends Client {
 	
 	/**
 	 * 
@@ -8,7 +15,7 @@ public class Particulier extends Client{
 	private static final long serialVersionUID = -2675066872546116276L;
 	private String nom;
 	private String prenom;
-	private String civilite;
+	private HonorificTitle honorificTitle;
 	
 	public Particulier() {}
 
@@ -28,12 +35,13 @@ public class Particulier extends Client{
 		this.prenom = prenom;
 	}
 
-	public String getCivilite() {
-		return civilite;
+	@Enumerated(EnumType.STRING)
+	public HonorificTitle getHonorificTitle() {
+		return honorificTitle;
 	}
 
-	public void setCivilite(String civilite) {
-		this.civilite = civilite;
+	public void setHonorificTitle(HonorificTitle honorificTitle) {
+		this.honorificTitle = honorificTitle;
 	}
 
 }

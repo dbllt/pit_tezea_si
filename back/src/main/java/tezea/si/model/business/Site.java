@@ -1,11 +1,18 @@
 package tezea.si.model.business;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import tezea.si.model.business.request.Request;
 
 @Entity
 public class Site implements Serializable{
@@ -19,12 +26,13 @@ public class Site implements Serializable{
 	private UserTezea responsable;
 	private String telephone;
 	private String description;
-	
+	private List<Request> requests;
 	
 	public Site() {}
 	
 	
 	@Id
+	@Column(name="id_site", nullable=false)
 	@GeneratedValue
 	public Long getId() {
 		return id;
@@ -44,7 +52,8 @@ public class Site implements Serializable{
 		this.nom = nom;
 	}
 
-	@ManyToOne
+	@ManyToOne()
+	//@JoinColumn(name="id_user", insertable=false, updatable=false)
 	public UserTezea getResponsable() {
 		return responsable;
 	}
@@ -57,6 +66,15 @@ public class Site implements Serializable{
 
 	public String getTelephone() {
 		return telephone;
+	}
+	
+	@OneToMany(mappedBy="site", fetch = FetchType.LAZY)
+	public List<Request> getRequests() {
+		return requests;
+	}
+	
+	public void setRequests(List<Request> requests) {
+		this.requests = requests;
 	}
 
 

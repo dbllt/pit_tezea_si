@@ -14,13 +14,9 @@ import tezea.si.utils.StringListConverter;
 @Entity
 @Table(name = "user")
 public class UserTezea {
-
     private long id;
-
     private String username;
-
     private String password;
-
     private List<String> authorities;
 
     public UserTezea() {
@@ -34,7 +30,7 @@ public class UserTezea {
 
     @Id
     @GeneratedValue
-    @Column(name = "id")
+    @Column(name = "id_user")
     public long getId() {
         return id;
     }
@@ -65,4 +61,5 @@ public class UserTezea {
         this.username = username;
     }
 
+    
 }

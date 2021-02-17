@@ -1,6 +1,8 @@
 package tezea.si.model.dto;
 
-public class PaginationDTO {
+import java.io.Serializable;
+
+public class PaginationDTO implements Serializable {
 
 	private Integer size;
 	private Integer page;
