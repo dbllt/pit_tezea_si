@@ -2,6 +2,7 @@ package tezea.si.model.business.request;
 
 import java.sql.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -49,13 +50,13 @@ public abstract class Request {
 		return date;
 	}
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne()
 	public Site getSite() {
 		return site;
 	}
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="id_user", insertable=false, updatable=false)
+	@ManyToOne(fetch = FetchType.EAGER)
+	//@JoinColumn(name="id_user", insertable=false, updatable=false)
 	public UserTezea getResponsable() {
 		return responsable;
 	}
@@ -79,8 +80,8 @@ public abstract class Request {
 		return status;
 	}
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="id_user", insertable=false, updatable=false)
+	@ManyToOne(fetch = FetchType.EAGER)
+	//@JoinColumn(name="id_user", insertable=false, updatable=false)
 	public UserTezea getClosedBy() {
 		return closedBy;
 	}

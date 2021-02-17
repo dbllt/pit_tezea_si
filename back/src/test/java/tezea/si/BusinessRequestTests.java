@@ -1,15 +1,20 @@
 package tezea.si;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import tezea.si.dao.ClientDAO;
 import tezea.si.dao.EstimationDAO;
@@ -29,6 +34,9 @@ import tezea.si.model.business.request.PrestationRequest;
 import tezea.si.model.business.request.Priority;
 import tezea.si.model.business.request.Request;
 import tezea.si.model.business.request.SatisfactionLevel;
+import tezea.si.model.dto.EnterpriseClientSearchDTO;
+import tezea.si.model.dto.RequestsSearchDTO;
+import tezea.si.utils.HibernateProxyTypeAdapter;
 
 @SpringBootTest
 public class BusinessRequestTests {
@@ -49,8 +57,15 @@ public class BusinessRequestTests {
 	@Autowired
 	RequestEmployeeDAO requestEmployeeDao;
 
+	/*
+	 * @BeforeAll public void clean() { requestDao.deleteAll();
+	 * clientDao.deleteAll(); siteDao.deleteAll(); userDao.deleteAll();
+	 * prestationDao.deleteAll(); estimationDao.deleteAll();
+	 * requestEmployeeDao.deleteAll(); }
+	 */
+
 	@Test
-	public void registerReturnsOK() throws Exception {
+	public void testAllRelationMapping() throws Exception {
 		Entreprise c = new Entreprise();
 		c.setAdresse("28 rue de la patate");
 		c.setCodePostal("25000");
@@ -64,7 +79,7 @@ public class BusinessRequestTests {
 		UserTezea u = new UserTezea();
 		u.setPassword("password");
 		u.setUsername("username");
-		u.setAuthorities(List.of());
+		u.setAuthorities(new ArrayList<String>());
 		u = userDao.save(u);
 
 		Estimation e = new Estimation();
@@ -112,33 +127,84 @@ public class BusinessRequestTests {
 		e.setRequest(r);
 		p = prestationDao.save(p);
 		e = estimationDao.save(e);
+		c = (Entreprise) clientDao.findById(c.getId()).get();
+		re = requestEmployeeDao.findById(re.getId()).get();
+		u = userDao.findById(u.getId()).get();
+		s = siteDao.findById(s.getId()).get();
 
-		Request test = (PrestationRequest)requestDao.findAll().get(0);
+		List<Request> list = requestDao.findAll();
+		Request test = (PrestationRequest) list.get(0);
+		assertEquals(list.size(), 1, "size:" + list.size());
 
-		//try {
-			logger.info(test.getPriority().getMessage());
-			logger.info(test.getDate().toGMTString());
-			logger.info(test.getDescription());
-			logger.info(test.getClient().getEmail());
-			logger.info(p.getRequest().getDescription());
-			logger.info(test.getSite().getNom());
-			//throws exception...
-			assertNotNull(test.getClosedBy(), "usertezea is null (1)");
-			assertNotNull(test.getResponsable(), "usertezea is null (2)");
-			logger.info(test.getClosedBy().getUsername());
-			logger.info(test.getResponsable().getUsername());
+		assertNotNull(test.getPriority());
+		assertNotNull(test.getDate());
+		assertNotNull(test.getDescription());
+		assertNotNull(test.getClient());
+		assertNotNull(test.getClosedBy(), "test closedby");
+		assertNotNull(test.getResponsable(), "test responsable");
+		assertEquals(test.getResponsable().getUsername(), u.getUsername(), "test responsable username");
+		assertNotNull(p.getRequest());
+		assertEquals(p.getRequest().getSite().getResponsable().getUsername(), u.getUsername(), "p req site resp user");
+		assertNotNull(p.getDate());
+		assertNotNull(p.getDetails());
+		assertNotNull(p.getSatisfactionLevel());
+		assertNotNull(u.getUsername());
+		assertNotNull(u.getPassword());
+		assertNotNull(re.getEmail());
+		assertNotNull(re.getFirstname());
+		assertNotNull(re.getLastname());
+		assertNotNull(re.getHonorificTitle());
+		assertNotNull(re.getPhone());
+		assertNotNull(c.getAdresse());
+		assertNotNull(c.getCodePostal());
+		assertNotNull(c.getDateAjout());
+		assertNotNull(c.getEmail());
+		assertNotNull(c.getNom());
+		assertNotNull(c.getTelephone());
+		assertNotNull(c.getVille());
+		assertNotNull(c.getRequests());
+		assertFalse(c.getRequests().isEmpty());
+		assertEquals(c.getRequests().size(), 1);
 
-			/*final GsonBuilder builder = new GsonBuilder()
-					.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY)
-					.setPrettyPrinting();
-			final Gson gson = builder.create();
+		assertNotNull(e.getAmount(), "e no amount");
+		assertNotNull(e.getDate(), "e no date");
+		assertNotNull(e.getEstimationResponsable(), "e no resps");
 
-			String json = gson.toJson(test);
-			logger.info(json);*/
-		/*} catch (Exception ex) {
-			logger.info(ex.toString());
-			throw ex;
-		}*/
+		assertNotNull(s.getDescription(), "s no desc");
+		assertNotNull(s.getNom(), "s no name");
+		assertNotNull(s.getRequests(), "s no requests");
+		assertNotNull(s.getResponsable(), "s no resp");
+		assertNotNull(s.getTelephone(), "s no tel");
+
+		logger.info(test.getPriority().getMessage());
+		logger.info(test.getDate().toGMTString());
+		logger.info(test.getDescription());
+		logger.info(test.getClient().getEmail());
+		logger.info(p.getRequest().getDescription());
+		logger.info(test.getSite().getNom());
+		logger.info(test.getClosedBy().getUsername());
+		logger.info(test.getResponsable().getUsername());
+
+		final GsonBuilder builder = new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY)
+				.setPrettyPrinting();
+		final Gson gson = builder.create();
+
+		String json = gson.toJson(u);
+		logger.info(json);
+		json = gson.toJson(re);
+		logger.info(json);
+		json = gson.toJson(e);
+		logger.info(json);
+		json = gson.toJson(p);
+		logger.info(json);
+		json = gson.toJson(u);
+		logger.info(json);
+
+		json = gson.toJson(new EnterpriseClientSearchDTO(c));
+		logger.info(json);
+		/*
+		 * json = gson.toJson(new RequestsSearchDTO(test)); logger.info(json);
+		 */
 
 		assertEquals(test.getDescription(), "NO DESCRIPTION");
 	}
