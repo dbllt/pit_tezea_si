@@ -14,7 +14,8 @@ public class ClientToDTOConverter {
 		} else if (c instanceof Particulier) {
 			return new ParticulierClientSearchDTO(c);
 		} else {
-			throw new RuntimeException("Undefined subtype of client");
+			return null;
+			//throw new RuntimeException("Undefined subtype of client");
 		}
 	}
 }

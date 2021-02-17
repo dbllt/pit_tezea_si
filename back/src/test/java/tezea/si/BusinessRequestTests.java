@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.logging.Logger;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -39,8 +38,9 @@ import tezea.si.model.business.request.Priority;
 import tezea.si.model.business.request.Request;
 import tezea.si.model.business.request.SatisfactionLevel;
 import tezea.si.model.dto.EnterpriseClientSearchDTO;
-import tezea.si.model.dto.RequestsSearchDTO;
+import tezea.si.utils.ClientToDTOConverter;
 import tezea.si.utils.HibernateProxyTypeAdapter;
+import tezea.si.utils.RequestToDTOConverter;
 
 @SpringBootTest
 public class BusinessRequestTests {
@@ -287,27 +287,29 @@ public class BusinessRequestTests {
 		assertNull(up.getSite().getResponsable(), "not null site resp");
 	}
 	
-	/*@Test
+	@Test
 	public void jsonTests() {
 		this.start1();
+		
+		List<Request> list = requestDao.findAll();
+		assertEquals(list.size(), 1, "size:" + list.size());
+		PrestationRequest test = (PrestationRequest) list.get(0);
 		
 		final GsonBuilder builder = new GsonBuilder()
 				.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY)
 				.setPrettyPrinting();
 		final Gson gson = builder.create();
 
-		String json = gson.toJson(u);
-		logger.info(json);
+		String json = "";
 		json = gson.toJson(re);
 		logger.info(json);
 		json = gson.toJson(e);
 		logger.info(json);
 		json = gson.toJson(p);
 		logger.info(json);
-		json = gson.toJson(new EnterpriseClientSearchDTO(c));
+		json = gson.toJson(RequestToDTOConverter.pack(test)); 
 		logger.info(json);
-		
-		json = gson.toJson(new RequestsSearchDTO(test)); logger.info(json);
-		 
-	}*/
+		json = gson.toJson(new EnterpriseClientSearchDTO(c)); 
+		logger.info(json);
+	}
 }
