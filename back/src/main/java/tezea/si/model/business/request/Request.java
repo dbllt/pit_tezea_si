@@ -50,18 +50,21 @@ public abstract class Request {
 		return date;
 	}
 
-	@ManyToOne()
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn
 	public Site getSite() {
 		return site;
 	}
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	@JoinColumn
 	//@JoinColumn(name="id_user", insertable=false, updatable=false)
 	public UserTezea getResponsable() {
 		return responsable;
 	}
 
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.LAZY, optional = true)
+	@JoinColumn
 	public Client getClient() {
 		return client;
 	}
@@ -80,7 +83,7 @@ public abstract class Request {
 		return status;
 	}
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
 	//@JoinColumn(name="id_user", insertable=false, updatable=false)
 	public UserTezea getClosedBy() {
 		return closedBy;

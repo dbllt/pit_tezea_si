@@ -3,6 +3,7 @@ package tezea.si.model.business;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -52,7 +53,8 @@ public class Site implements Serializable{
 		this.nom = nom;
 	}
 
-	@ManyToOne()
+	@ManyToOne(fetch=FetchType.LAZY, optional = true)
+	@JoinColumn
 	//@JoinColumn(name="id_user", insertable=false, updatable=false)
 	public UserTezea getResponsable() {
 		return responsable;
@@ -68,7 +70,7 @@ public class Site implements Serializable{
 		return telephone;
 	}
 	
-	@OneToMany(mappedBy="site", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="site", orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	public List<Request> getRequests() {
 		return requests;
 	}

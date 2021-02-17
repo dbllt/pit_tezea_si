@@ -107,7 +107,7 @@ public abstract class Client implements Serializable {
 		this.ville = ville;
 	}
 
-	@OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "client", orphanRemoval = true, fetch = FetchType.LAZY)
 	public List<Request> getRequests() {
 		return requests;
 	}

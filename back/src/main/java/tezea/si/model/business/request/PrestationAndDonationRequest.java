@@ -23,11 +23,19 @@ public class PrestationAndDonationRequest extends Request{
 		return prestation;
 	}
 	
-	public void setEstimation(Estimation estimation) {
+	protected void setEstimation(Estimation estimation) {
 		this.estimation = estimation;
 	}
+	
+	public int getAmount() {
+		return amount;
+	}
 
-	public void setPrestation(Prestation prestation) {
+	protected void setPrestation(Prestation prestation) {
 		this.prestation = prestation;
+	}
+
+	public void setAmount(int amount) {
+		this.amount = amount;
 	}
 }
