@@ -2,10 +2,10 @@ package tezea.si.utils.search;
 
 public class SearchCriteria {
 	private String key;
-	private String operation;
+	private SearchOperations operation;
 	private Object value;
 
-	public SearchCriteria(String key, String operation, Object value) {
+	public SearchCriteria(String key, SearchOperations operation, Object value) {
 		this.key = key;
 		this.operation = operation;
 		this.value = value;
@@ -19,11 +19,11 @@ public class SearchCriteria {
 		this.key = key;
 	}
 
-	public String getOperation() {
+	public SearchOperations getOperation() {
 		return operation;
 	}
 
-	public void setOperation(String operation) {
+	public void setOperation(SearchOperations operation) {
 		this.operation = operation;
 	}
 

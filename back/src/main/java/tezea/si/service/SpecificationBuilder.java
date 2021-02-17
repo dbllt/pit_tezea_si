@@ -5,33 +5,33 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-import tezea.si.model.business.Client;
-import tezea.si.utils.search.ClientSpecification;
 import tezea.si.utils.search.SearchCriteria;
+import tezea.si.utils.search.SearchOperations;
+import tezea.si.utils.search.SearchSpecification;
 
-@Service
-public class ClientSpecificationBuilder {
+@Component
+public class SpecificationBuilder<T> {
 	private final List<SearchCriteria> params = new ArrayList<SearchCriteria>();
 
-	public ClientSpecificationBuilder() {
+	public SpecificationBuilder() {
 	}
 
-	public ClientSpecificationBuilder with(String key, String operation, Object value) {
+	public SpecificationBuilder<T> with(String key, SearchOperations operation, Object value) {
 		params.add(new SearchCriteria(key, operation, value));
 		return this;
 	}
 
-	public Specification<Client> build() {
+	public Specification<T> build() {
 		if (params.size() == 0) {
 			return null;
 		}
 
-		List<Specification<Client>> specs = params.stream().map(ClientSpecification::new)
+		List<Specification<T>> specs = params.stream().map(SearchSpecification<T>::new)
 				.collect(Collectors.toList());
 
-		Specification<Client> result = specs.get(0);
+		Specification<T> result = specs.get(0);
 
 		for (int i = 1; i < params.size(); i++) {
 			result = Specification.where(result).and(specs.get(i));

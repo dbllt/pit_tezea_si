@@ -4,24 +4,34 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.jpa.domain.Specification;
 
 import tezea.si.dao.ClientDAO;
 import tezea.si.model.business.Client;
 import tezea.si.model.business.Particulier;
-import tezea.si.service.ClientSpecificationBuilder;
-import tezea.si.utils.search.ClientSpecification;
+import tezea.si.model.dto.ClientSearchDTO;
+import tezea.si.service.ClientSearchService;
+import tezea.si.service.SpecificationBuilder;
+import tezea.si.utils.search.SearchSpecification;
 import tezea.si.utils.search.SearchCriteria;
+import tezea.si.utils.search.SearchOperations;
 
-@DataJpaTest
+@SpringBootTest
 public class ClientSearchTests {
 
 	@Autowired
 	private ClientDAO clientDao;
+
+	@Autowired
+	private SpecificationBuilder<Client> builder;
+
+	@Autowired
+	private ClientSearchService searchService;
 
 	private Particulier jeanNoix35700;
 	private Particulier jeannetteNoisette35200;
@@ -49,82 +59,105 @@ public class ClientSearchTests {
 		liseOlli53500 = clientDao.save(particulier3);
 	}
 
+	@AfterEach
+	public void destroy() {
+		clientDao.deleteAll();
+	}
+
 	@Test
 	public void findByPostCodeContains() {
 		// Arrange
-		ClientSpecification spec = new ClientSpecification(
-				new SearchCriteria("codePostal", "contains", "7"));
+		SearchSpecification<Client> spec = new SearchSpecification<Client>(
+				new SearchCriteria("codePostal", SearchOperations.CONTAINS, "7"));
 
 		// Act
 		List<Client> results = clientDao.findAll(spec);
 
 		// Assert
-		assertThat(results).containsOnly(jeanNoix35700);
+		assertThat(results).usingRecursiveFieldByFieldElementComparator()
+				.containsOnly(jeanNoix35700);
 	}
-	
+
 	@Test
 	public void findByPostCodeStartsWith() {
 		// Arrange
-		ClientSpecification spec = new ClientSpecification(
-				new SearchCriteria("codePostal", "startswith", "35"));
+		SearchSpecification<Client> spec = new SearchSpecification<Client>(
+				new SearchCriteria("codePostal", SearchOperations.STARTSWITH, "35"));
 
 		// Act
 		List<Client> results = clientDao.findAll(spec);
 
 		// Assert
-		assertThat(results).containsOnly(jeanNoix35700, jeannetteNoisette35200);
+		assertThat(results).usingRecursiveFieldByFieldElementComparator()
+				.containsOnly(jeanNoix35700, jeannetteNoisette35200);
 	}
-	
+
 	@Test
 	public void findEmptyByPostCodeContains() {
 		// Arrange
-		ClientSpecification spec = new ClientSpecification(
-				new SearchCriteria("codePostal", "contains", "5"));
+		SearchSpecification<Client> spec = new SearchSpecification<Client>(
+				new SearchCriteria("codePostal", SearchOperations.CONTAINS, "5"));
 
 		// Act
 		List<Client> results = clientDao.findAll(spec);
 
 		// Assert
-		assertThat(results).containsOnly(jeanNoix35700, jeannetteNoisette35200, liseOlli53500);
+		assertThat(results).usingRecursiveFieldByFieldElementComparator()
+				.containsOnly(jeanNoix35700, jeannetteNoisette35200, liseOlli53500);
 	}
-	
+
 	@Test
 	public void findEmptyByPostCodeEquals() {
 		// Arrange
-		ClientSpecification spec = new ClientSpecification(
-				new SearchCriteria("codePostal", "equals", "700"));
+		SearchSpecification<Client> spec = new SearchSpecification<Client>(
+				new SearchCriteria("codePostal", SearchOperations.EQUALS, "700"));
 
 		// Act
 		List<Client> results = clientDao.findAll(spec);
 
 		// Assert
-		assertThat(results).isEmpty();
+		assertThat(results).usingRecursiveFieldByFieldElementComparator().isEmpty();
 	}
-	
+
 	@Test
 	public void findByPostCodeEquals() {
 		// Arrange
-		ClientSpecification spec = new ClientSpecification(
-				new SearchCriteria("codePostal", "equals", "35700"));
+		SearchSpecification<Client> spec = new SearchSpecification<Client>(
+				new SearchCriteria("codePostal", SearchOperations.EQUALS, "35700"));
 
 		// Act
 		List<Client> results = clientDao.findAll(spec);
 
 		// Assert
-		assertThat(results).containsOnly(jeanNoix35700);
+		assertThat(results).usingRecursiveFieldByFieldElementComparator()
+				.containsOnly(jeanNoix35700);
 	}
 
 	@Test
 	public void findWithBuiltSpec() {
-		// Arrange
-		ClientSpecificationBuilder builder = new ClientSpecificationBuilder();
-
 		// Act
-		Specification<Client> spec = builder.with("codePostal", "contains", "352")
-				.with("ville", "contains", "ennes").build();
+		Specification<Client> spec = builder
+				.with("codePostal", SearchOperations.CONTAINS, "352")
+				.with("ville", SearchOperations.CONTAINS, "ennes").build();
 		List<Client> results = clientDao.findAll(spec);
 
 		// Assert
-		assertThat(results).containsOnly(jeannetteNoisette35200);
+		assertThat(results).usingRecursiveFieldByFieldElementComparator()
+				.containsOnly(jeannetteNoisette35200);
+	}
+
+	@Test
+	public void findWithService() {
+		// Arrange
+		ClientSearchDTO dto = new ClientSearchDTO();
+		dto.setAddress("352");
+
+		// Act
+		Specification<Client> spec = searchService.convert(dto);
+		List<Client> results = clientDao.findAll(spec);
+
+		// Assert
+		assertThat(results).usingRecursiveFieldByFieldElementComparator()
+				.containsOnly(jeannetteNoisette35200);
 	}
 }

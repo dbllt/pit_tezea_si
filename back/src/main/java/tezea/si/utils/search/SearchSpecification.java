@@ -9,24 +9,24 @@ import org.springframework.data.jpa.domain.Specification;
 
 import tezea.si.model.business.Client;
 
-public class ClientSpecification implements Specification<Client> {
+public class SearchSpecification<T> implements Specification<T> {
 	private SearchCriteria criteria;
 
-	public ClientSpecification(SearchCriteria searchCriteria) {
+	public SearchSpecification(SearchCriteria searchCriteria) {
 		this.criteria = searchCriteria;
 	}
 
 	@Override
-	public Predicate toPredicate(Root<Client> root, CriteriaQuery<?> query,
+	public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
 			CriteriaBuilder builder) {
-		if (criteria.getOperation().equalsIgnoreCase("equals")) {
+		if (criteria.getOperation().equals(SearchOperations.EQUALS)) {
 			return builder.equal(root.<String>get(criteria.getKey()),
 					criteria.getValue().toString());
-		} else if (criteria.getOperation().equalsIgnoreCase("startswith")) {
+		} else if (criteria.getOperation().equals(SearchOperations.STARTSWITH)) {
 			return builder.like(root.<String>get(criteria.getKey()),
 					criteria.getValue() + "%");
 		}
-		else if (criteria.getOperation().equalsIgnoreCase("contains")) {
+		else if (criteria.getOperation().equals(SearchOperations.CONTAINS)) {
 			if (root.get(criteria.getKey()).getJavaType() == String.class) {
 				return builder.like(root.<String>get(criteria.getKey()),
 						"%" + criteria.getValue() + "%");
