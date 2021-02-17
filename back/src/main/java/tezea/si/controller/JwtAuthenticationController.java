@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import tezea.si.model.dto.auth.JwtAuthenticationRequest;
@@ -59,7 +61,8 @@ public class JwtAuthenticationController {
      * @throws Exception
      */
     @Operation(summary = "Authenticate and get an access token")
-    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Your access token"),
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Your access token", content = @Content(schema= @Schema(implementation = JwtAuthenticationResponse.class))),
             @ApiResponse(responseCode = "401", description = "If your credentials are incorrect") })
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest)
@@ -101,7 +104,7 @@ public class JwtAuthenticationController {
      * @throws Exception
      */
     @Operation(summary = "Refresh an access token")
-    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Your access token"),
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Your access token", content = @Content(schema= @Schema(implementation = JwtRefreshResponse.class))),
             @ApiResponse(responseCode = "401", description = "If refresh token is invalid") })
     @RequestMapping(value = "/token", method = RequestMethod.POST)
     public ResponseEntity<?> refreshAccess(@RequestBody JwtRefreshRequest refreshRequest) throws Exception {

@@ -18,9 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.v3.oas.annotations.Operation;
 import tezea.si.dao.UserTezeaDAO;
 import tezea.si.model.dto.admin.JwtRegisterRequest;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 import tezea.si.service.JwtUserDetailsService;
 import tezea.si.utils.auth.GrantedAutorities;
 import tezea.si.utils.errors.UserAlreadyExistsException;
@@ -52,7 +56,10 @@ public class AdminController {
      * @throws Exception
      */
     @Operation(summary = "Creating a new user")
+    @ApiResponses(value = { @ApiResponse(responseCode = "201", description = "User created"),
+            @ApiResponse(responseCode = "401", description = "If not admin") })
     @RequestMapping(value = "/register", method = RequestMethod.POST)
+
     public ResponseEntity<?> createAccount(@RequestBody JwtRegisterRequest newUser) throws Exception {
         if (newUser == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("BAD_REQUEST");
