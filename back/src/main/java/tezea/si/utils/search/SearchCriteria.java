@@ -1,21 +1,27 @@
 package tezea.si.utils.search;
 
-public class SearchCriteria {
-	private String key;
+import javax.persistence.metamodel.SingularAttribute;
+
+public class SearchCriteria<T> {
+	private SingularAttribute<T, ?> key;
 	private SearchOperations operation;
 	private Object value;
 
-	public SearchCriteria(String key, SearchOperations operation, Object value) {
+	public SearchCriteria(SingularAttribute<T, ?> key, SearchOperations operation, Object value) {
 		this.key = key;
 		this.operation = operation;
 		this.value = value;
 	}
 
 	public String getKey() {
-		return key;
+		return key.getName();
+	}
+	
+	public Class<?> getJavaClass() {
+		return key.getJavaType();
 	}
 
-	public void setKey(String key) {
+	public void setKey(SingularAttribute<T, ?> key) {
 		this.key = key;
 	}
 

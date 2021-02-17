@@ -69,7 +69,8 @@ public class ClientSearchTests {
 	public void findByPostCodeContains() {
 		// Arrange
 		SearchSpecification<Client> spec = new SearchSpecification<Client>(
-				new SearchCriteria("codePostal", SearchOperations.CONTAINS, "7"));
+				new SearchCriteria<Client>(Client_.codePostal, SearchOperations.CONTAINS,
+						"7"));
 
 		// Act
 		List<Client> results = clientDao.findAll(spec);
@@ -83,7 +84,8 @@ public class ClientSearchTests {
 	public void findByPostCodeStartsWith() {
 		// Arrange
 		SearchSpecification<Client> spec = new SearchSpecification<Client>(
-				new SearchCriteria("codePostal", SearchOperations.STARTSWITH, "35"));
+				new SearchCriteria<Client>(Client_.codePostal,
+						SearchOperations.STARTSWITH, "35"));
 
 		// Act
 		List<Client> results = clientDao.findAll(spec);
@@ -97,7 +99,8 @@ public class ClientSearchTests {
 	public void findEmptyByPostCodeContains() {
 		// Arrange
 		SearchSpecification<Client> spec = new SearchSpecification<Client>(
-				new SearchCriteria("codePostal", SearchOperations.CONTAINS, "5"));
+				new SearchCriteria<Client>(Client_.codePostal, SearchOperations.CONTAINS,
+						"5"));
 
 		// Act
 		List<Client> results = clientDao.findAll(spec);
@@ -111,7 +114,8 @@ public class ClientSearchTests {
 	public void findEmptyByPostCodeEquals() {
 		// Arrange
 		SearchSpecification<Client> spec = new SearchSpecification<Client>(
-				new SearchCriteria("codePostal", SearchOperations.EQUALS, "700"));
+				new SearchCriteria<Client>(Client_.codePostal, SearchOperations.EQUALS,
+						"700"));
 
 		// Act
 		List<Client> results = clientDao.findAll(spec);
@@ -124,7 +128,8 @@ public class ClientSearchTests {
 	public void findByPostCodeEquals() {
 		// Arrange
 		SearchSpecification<Client> spec = new SearchSpecification<Client>(
-				new SearchCriteria("codePostal", SearchOperations.EQUALS, "35700"));
+				new SearchCriteria<Client>(Client_.codePostal, SearchOperations.EQUALS,
+						"35700"));
 
 		// Act
 		List<Client> results = clientDao.findAll(spec);
@@ -138,8 +143,8 @@ public class ClientSearchTests {
 	public void findWithBuiltSpec() {
 		// Act
 		Specification<Client> spec = builder
-				.with(Client_.CODE_POSTAL, SearchOperations.CONTAINS, "352")
-				.with("ville", SearchOperations.CONTAINS, "ennes").build();
+				.with(Client_.codePostal, SearchOperations.CONTAINS, "352")
+				.with(Client_.ville, SearchOperations.CONTAINS, "ennes").build();
 		List<Client> results = clientDao.findAll(spec);
 
 		// Assert

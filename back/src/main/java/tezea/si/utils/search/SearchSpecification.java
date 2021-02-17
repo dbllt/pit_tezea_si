@@ -7,36 +7,37 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import tezea.si.model.business.Client;
+import tezea.si.utils.errors.InvalidSearchTypeException;
 
 public class SearchSpecification<T> implements Specification<T> {
 	private static final long serialVersionUID = 1L;
-	private SearchCriteria criteria;
+	private SearchCriteria<T> criteria;
 
-	public SearchSpecification(SearchCriteria searchCriteria) {
+	public SearchSpecification(SearchCriteria<T> searchCriteria) {
 		this.criteria = searchCriteria;
 	}
 
 	@Override
 	public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
 			CriteriaBuilder builder) {
-		switch (criteria.getOperation()) {
-		case EQUALS:
-			return builder.equal(root.<String>get(criteria.getKey()),
-					criteria.getValue().toString());
-		case STARTSWITH:
-			return builder.like(root.<String>get(criteria.getKey()),
-					criteria.getValue() + "%");
-		case CONTAINS:
-			if (root.get(criteria.getKey()).getJavaType() == String.class) {
+		if (criteria.getJavaClass() == String.class) {
+			switch (criteria.getOperation()) {
+			case EQUALS:
+				return builder.equal(root.<String>get(criteria.getKey()),
+						criteria.getValue().toString());
+			case STARTSWITH:
+				return builder.like(root.<String>get(criteria.getKey()),
+						criteria.getValue() + "%");
+			case CONTAINS:
 				return builder.like(root.<String>get(criteria.getKey()),
 						"%" + criteria.getValue() + "%");
-			} else {
-				return builder.equal(root.get(criteria.getKey()), criteria.getValue());
+			default:
+				throw new InvalidSearchTypeException(
+						"String search cannot use operation " + criteria.getOperation());
 			}
-		default:
-			return null;
 		}
+		throw new InvalidSearchTypeException(
+				"Cannot search on type " + criteria.getJavaClass());
 	}
 
 }

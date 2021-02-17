@@ -5,6 +5,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import tezea.si.model.business.Client;
+import tezea.si.model.business.Client_;
 import tezea.si.model.dto.ClientSearchDTO;
 import tezea.si.utils.search.SearchOperations;
 
@@ -15,7 +16,7 @@ public class ClientSearchService {
 	SpecificationBuilder<Client> builder;
 	
 	public Specification<Client> convert(ClientSearchDTO client) {
-		return builder.with("codePostal", SearchOperations.CONTAINS, client.getAddress()).build();
+		return builder.with(Client_.codePostal, SearchOperations.CONTAINS, client.getAddress()).build();
 	}
 
 }

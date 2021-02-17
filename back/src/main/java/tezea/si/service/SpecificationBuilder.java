@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.metamodel.SingularAttribute;
+
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
@@ -13,13 +15,14 @@ import tezea.si.utils.search.SearchSpecification;
 
 @Component
 public class SpecificationBuilder<T> {
-	private final List<SearchCriteria> params = new ArrayList<SearchCriteria>();
+	private final List<SearchCriteria<T>> params = new ArrayList<SearchCriteria<T>>();
 
 	public SpecificationBuilder() {
 	}
 
-	public SpecificationBuilder<T> with(String key, SearchOperations operation, Object value) {
-		params.add(new SearchCriteria(key, operation, value));
+	public SpecificationBuilder<T> with(SingularAttribute<T, ?> key,
+			SearchOperations operation, Object value) {
+		params.add(new SearchCriteria<T>(key, operation, value));
 		return this;
 	}
 
