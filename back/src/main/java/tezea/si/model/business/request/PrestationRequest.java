@@ -21,11 +21,11 @@ public class PrestationRequest extends Request{
 		return prestation;
 	}
 	
-	public void setEstimation(Estimation estimation) {
+	protected void setEstimation(Estimation estimation) {
 		this.estimation = estimation;
 	}
 
-	public void setPrestation(Prestation prestation) {
+	protected void setPrestation(Prestation prestation) {
 		this.prestation = prestation;
 	}
 }

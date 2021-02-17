@@ -2,13 +2,13 @@ package tezea.si.model.business.request;
 
 import java.sql.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
@@ -28,11 +28,12 @@ public class Prestation {
 	public long getId() {
 		return id;
 	}
-    @OneToOne(fetch = FetchType.LAZY)
+
+    @OneToOne(fetch = FetchType.LAZY, optional = true) //TODO Optional = true
 	public Request getRequest() {
 		return request;
 	}
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
     //@JoinColumn(name="id_employee", insertable = false, updatable = false)
 	public RequestEmployee getEmployee() {
 		return employee;
@@ -51,6 +52,7 @@ public class Prestation {
 	public void setId(long id) {
 		this.id = id;
 	}
+	
 	public void setRequest(Request request) {
 		this.request = request;
 	}

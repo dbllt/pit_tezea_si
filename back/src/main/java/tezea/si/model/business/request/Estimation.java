@@ -3,6 +3,7 @@ package tezea.si.model.business.request;
 import java.sql.Date;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -40,7 +41,8 @@ public class Estimation {
 		this.request = request;
 	}
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	@JoinColumn
 	//@JoinColumn(name="id_user", insertable=false, updatable=false)
 	public UserTezea getEstimationResponsable() {
 		return estimationResponsable;

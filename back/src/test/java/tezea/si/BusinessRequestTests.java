@@ -3,12 +3,16 @@ package tezea.si;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.logging.Logger;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -57,16 +61,26 @@ public class BusinessRequestTests {
 	@Autowired
 	RequestEmployeeDAO requestEmployeeDao;
 
-	/*
-	 * @BeforeAll public void clean() { requestDao.deleteAll();
-	 * clientDao.deleteAll(); siteDao.deleteAll(); userDao.deleteAll();
-	 * prestationDao.deleteAll(); estimationDao.deleteAll();
-	 * requestEmployeeDao.deleteAll(); }
-	 */
-
-	@Test
-	public void testAllRelationMapping() throws Exception {
-		Entreprise c = new Entreprise();
+	Entreprise c;
+	UserTezea u;
+	Estimation e;
+	RequestEmployee re;
+	Prestation p;
+	Site s;
+	
+	private void clean() {
+		requestDao.deleteAll();
+		clientDao.deleteAll();
+		siteDao.deleteAll();
+		userDao.deleteAll();
+		prestationDao.deleteAll();
+		estimationDao.deleteAll();
+		requestEmployeeDao.deleteAll();
+	}
+	
+	private void start1() {
+		clean();
+		c = new Entreprise();
 		c.setAdresse("28 rue de la patate");
 		c.setCodePostal("25000");
 		c.setEmail("m@m.fr");
@@ -76,20 +90,20 @@ public class BusinessRequestTests {
 		c.setVille("New York");
 		c = clientDao.save(c);
 
-		UserTezea u = new UserTezea();
+		u = new UserTezea();
 		u.setPassword("password");
 		u.setUsername("username");
 		u.setAuthorities(new ArrayList<String>());
 		u = userDao.save(u);
 
-		Estimation e = new Estimation();
+		e = new Estimation();
 		e.setAmount(135.0);
 		e.setDate(new Date(1235));
 		e.setEstimationResponsable(u);
 		e.setMaterialEstimation("NO NEED");
 		e = estimationDao.save(e);
 
-		RequestEmployee re = new RequestEmployee();
+		re = new RequestEmployee();
 		re.setEmail("re@re.fr");
 		re.setFirstname("michel");
 		re.setLastname("rodriguez");
@@ -97,14 +111,14 @@ public class BusinessRequestTests {
 		re.setPhone("0628282828");
 		re = requestEmployeeDao.save(re);
 
-		Prestation p = new Prestation();
+		p = new Prestation();
 		p.setDate(new Date(1236));
 		p.setDetails("NO DETAILS");
 		p.setEmployee(re);
 		p.setSatisfactionLevel(SatisfactionLevel.NOT_VERY_SATISFIED);
 		p = prestationDao.save(p);
 
-		Site s = new Site();
+		s = new Site();
 		s.setDescription("CONCIERGERIE DESCRIPTION");
 		s.setResponsable(u);
 		s.setNom("CONCIERGERIE");
@@ -116,45 +130,59 @@ public class BusinessRequestTests {
 		r.setClosedBy(u);
 		r.setDate(new Date(3210));
 		r.setDescription("NO DESCRIPTION");
-		r.setEstimation(e);
-		r.setPrestation(p);
+		//r.setEstimation(e);
+		//r.setPrestation(p);
 		r.setPriority(Priority.VERY_HIGH);
 		r.setResponsable(u);
 		r.setSite(s);
 		r = requestDao.save(r);
-
+		
 		p.setRequest(r);
 		e.setRequest(r);
+		//UPDATES ALL DETACHED OBJECTS
 		p = prestationDao.save(p);
 		e = estimationDao.save(e);
+
 		c = (Entreprise) clientDao.findById(c.getId()).get();
 		re = requestEmployeeDao.findById(re.getId()).get();
 		u = userDao.findById(u.getId()).get();
 		s = siteDao.findById(s.getId()).get();
+	}
+
+	@Test
+	public void testAllRelationMapping() throws Exception {
+		this.start1();
 
 		List<Request> list = requestDao.findAll();
-		Request test = (PrestationRequest) list.get(0);
 		assertEquals(list.size(), 1, "size:" + list.size());
 
+		PrestationRequest test = (PrestationRequest) list.get(0);
 		assertNotNull(test.getPriority(), "test priority");
 		assertNotNull(test.getDate(), "test date");
 		assertNotNull(test.getDescription(), "test desc");
 		assertNotNull(test.getClient(), "test client");
+		assertNotNull(test.getClient().getRequests(), "test client requests");
+		assertNotNull(test.getEstimation().getEstimationResponsable(), "test estim resp");
+		assertNotNull(test.getPrestation().getSatisfactionLevel(), "test estim resp");
 		assertNotNull(test.getClosedBy(), "test closedby");
 		assertNotNull(test.getResponsable(), "test responsable");
 		assertEquals(test.getResponsable().getUsername(), u.getUsername(), "test responsable username");
+		
 		assertNotNull(p.getRequest(), "p request");
 		assertEquals(p.getRequest().getSite().getResponsable().getUsername(), u.getUsername(), "p req site resp user");
 		assertNotNull(p.getDate(), "p date");
 		assertNotNull(p.getDetails(), "p details");
 		assertNotNull(p.getSatisfactionLevel(), "p satisf");
+		
 		assertNotNull(u.getUsername(), "u username");
 		assertNotNull(u.getPassword(), "u password");
+		
 		assertNotNull(re.getEmail(), "re email");
 		assertNotNull(re.getFirstname(), "re firstname");
 		assertNotNull(re.getLastname(), "re lastname");
 		assertNotNull(re.getHonorificTitle(), "re honorific title");
 		assertNotNull(re.getPhone(), "re phone");
+		
 		assertNotNull(c.getAdresse(), "c address");
 		assertNotNull(c.getCodePostal(), "c getCodePostal");
 		assertNotNull(c.getDateAjout(), "c getDateAjout");
@@ -184,8 +212,87 @@ public class BusinessRequestTests {
 		logger.info(test.getSite().getNom());
 		logger.info(test.getClosedBy().getUsername());
 		logger.info(test.getResponsable().getUsername());
+		
 
-		final GsonBuilder builder = new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY)
+		assertEquals(test.getDescription(), "NO DESCRIPTION");
+	}
+	
+	//TODO faire en sorte que ce ne soit plus le cas si on souhaite conserver meme si le site n'existe plus
+	@Test
+	public void testSiteDeletionCascadeOnRequest() throws Exception {
+		this.start1();
+
+		List<Request> list = requestDao.findAll();
+		assertEquals(list.size(), 1, "size:" + list.size());
+		PrestationRequest test = (PrestationRequest) list.get(0);
+		
+		siteDao.delete(test.getSite());
+		
+		assertThrows(NoSuchElementException.class, () -> requestDao.findById(test.getId()).get());
+		
+		assertEquals(siteDao.count(), 0, "not removed s from dao");
+	}
+	
+	@Test
+	public void testEstimationAndPrestationDeletionCascade() throws Exception {
+		this.start1();
+
+		List<Request> list = requestDao.findAll();
+		assertEquals(list.size(), 1, "size:" + list.size());
+		PrestationRequest test = (PrestationRequest) list.get(0);
+		
+		requestDao.delete(test);
+		
+		assertEquals(estimationDao.count(), 0, "not removed e in cascade");
+		assertEquals(prestationDao.count(), 0, "not removed p in cascade");
+	}
+	
+	@Test
+	public void testUserTezeaNullIfDeleted() throws Exception {
+		this.start1();
+
+		List<Request> list = requestDao.findAll();
+		assertEquals(list.size(), 1, "size:" + list.size());
+		PrestationRequest test = (PrestationRequest) list.get(0);
+		long id = test.getId();
+		logger.info("salutmec:"+test.getResponsable().getUsername());
+		logger.info("salutmec:"+test.getResponsable().getId());
+		
+		userDao.delete(test.getResponsable()); //repercutions avec @PreRemove
+		
+		PrestationRequest up = (PrestationRequest) requestDao.findById(id).get();
+		
+		assertEquals(userDao.count(), 0, "not removed u in dao");
+		assertNull(up.getResponsable(), "not null responsable");
+	}
+	
+	@Test
+	public void testUserTezeaNullEverywhereUsedIfDeleted() throws Exception {
+		this.start1();
+
+		List<Request> list = requestDao.findAll();
+		assertEquals(list.size(), 1, "size:" + list.size());
+		PrestationRequest test = (PrestationRequest) list.get(0);
+		long id = test.getId();
+		logger.info("salutmec:"+test.getResponsable().getUsername());
+		logger.info("salutmec:"+test.getResponsable().getId());
+		
+		userDao.delete(u); //repercutions avec @PreRemove
+		
+		PrestationRequest up = (PrestationRequest) requestDao.findById(id).get();
+		
+		assertEquals(userDao.count(), 0, "not removed u in dao");
+		assertNull(up.getResponsable(), "not null responsable");
+		assertNull(up.getClosedBy(), "not null closedBy");
+		assertNull(up.getSite().getResponsable(), "not null site resp");
+	}
+	
+	/*@Test
+	public void jsonTests() {
+		this.start1();
+		
+		final GsonBuilder builder = new GsonBuilder()
+				.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY)
 				.setPrettyPrinting();
 		final Gson gson = builder.create();
 
@@ -197,15 +304,10 @@ public class BusinessRequestTests {
 		logger.info(json);
 		json = gson.toJson(p);
 		logger.info(json);
-		json = gson.toJson(u);
-		logger.info(json);
-
 		json = gson.toJson(new EnterpriseClientSearchDTO(c));
 		logger.info(json);
-		/*
-		 * json = gson.toJson(new RequestsSearchDTO(test)); logger.info(json);
-		 */
-
-		assertEquals(test.getDescription(), "NO DESCRIPTION");
-	}
+		
+		json = gson.toJson(new RequestsSearchDTO(test)); logger.info(json);
+		 
+	}*/
 }
