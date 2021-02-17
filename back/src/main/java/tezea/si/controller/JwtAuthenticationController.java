@@ -1,5 +1,7 @@
 package tezea.si.controller;
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +18,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import tezea.si.model.auth.JwtAuthenticationRequest;
-import tezea.si.model.auth.JwtAuthenticationResponse;
-import tezea.si.model.auth.JwtRefreshRequest;
-import tezea.si.model.auth.JwtRefreshResponse;
+import tezea.si.model.dto.auth.JwtAuthenticationRequest;
+import tezea.si.model.dto.auth.JwtAuthenticationResponse;
+import tezea.si.model.dto.auth.JwtRefreshRequest;
+import tezea.si.model.dto.auth.JwtRefreshResponse;
 import tezea.si.service.JwtUserDetailsService;
 import tezea.si.service.RefreshTokenService;
 import tezea.si.utils.JwtTokenUtil;
@@ -57,20 +61,25 @@ public class JwtAuthenticationController {
      * @throws Exception
      */
     @Operation(summary = "Authenticate and get an access token")
-    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Your access token"),
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Your access token", content = @Content(schema= @Schema(implementation = JwtAuthenticationResponse.class))),
             @ApiResponse(responseCode = "401", description = "If your credentials are incorrect") })
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest)
             throws Exception {
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-        
-        
+
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+
         final String token = jwtTokenUtil.generateToken(userDetails);
         final String refreshToken = jwtTokenUtil.generateRefreshToken(userDetails);
+
+        final Long expiresIn = jwtTokenUtil.getAccessTokenExpirationTime();
+
         refreshTokenService.saveRefreshToken(refreshToken);
 
-        return ResponseEntity.ok(new JwtAuthenticationResponse(token, refreshToken));
+        return ResponseEntity
+                .ok(new JwtAuthenticationResponse(token, refreshToken, expiresIn, userDetails.getAuthorities()));
     }
 
     private void authenticate(String username, String password) throws Exception {
@@ -83,7 +92,7 @@ public class JwtAuthenticationController {
             logger.debug("Bad credentials");
             throw new Exception("INVALID_CREDENTIALS", e);
         } catch (Exception e) {
-            logger.debug("Something went wrong",e);
+            logger.debug("Something went wrong", e);
         }
     }
 
@@ -95,7 +104,7 @@ public class JwtAuthenticationController {
      * @throws Exception
      */
     @Operation(summary = "Refresh an access token")
-    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Your access token"),
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Your access token", content = @Content(schema= @Schema(implementation = JwtRefreshResponse.class))),
             @ApiResponse(responseCode = "401", description = "If refresh token is invalid") })
     @RequestMapping(value = "/token", method = RequestMethod.POST)
     public ResponseEntity<?> refreshAccess(@RequestBody JwtRefreshRequest refreshRequest) throws Exception {
@@ -103,7 +112,7 @@ public class JwtAuthenticationController {
             final String username = jwtTokenUtil.getUsernameFromToken(refreshRequest.getRefreshToken());
             final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             final String token = jwtTokenUtil.generateToken(userDetails);
-            
+
             refreshTokenService.refreshValidity(refreshRequest.getRefreshToken());
 
             return ResponseEntity.ok(new JwtRefreshResponse(token));
@@ -129,5 +138,5 @@ public class JwtAuthenticationController {
 
         return ResponseEntity.noContent().build();
     }
-    
+
 }

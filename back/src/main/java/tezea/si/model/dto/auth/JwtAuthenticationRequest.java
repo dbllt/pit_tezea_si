@@ -1,30 +1,33 @@
-package tezea.si.model.admin;
+package tezea.si.model.dto.auth;
 
 import java.io.Serializable;
-import java.util.List;
 
-public class UserTezeaDTO implements Serializable {
+/**
+ * Format for a JWT request from client
+ * 
+ * @author Nils Richard
+ *
+ */
+public class JwtAuthenticationRequest implements Serializable {
     private static final long serialVersionUID = 5926468583005150707L;
 
     private String username;
     private String password;
-    private List<String> authorities;
 
     /**
      * Default constructor needed for JSON Parsing
      */
-    public UserTezeaDTO() {
+    public JwtAuthenticationRequest() {
 
     }
 
-    public UserTezeaDTO(String username, String password, List<String> authorities) {
+    public JwtAuthenticationRequest(String username, String password) {
         this.setUsername(username);
         this.setPassword(password);
-        this.setAuthorities(authorities);
     }
 
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
     public void setUsername(String username) {
@@ -32,19 +35,10 @@ public class UserTezeaDTO implements Serializable {
     }
 
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public List<String> getAuthorities() {
-        return authorities;
-    }
-
-    public void setAuthorities(List<String> authorities) {
-        this.authorities = authorities;
-    }
-
 }
