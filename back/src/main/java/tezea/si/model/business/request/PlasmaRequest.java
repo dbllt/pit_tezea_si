@@ -6,14 +6,14 @@ import javax.persistence.Entity;
 
 @Entity
 public class PlasmaRequest extends Request{
-    private Date date;
+    private Date appointmentDate;
     
-    public Date getDate() {
-		return date;
+    public Date getAppointmentDate() {
+		return appointmentDate;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setAppointmentDate(Date appointmentDate) {
+		this.appointmentDate = appointmentDate;
 	}
 
 }

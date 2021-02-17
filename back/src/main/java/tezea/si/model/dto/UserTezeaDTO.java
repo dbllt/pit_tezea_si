@@ -27,6 +27,10 @@ public class UserTezeaDTO implements Serializable {
     	setUsername(copy.getUsername());
     	setAuthorities(copy.getAuthorities());
     }
+
+    public static UserTezeaDTO copy(UserTezea from){
+    	return from == null ? null : new UserTezeaDTO(from);
+	}
     
 	public long getId() {
 		return id;
