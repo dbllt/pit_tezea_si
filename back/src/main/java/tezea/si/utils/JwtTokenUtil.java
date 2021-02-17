@@ -44,6 +44,11 @@ public class JwtTokenUtil implements Serializable {
     @Value("${jwt.access-token-expiration}")
     private Long JWT_TOKEN_VALIDITY;
     
+    
+    public Long getAccessTokenExpirationTime() {
+        return JWT_TOKEN_VALIDITY;
+    }
+    
     /**
      * Retrieves username from JWT token
      * 
@@ -63,6 +68,7 @@ public class JwtTokenUtil implements Serializable {
     public Date getExpirationDateFromToken(String token) {
         return getClaimFromToken(token, Claims::getExpiration);
     }
+    
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);

@@ -1,5 +1,6 @@
 package tezea.si.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,7 +19,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
-import tezea.si.model.admin.UserTezeaDTO;
+import tezea.si.dao.UserTezeaDAO;
+import tezea.si.model.dto.admin.JwtRegisterRequest;
 import tezea.si.service.JwtUserDetailsService;
 import tezea.si.utils.auth.GrantedAutorities;
 import tezea.si.utils.errors.UserAlreadyExistsException;
@@ -35,6 +37,8 @@ public class AdminController {
 
     @Autowired
     private JwtUserDetailsService userDetailsService;
+    @Autowired
+    private UserTezeaDAO userDao;
 
     /**
      * Entry point to register, there is an exception in configuration to allow
@@ -49,10 +53,11 @@ public class AdminController {
      */
     @Operation(summary = "Creating a new user")
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<?> createAccount(@RequestBody UserTezeaDTO newUser) throws Exception {
-        if(newUser == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("BAD_REQUEST");
+    public ResponseEntity<?> createAccount(@RequestBody JwtRegisterRequest newUser) throws Exception {
+        if (newUser == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("BAD_REQUEST");
         checkIfAdmin();
-        
+
         try {
             userDetailsService.save(newUser.getUsername(), newUser.getPassword(), newUser.getAuthorities());
         } catch (UserAlreadyExistsException e) {
@@ -64,12 +69,28 @@ public class AdminController {
         // return createAuthenticationToken(authenticationRequest);
     }
 
+    /**
+     * Gets all users in database
+     * 
+     * @return
+     * @throws Exception
+     */
+    @Operation(summary = "Get users")
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    public ResponseEntity<?> getUsers() throws Exception {
+        checkIfAdmin();
+
+        // TODO send UserTezeaDTO with userDao
+        
+        return ResponseEntity.ok(new ArrayList<>());
+    }
+
     private void checkIfAdmin() throws AccessDeniedException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         List<String> authorities = auth.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
-        
+
         if (!authorities.contains(GrantedAutorities.ADMIN)) {
             throw new AccessDeniedException("AUTHORITY_REQUIRED");
         }
