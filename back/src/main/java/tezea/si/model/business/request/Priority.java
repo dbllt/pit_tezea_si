@@ -16,4 +16,8 @@ public enum Priority {
     public String getMessage() {
         return message;
     }
+    
+    public String toString() {
+    	return message;
+    }
 }

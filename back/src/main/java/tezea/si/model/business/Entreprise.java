@@ -1,8 +1,10 @@
 package tezea.si.model.business;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 @Entity
+@DiscriminatorValue("Entreprise")
 public class Entreprise extends Client{
 	
 	/**
@@ -12,6 +14,7 @@ public class Entreprise extends Client{
 	private String nom;
 	
 	public Entreprise() {}
+	
 	public Entreprise(String email, String tel, String adresse, String codePostal, String ville, String nom) {
 		super(email,tel,adresse,  codePostal, ville);
 		this.nom = nom;

@@ -1,6 +1,6 @@
 package tezea.si.model.business;
 
-public enum Title {
+public enum HonorificTitle {
     MR,
     MME,
 }
