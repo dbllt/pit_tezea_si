@@ -1,5 +1,6 @@
 package tezea.si.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,10 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import tezea.si.dao.UserTezeaDAO;
+import tezea.si.model.dto.admin.JwtRegisterRequest;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import tezea.si.model.admin.UserTezeaDTO;
+
 import tezea.si.service.JwtUserDetailsService;
 import tezea.si.utils.auth.GrantedAutorities;
 import tezea.si.utils.errors.UserAlreadyExistsException;
@@ -37,6 +41,8 @@ public class AdminController {
 
     @Autowired
     private JwtUserDetailsService userDetailsService;
+    @Autowired
+    private UserTezeaDAO userDao;
 
     /**
      * Entry point to register, there is an exception in configuration to allow
@@ -53,7 +59,8 @@ public class AdminController {
     @ApiResponses(value = { @ApiResponse(responseCode = "201", description = "User created"),
             @ApiResponse(responseCode = "401", description = "If not admin") })
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<?> createAccount(@RequestBody UserTezeaDTO newUser) throws Exception {
+
+    public ResponseEntity<?> createAccount(@RequestBody JwtRegisterRequest newUser) throws Exception {
         if (newUser == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("BAD_REQUEST");
         checkIfAdmin();
@@ -67,6 +74,22 @@ public class AdminController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body("User successfully created");
         // return createAuthenticationToken(authenticationRequest);
+    }
+
+    /**
+     * Gets all users in database
+     * 
+     * @return
+     * @throws Exception
+     */
+    @Operation(summary = "Get users")
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    public ResponseEntity<?> getUsers() throws Exception {
+        checkIfAdmin();
+
+        // TODO send UserTezeaDTO with userDao
+        
+        return ResponseEntity.ok(new ArrayList<>());
     }
 
     private void checkIfAdmin() throws AccessDeniedException {

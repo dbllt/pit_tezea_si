@@ -19,7 +19,7 @@ POST http://localhost:8080/auth/authenticate
 Content-Type: application/json
 
 {
-    "username":"tes2t",
+    "username":"grogu",
     "password":"password"
 }
 

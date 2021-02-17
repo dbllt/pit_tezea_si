@@ -1,5 +1,7 @@
 package tezea.si.controller;
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +22,10 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import tezea.si.model.auth.JwtAuthenticationRequest;
-import tezea.si.model.auth.JwtAuthenticationResponse;
-import tezea.si.model.auth.JwtRefreshRequest;
-import tezea.si.model.auth.JwtRefreshResponse;
+import tezea.si.model.dto.auth.JwtAuthenticationRequest;
+import tezea.si.model.dto.auth.JwtAuthenticationResponse;
+import tezea.si.model.dto.auth.JwtRefreshRequest;
+import tezea.si.model.dto.auth.JwtRefreshResponse;
 import tezea.si.service.JwtUserDetailsService;
 import tezea.si.service.RefreshTokenService;
 import tezea.si.utils.JwtTokenUtil;
@@ -68,11 +70,16 @@ public class JwtAuthenticationController {
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+
         final String token = jwtTokenUtil.generateToken(userDetails);
         final String refreshToken = jwtTokenUtil.generateRefreshToken(userDetails);
+
+        final Long expiresIn = jwtTokenUtil.getAccessTokenExpirationTime();
+
         refreshTokenService.saveRefreshToken(refreshToken);
 
-        return ResponseEntity.ok(new JwtAuthenticationResponse(token, refreshToken));
+        return ResponseEntity
+                .ok(new JwtAuthenticationResponse(token, refreshToken, expiresIn, userDetails.getAuthorities()));
     }
 
     private void authenticate(String username, String password) throws Exception {
