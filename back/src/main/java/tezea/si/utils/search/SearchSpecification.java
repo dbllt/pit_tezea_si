@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import tezea.si.model.business.Client;
 
 public class SearchSpecification<T> implements Specification<T> {
+	private static final long serialVersionUID = 1L;
 	private SearchCriteria criteria;
 
 	public SearchSpecification(SearchCriteria searchCriteria) {
@@ -19,22 +20,23 @@ public class SearchSpecification<T> implements Specification<T> {
 	@Override
 	public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
 			CriteriaBuilder builder) {
-		if (criteria.getOperation().equals(SearchOperations.EQUALS)) {
+		switch (criteria.getOperation()) {
+		case EQUALS:
 			return builder.equal(root.<String>get(criteria.getKey()),
 					criteria.getValue().toString());
-		} else if (criteria.getOperation().equals(SearchOperations.STARTSWITH)) {
+		case STARTSWITH:
 			return builder.like(root.<String>get(criteria.getKey()),
 					criteria.getValue() + "%");
-		}
-		else if (criteria.getOperation().equals(SearchOperations.CONTAINS)) {
+		case CONTAINS:
 			if (root.get(criteria.getKey()).getJavaType() == String.class) {
 				return builder.like(root.<String>get(criteria.getKey()),
 						"%" + criteria.getValue() + "%");
 			} else {
 				return builder.equal(root.get(criteria.getKey()), criteria.getValue());
 			}
+		default:
+			return null;
 		}
-		return null;
 	}
 
 }

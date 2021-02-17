@@ -13,6 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import tezea.si.dao.ClientDAO;
 import tezea.si.model.business.Client;
+import tezea.si.model.business.Client_;
 import tezea.si.model.business.Particulier;
 import tezea.si.model.dto.ClientSearchDTO;
 import tezea.si.service.ClientSearchService;
@@ -137,7 +138,7 @@ public class ClientSearchTests {
 	public void findWithBuiltSpec() {
 		// Act
 		Specification<Client> spec = builder
-				.with("codePostal", SearchOperations.CONTAINS, "352")
+				.with(Client_.CODE_POSTAL, SearchOperations.CONTAINS, "352")
 				.with("ville", SearchOperations.CONTAINS, "ennes").build();
 		List<Client> results = clientDao.findAll(spec);
 
