@@ -13,6 +13,19 @@ interface IState {
     redirect: boolean
 }
 
+function RedirectionIfNotConnected() {
+    let temp = localStorage.getItem('token');
+    if (temp === null) {
+        temp = "";
+    }
+    let token: string = temp;
+    if (token==="") {
+        return <Redirect to="/login"/>
+    }else{
+        return <div/>
+    }
+}
+
 class NewUserScreen extends Component<IProps, IState> {
     private username: React.RefObject<any>;
     private password: React.RefObject<any>;
@@ -68,7 +81,7 @@ class NewUserScreen extends Component<IProps, IState> {
     render() {
         return (
             <div>
-
+                <RedirectionIfNotConnected/>
                 <Grid container direction="column" justify="center" alignItems="center" spacing={5}>
                     <h1>Nouvel utilisateur</h1>
                     <Grid item>

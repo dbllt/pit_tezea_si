@@ -9,7 +9,6 @@ import {Link, Redirect} from "react-router-dom";
 import "./NewRequest.css";
 import {RouteComponentProps} from "react-router-dom";
 import FormClient from "../FormClient/FormClient";
-import API from "../../network/API";
 
 
 type StateType = {
@@ -24,6 +23,18 @@ interface IState {
 
 type IndexProps = RouteComponentProps<{}, {}, StateType>;
 
+function RedirectionIfNotConnected() {
+    let temp = localStorage.getItem('token');
+    if (temp === null) {
+        temp = "";
+    }
+    let token: string = temp;
+    if (token==="") {
+        return <Redirect to="/login"/>
+    }else{
+        return <div/>
+    }
+}
 class NewRequest extends Component<IndexProps, IState> {
     private task: React.RefObject<any>;
 
@@ -46,9 +57,10 @@ class NewRequest extends Component<IndexProps, IState> {
     };
 
     addRequest() {
-        if (this.getTask() !== "" || true) {//TODO remove true
-            API.addRequest(this.getTask(), "").then(() => this.setState({redirect: true}));
-        }
+        // if (this.getTask() !== "" || true) {//TODO remove true
+        //     API.addRequest(this.getTask(), "").then(() => this.setState({redirect: true}));
+        // }
+        this.setState({redirect: true})
     }
 
 
@@ -64,6 +76,7 @@ class NewRequest extends Component<IndexProps, IState> {
     render() {
         return (
             <Container>
+                <RedirectionIfNotConnected/>
                 <h1>Service {this.state.service}</h1>
                 <h1>Enregistrer une demande client</h1>
                 <Form className="form">
@@ -207,12 +220,12 @@ class NewRequest extends Component<IndexProps, IState> {
                     Enregistrer la demande
                 </Button>
 
-                <Link to="/menu">
+                <Link to="/">
                     <Button className={"MyButton"} type="button">
                         Retour
                     </Button>
                 </Link>
-                {this.state.redirect ? (<Redirect push to="/menu"/>) : null}
+                {this.state.redirect ? (<Redirect push to="/"/>) : null}
             </Container>
 
         );

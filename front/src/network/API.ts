@@ -1,7 +1,23 @@
 interface Request {
     id: string;
-    task: string;
-    address: string;
+    date: string,
+    hour: string,
+    concierge: string,
+    site: string,
+    serviceType: string,
+    requestStatus: string,
+    requestAssignment: string,
+    emergency: string,
+    clientStatus: string,
+    company: string,
+    gender: string,
+    lName: string,
+    fName: string,
+    phone: string,
+    email: string,
+    address: string,
+    cp: string,
+    city: string
 }
 
 interface Client {
@@ -35,21 +51,59 @@ const paul: Client = {
     mail: "paul@mail.fr"
 }
 
+interface filter {
+    site: string,
 
-const request: Request = {
-    id: "0",
-    task: "task",
-    address: "address"
 }
 
+
 let requests: Request[] = [];
+addRequest("1", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("2", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "En cours", "Ouvrier 3", "Urgent", "Entreprise", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("3", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("4", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("5", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "En cours", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("6", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("7", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "En cours", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("8", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("9", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+
+
 let clients: Client[] = [];
 let users: User[] = [];
 users.push(serge);
 users.push(pierre);
 clients.push(paul);
-requests.push(request);
-const role="";
+const role = "";
+
+
+function addRequest(requestNumber: string, date: string, hour: string, concierge: string, site: string, serviceType: string, requestStatus: string, requestAssignment: string, emergency: string,
+                    clientStatus: string, company: string, gender: string, lName: string, fName: string, phone: string, email: string, address: string, cp: string, city: string) {
+    const request = {
+        id: requestNumber,
+        date: date,
+        hour: hour,
+        concierge: concierge,
+        site: site,
+        serviceType: serviceType,
+        requestStatus: requestStatus,
+        requestAssignment: requestAssignment,
+        emergency: emergency,
+        clientStatus: clientStatus,
+        company: company,
+        gender: gender,
+        lName: lName,
+        fName: fName,
+        phone: phone,
+        email: email,
+        address: address,
+        cp: cp,
+        city: city
+    }
+
+    requests.push(request);
+}
+
 
 const API = {
 
@@ -82,19 +136,75 @@ const API = {
         return found;
     },
 
+    disconnect: async function (): Promise<any> {
+
+        let temp = localStorage.getItem('token');
+        if (temp === null) {
+            temp = "";
+        }
+        let token: string = temp;
+
+        temp = localStorage.getItem('refreshToken');
+        if (temp === null) {
+            temp = "";
+        }
+        let refreshToken: string = temp;
+        const requestOptions = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + token
+            },
+            body: JSON.stringify({refreshToken: refreshToken})
+        };
+
+        await fetch('/auth/token', requestOptions)
+            .then(async response => {
+                if (response.status!==204) {
+                    return Promise.reject(response);
+                } else {
+                    console.log('user disconnected');
+                    localStorage.setItem('token', "")
+                    localStorage.setItem('refreshToken', "")
+                }
+            }).catch(error => {
+                console.error('There was an error!', error);
+            })
+
+
+    },
+
     getRole: function (): string {
         return role;
     },
 
-    getRequests: async function (): Promise<Request[]> {
-        return requests;
+    getRequests: async function (filter: filter): Promise<Request[]> {
+        let ret = requests.filter((request => request.site.toLocaleLowerCase().includes(filter.site.toLocaleLowerCase())))
+        return ret;
     },
-    addRequest: async function (task: string, address: string): Promise<any> {
-        const request: Request = {
-            id: clients.length.toString(),
-            task: task,
-            address: address
-        };
+    addRequest: async function (requestNumber: string, date: string, hour: string, concierge: string, site: string, serviceType: string, requestStatus: string, requestAssignment: string, emergency: string,
+                                clientStatus: string, company: string, gender: string, lName: string, fName: string, phone: string, email: string, address: string, cp: string, city: string): Promise<any> {
+        const request = {
+            id: requestNumber,
+            date: date,
+            hour: hour,
+            concierge: concierge,
+            site: site,
+            serviceType: serviceType,
+            requestStatus: requestStatus,
+            requestAssignment: requestAssignment,
+            emergency: emergency,
+            clientStatus: clientStatus,
+            company: company,
+            gender: gender,
+            lName: lName,
+            fName: fName,
+            phone: phone,
+            email: email,
+            address: address,
+            cp: cp,
+            city: city
+        }
 
         requests.push(request);
     },
@@ -167,14 +277,16 @@ const API = {
     addUser: async function (username: string, password: string, role: string): Promise<any> {
 
         let temp = localStorage.getItem('token');
-        if(temp===null){
-            temp="";
+        if (temp === null) {
+            temp = "";
         }
         let token: string = temp;
         const requestOptions = {
             method: 'POST',
-            headers: {'Content-Type': 'application/json',
-                      'Authorization': "Bearer " +token},
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + token
+            },
             body: JSON.stringify({username: username, password: password})
         };
 

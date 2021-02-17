@@ -7,12 +7,13 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import {Button} from "@material-ui/core";
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import "./UsersScreen.css";
 import API from "../../network/API";
 
 
 const tableHeadNames = ["Identifiant", "Rôle"];
+
 function createRequestData(username: string, role: string) {
     return {
         username, role,
@@ -47,6 +48,18 @@ interface IState {
     users: User[];
 }
 
+function RedirectionIfNotConnected() {
+    let temp = localStorage.getItem('token');
+    if (temp === null) {
+        temp = "";
+    }
+    let token: string = temp;
+    if (token==="") {
+        return <Redirect to="/login"/>
+    }else{
+        return <div/>
+    }
+}
 
 class UsersScreen extends Component<IProps, IState> {
     state = {
@@ -59,9 +72,11 @@ class UsersScreen extends Component<IProps, IState> {
         }));
     }
 
+
     render() {
         return (
             <div className={"users"}>
+                <RedirectionIfNotConnected/>
                 <TableContainer component={Paper}>
                     <Table aria-label="collapsible table">
                         <TableHead>
@@ -74,8 +89,8 @@ class UsersScreen extends Component<IProps, IState> {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {this.state.users.map((user:User) => (
-                                <Row key={user.id} row={user} />
+                            {this.state.users.map((user: User) => (
+                                <Row key={user.id} row={user}/>
                             ))}
                         </TableBody>
                     </Table>
@@ -85,7 +100,7 @@ class UsersScreen extends Component<IProps, IState> {
                         Ajouter utilisateur
                     </Button>
                 </Link>
-                <Link to="/menu">
+                <Link to="/">
                     <Button color="primary">
                         Retour
                     </Button>

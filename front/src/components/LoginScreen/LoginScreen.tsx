@@ -13,6 +13,19 @@ interface IState {
     redirect: boolean
 }
 
+function RedirectionIfNotConnected() {
+    let temp = localStorage.getItem('token');
+    if (temp === null) {
+        temp = "";
+    }
+    let token: string = temp;
+    if (token !== "") {
+        return <Redirect to="/"/>
+    } else {
+        return <div/>
+    }
+}
+
 class LoginScreen extends Component<IProps, IState> {
     private username: React.RefObject<any>;
     private password: React.RefObject<any>;
@@ -38,8 +51,7 @@ class LoginScreen extends Component<IProps, IState> {
                         this.setState({redirect: true})
                     }
                 }
-            )
-            ;
+            );
         }
     }
 
@@ -63,6 +75,7 @@ class LoginScreen extends Component<IProps, IState> {
     render() {
         return (
             <div className={styles.LoginScreen}>
+                <RedirectionIfNotConnected/>
                 <Grid container direction="column" justify="center" alignItems="center" spacing={5}>
                     <h1>Connexion</h1>
                     <Grid item>
@@ -90,7 +103,7 @@ class LoginScreen extends Component<IProps, IState> {
                         </Button>
                     </Grid>
                 </Grid>
-                {this.state.redirect ? (<Redirect push to="/menu"/>) : null}
+                {this.state.redirect ? (<Redirect push to="/"/>) : null}
             </div>
         )
     }

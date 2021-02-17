@@ -6,6 +6,7 @@ import Select from '@material-ui/core/Select';
 import styles from './FormClient.module.css';
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
+import {Redirect} from "react-router-dom";
 
 interface Props {
 
@@ -24,20 +25,18 @@ interface State {
     ville : String;
 };
 
-interface Client {
-    statut: String;
-    gender: String;
-    nom: String;
-    lastName: String;
-    firstName: String;
-    tel: String;
-    email: String;
-    address : String;
-    codepostal : Number;
-    ville : String;
-
+function RedirectionIfNotConnected() {
+    let temp = localStorage.getItem('token');
+    if (temp === null) {
+        temp = "";
+    }
+    let token: string = temp;
+    if (token==="") {
+        return <Redirect to="/login"/>
+    }else{
+        return <div/>
+    }
 }
-
 
 
 class FormClient extends Component<Props,State> {
@@ -71,7 +70,7 @@ class FormClient extends Component<Props,State> {
     render(){
         return (
             <Container>
-                
+                <RedirectionIfNotConnected/>
                 <form>
                     <Grid container direction="column" alignItems="flex-start">
 

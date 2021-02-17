@@ -1,12 +1,26 @@
 import React, {Component} from 'react';
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import {Button} from "@material-ui/core";
 
+
+function RedirectionIfNotConnected() {
+    let temp = localStorage.getItem('token');
+    if (temp === null) {
+        temp = "";
+    }
+    let token: string = temp;
+    if (token==="") {
+        return <Redirect to="/login"/>
+    }else{
+        return <div/>
+    }
+}
 
 class ServiceList extends Component {
     render() {
         return (
             <div style={{margin: 50}}>
+                <RedirectionIfNotConnected/>
                 <Link to={{
                     pathname: '/newRequest',
                     state: {

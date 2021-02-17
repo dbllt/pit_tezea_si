@@ -1,6 +1,6 @@
 import React from "react";
 import {
-    Link
+    Link, Redirect
 } from "react-router-dom";
 import {Button} from '@material-ui/core';
 import API from "../../network/API";
@@ -10,6 +10,19 @@ interface IProps {
 }
 
 interface IState {
+}
+
+function RedirectionIfNotConnected() {
+    let temp = localStorage.getItem('token');
+    if (temp === null) {
+        temp = "";
+    }
+    let token: string = temp;
+    if (token==="") {
+        return <Redirect to="/login"/>
+    }else{
+        return <div/>
+    }
 }
 
 class Menu extends React.Component<IProps, IState> {
@@ -35,6 +48,7 @@ class Menu extends React.Component<IProps, IState> {
 
         return (
             <div style={{margin: 50}}>
+                <RedirectionIfNotConnected/>
                 <Link to="/requestsList" style={{margin: 20}}>
                     <Button variant="contained">
                         Liste de demandes
