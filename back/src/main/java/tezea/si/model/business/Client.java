@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import tezea.si.model.business.request.Request;
 
@@ -21,7 +22,8 @@ import tezea.si.model.business.request.Request;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="client_type", discriminatorType = DiscriminatorType.STRING)
 public abstract class Client implements Serializable {
-
+    
+	
 	/**
 	 * 
 	 */
@@ -35,6 +37,15 @@ public abstract class Client implements Serializable {
 	protected String ville;
 	protected List<Request> requests;
 
+	private String clientType;
+	@Column(name = "client_type", insertable = false, updatable = false)
+	public String getDiscriminator() {
+		return clientType;
+	}
+	protected void setDiscriminator(String type) {
+		this.clientType = type;
+	}
+	
 	public Client() {
 	}
 

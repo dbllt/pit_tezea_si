@@ -1,7 +1,5 @@
 package tezea.si.utils;
 
-import java.util.logging.Logger;
-
 import tezea.si.model.business.request.DonationRequest;
 import tezea.si.model.business.request.InformationRequest;
 import tezea.si.model.business.request.PlasmaRequest;

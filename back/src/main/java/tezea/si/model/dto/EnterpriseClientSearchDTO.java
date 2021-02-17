@@ -3,7 +3,7 @@ package tezea.si.model.dto;
 import java.io.Serializable;
 
 import tezea.si.model.business.Client;
-import tezea.si.model.business.Entreprise;
+import tezea.si.model.business.Enterprise;
 
 public class EnterpriseClientSearchDTO extends ClientSearchDTO implements Serializable {
 	private String name;
@@ -14,8 +14,8 @@ public class EnterpriseClientSearchDTO extends ClientSearchDTO implements Serial
 	
 	public EnterpriseClientSearchDTO(Client copy) {		
 		super(copy);
-		assert(copy instanceof Entreprise);
-		Entreprise e = (Entreprise)copy;
+		assert(copy instanceof Enterprise);
+		Enterprise e = (Enterprise)copy;
 		setName(e.getNom());
 	}
 

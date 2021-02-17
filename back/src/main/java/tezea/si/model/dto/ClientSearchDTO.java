@@ -3,6 +3,8 @@ package tezea.si.model.dto;
 import java.io.Serializable;
 import java.sql.Date;
 
+import javax.persistence.Transient;
+
 import tezea.si.model.business.Client;
 
 public abstract class ClientSearchDTO implements Serializable {
@@ -15,12 +17,14 @@ public abstract class ClientSearchDTO implements Serializable {
 	private String codePostal;
 	private String city;
 	private Date date;
+	private String inherits;
 	
 	public ClientSearchDTO() {
 		
 	}
 	
 	public ClientSearchDTO(Client copy) {
+		inherits = (copy.getDiscriminator());
 		setId(copy.getId());
 		setEmail(copy.getEmail());
 		setCodePostal(copy.getCodePostal());
@@ -30,7 +34,11 @@ public abstract class ClientSearchDTO implements Serializable {
 		setAddress(copy.getAdresse());
 		//copy.getRequests()
 	}
-
+	
+	public String getDiscriminator() {
+		return inherits;
+	}
+	
 	public long getId() {
 		return id;
 	}

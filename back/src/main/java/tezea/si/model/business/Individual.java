@@ -7,7 +7,7 @@ import javax.persistence.Enumerated;
 
 @Entity
 @DiscriminatorValue("Particulier")
-public class Particulier extends Client {
+public class Individual extends Client {
 	
 	/**
 	 * 
@@ -17,7 +17,7 @@ public class Particulier extends Client {
 	private String prenom;
 	private HonorificTitle honorificTitle;
 	
-	public Particulier() {}
+	public Individual() {}
 
 	public String getNom() {
 		return nom;

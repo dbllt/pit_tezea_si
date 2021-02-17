@@ -4,21 +4,21 @@ import java.io.Serializable;
 
 import tezea.si.model.business.Client;
 import tezea.si.model.business.HonorificTitle;
-import tezea.si.model.business.Particulier;
+import tezea.si.model.business.Individual;
 
-public class ParticulierClientSearchDTO extends ClientSearchDTO implements Serializable {
+public class IndividualClientSearchDTO extends ClientSearchDTO implements Serializable {
 	private String nom;
 	private String prenom;
 	private HonorificTitle honorificTitle;
 	
-	public ParticulierClientSearchDTO() {
+	public IndividualClientSearchDTO() {
 		super();
 	}
 	
-	public ParticulierClientSearchDTO(Client copy) {		
+	public IndividualClientSearchDTO(Client copy) {		
 		super(copy);
-		assert(copy instanceof Particulier);
-		Particulier p = (Particulier)copy;
+		assert(copy instanceof Individual);
+		Individual p = (Individual)copy;
 		setNom(p.getNom());
 		setPrenom(p.getPrenom());
 		setHonorificTitle(p.getHonorificTitle());

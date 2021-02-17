@@ -2,9 +2,11 @@ package tezea.si;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -26,7 +28,7 @@ import tezea.si.dao.RequestDAO;
 import tezea.si.dao.RequestEmployeeDAO;
 import tezea.si.dao.SiteDAO;
 import tezea.si.dao.UserTezeaDAO;
-import tezea.si.model.business.Entreprise;
+import tezea.si.model.business.Enterprise;
 import tezea.si.model.business.HonorificTitle;
 import tezea.si.model.business.RequestEmployee;
 import tezea.si.model.business.Site;
@@ -38,7 +40,6 @@ import tezea.si.model.business.request.Priority;
 import tezea.si.model.business.request.Request;
 import tezea.si.model.business.request.SatisfactionLevel;
 import tezea.si.model.dto.EnterpriseClientSearchDTO;
-import tezea.si.utils.ClientToDTOConverter;
 import tezea.si.utils.HibernateProxyTypeAdapter;
 import tezea.si.utils.RequestToDTOConverter;
 
@@ -61,7 +62,7 @@ public class BusinessRequestTests {
 	@Autowired
 	RequestEmployeeDAO requestEmployeeDao;
 
-	Entreprise c;
+	Enterprise c;
 	UserTezea u;
 	Estimation e;
 	RequestEmployee re;
@@ -78,9 +79,10 @@ public class BusinessRequestTests {
 		requestEmployeeDao.deleteAll();
 	}
 	
+	//BeforeEach
 	private void start1() {
 		clean();
-		c = new Entreprise();
+		c = new Enterprise();
 		c.setAdresse("28 rue de la patate");
 		c.setCodePostal("25000");
 		c.setEmail("m@m.fr");
@@ -143,7 +145,7 @@ public class BusinessRequestTests {
 		p = prestationDao.save(p);
 		e = estimationDao.save(e);
 
-		c = (Entreprise) clientDao.findById(c.getId()).get();
+		c = (Enterprise) clientDao.findById(c.getId()).get();
 		re = requestEmployeeDao.findById(re.getId()).get();
 		u = userDao.findById(u.getId()).get();
 		s = siteDao.findById(s.getId()).get();
@@ -167,7 +169,8 @@ public class BusinessRequestTests {
 		assertNotNull(test.getClosedBy(), "test closedby");
 		assertNotNull(test.getResponsable(), "test responsable");
 		assertEquals(test.getResponsable().getUsername(), u.getUsername(), "test responsable username");
-		
+		assertFalse(u.getSites().get(0).getRequests().isEmpty(), "site has updated request");
+
 		assertNotNull(p.getRequest(), "p request");
 		assertEquals(p.getRequest().getSite().getResponsable().getUsername(), u.getUsername(), "p req site resp user");
 		assertNotNull(p.getDate(), "p date");
@@ -213,7 +216,6 @@ public class BusinessRequestTests {
 		logger.info(test.getClosedBy().getUsername());
 		logger.info(test.getResponsable().getUsername());
 		
-
 		assertEquals(test.getDescription(), "NO DESCRIPTION");
 	}
 	
@@ -255,8 +257,6 @@ public class BusinessRequestTests {
 		assertEquals(list.size(), 1, "size:" + list.size());
 		PrestationRequest test = (PrestationRequest) list.get(0);
 		long id = test.getId();
-		logger.info("salutmec:"+test.getResponsable().getUsername());
-		logger.info("salutmec:"+test.getResponsable().getId());
 		
 		userDao.delete(test.getResponsable()); //repercutions avec @PreRemove
 		
@@ -267,6 +267,28 @@ public class BusinessRequestTests {
 	}
 	
 	@Test
+	public void testResponsableUserTezeaNull() throws Exception {
+		this.start1();
+
+		List<Request> list = requestDao.findAll();
+		assertEquals(list.size(), 1, "size:" + list.size());
+		PrestationRequest test = (PrestationRequest) list.get(0);
+		long id = test.getId();
+		
+		test.setResponsable(null);
+		test.getSite().setResponsable(null);
+		requestDao.save(test);
+		siteDao.save(test.getSite());
+		
+		PrestationRequest up = (PrestationRequest) requestDao.findById(id).get();
+		
+		assertNotEquals(userDao.count(), 0, "removed u in dao");
+		assertNull(up.getResponsable(), "not null responsable");
+		assertNull(up.getSite().getResponsable(), "not null site resp");
+		assertNotNull(up.getClosedBy(), "null closed by");
+	}
+	
+	@Test
 	public void testUserTezeaNullEverywhereUsedIfDeleted() throws Exception {
 		this.start1();
 
@@ -274,8 +296,6 @@ public class BusinessRequestTests {
 		assertEquals(list.size(), 1, "size:" + list.size());
 		PrestationRequest test = (PrestationRequest) list.get(0);
 		long id = test.getId();
-		logger.info("salutmec:"+test.getResponsable().getUsername());
-		logger.info("salutmec:"+test.getResponsable().getId());
 		
 		userDao.delete(u); //repercutions avec @PreRemove
 		
@@ -285,6 +305,26 @@ public class BusinessRequestTests {
 		assertNull(up.getResponsable(), "not null responsable");
 		assertNull(up.getClosedBy(), "not null closedBy");
 		assertNull(up.getSite().getResponsable(), "not null site resp");
+	}
+	
+	@Test
+	public void testEntrepriseNullEverywhereUsedIfDeleted() throws Exception {
+		this.start1();
+
+		List<Request> list = requestDao.findAll();
+		assertEquals(list.size(), 1, "size:" + list.size());
+		PrestationRequest test = (PrestationRequest) list.get(0);
+		long id = test.getId();
+		
+		requestDao.delete(test); //repercutions avec @PreRemove
+		
+		assertThrows(NoSuchElementException.class, () -> requestDao.findById(id).get(), "request not removed");
+		assertTrue(u.getResponsabilities().isEmpty(), "user has responsabilities");
+		assertTrue(u.getClosedBy().isEmpty(), "user has responsabilities");
+		assertTrue(u.getEstimations().isEmpty(), "user has estimations");
+		assertTrue(u.getSites().get(0).getRequests().isEmpty(), "site has not updated request");
+		assertThrows(NoSuchElementException.class, () -> prestationDao.findById(p.getId()).get());
+		assertNotNull(requestEmployeeDao.findById(re.getId()).get(), "request employee deleted");
 	}
 	
 	@Test

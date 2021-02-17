@@ -2,6 +2,9 @@ package tezea.si.model.dto.requests;
 
 import java.io.Serializable;
 import java.sql.Date;
+
+import javax.persistence.Transient;
+
 import tezea.si.model.business.Site;
 import tezea.si.model.business.request.Priority;
 import tezea.si.model.business.request.Request;
@@ -21,8 +24,10 @@ public class RequestDTO implements Serializable {
     private String description;
     private RequestStatus status;
     private UserTezeaDTO closedBy;
+	private String inherits;
 
     public RequestDTO(Request copy){
+    	this.inherits = copy.getDiscriminator();
         this.id = copy.getId();
         this.date = copy.getDate();
         this.site = copy.getSite();
@@ -35,7 +40,11 @@ public class RequestDTO implements Serializable {
     }
 
     public RequestDTO(){}
-
+    
+    public String getDiscriminator() {
+    	return inherits;
+    }
+    
     public long getId() {
         return id;
     }

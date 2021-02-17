@@ -17,6 +17,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import tezea.si.model.business.Client;
 import tezea.si.model.business.Site;
@@ -24,8 +25,9 @@ import tezea.si.model.business.UserTezea;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="request_type", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorColumn(name = "request_type", discriminatorType = DiscriminatorType.STRING)
 public abstract class Request {
+	
 
 	private long id;
 	private Date date;
@@ -38,9 +40,18 @@ public abstract class Request {
 	private RequestStatus status;
 	// TODO : Utiliser idUserTezea plutôt que d'avoir l'objet complet ?
 	private UserTezea closedBy;
-
+	
+	private String requestType;
+	@Column(name = "request_type", insertable = false, updatable = false)
+	public String getDiscriminator() {
+		return requestType;
+	}
+	protected void setDiscriminator(String type) {
+		this.requestType = type;
+	}
+	
 	@Id
-	@Column(name="id_request", nullable=false)
+	@Column(name = "id_request", nullable = false)
 	@GeneratedValue
 	public long getId() {
 		return id;
@@ -55,10 +66,10 @@ public abstract class Request {
 	public Site getSite() {
 		return site;
 	}
-	
+
 	@ManyToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn
-	//@JoinColumn(name="id_user", insertable=false, updatable=false)
+	// @JoinColumn(name="id_user", insertable=false, updatable=false)
 	public UserTezea getResponsable() {
 		return responsable;
 	}
@@ -82,9 +93,9 @@ public abstract class Request {
 	public RequestStatus getStatus() {
 		return status;
 	}
-	
+
 	@ManyToOne(fetch = FetchType.LAZY, optional = true)
-	//@JoinColumn(name="id_user", insertable=false, updatable=false)
+	// @JoinColumn(name="id_user", insertable=false, updatable=false)
 	public UserTezea getClosedBy() {
 		return closedBy;
 	}
