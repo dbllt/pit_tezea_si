@@ -127,4 +127,30 @@ public abstract class Client implements Serializable {
 		this.requests = requests;
 	}
 
+	public void updateFrom(Client c) {
+		if(c.adresse != null) {
+			this.adresse = c.adresse;
+		}
+		
+		if(c.codePostal != null) {
+			this.codePostal = c.codePostal;
+		}
+		
+		if(c.dateAjout != null) {
+			this.dateAjout = c.dateAjout;
+		}
+		
+		if(c.email != null) {
+			this.email = c.email;
+		}
+		
+		if(c.telephone != null) {
+			this.telephone = c.telephone;
+		}
+		
+		if(c.ville != null) {
+			this.ville = c.ville;
+		}
+		
+	}
 }
