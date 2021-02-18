@@ -11,6 +11,7 @@ interface IProps {
 
 interface IState {
     redirect: boolean
+    triedToLogin:boolean
 }
 
 function RedirectionIfNotConnected() {
@@ -32,6 +33,7 @@ class LoginScreen extends Component<IProps, IState> {
 
     state = {
         redirect: false,
+        triedToLogin:false,
     }
 
     constructor(props: IProps) {
@@ -45,6 +47,7 @@ class LoginScreen extends Component<IProps, IState> {
     }
 
     login() {
+        this.setState({triedToLogin:true})
         if (this.getUsername() !== "" && this.getPassword() !== "") {
             API.login(this.getUsername(), this.getPassword()).then((b) => {
                     if (b) {
@@ -76,8 +79,8 @@ class LoginScreen extends Component<IProps, IState> {
         return (
             <div className={styles.LoginScreen}>
                 <RedirectionIfNotConnected/>
+                <h1>Connexion</h1>
                 <Grid container direction="column" justify="center" alignItems="center" spacing={5}>
-                    <h1>Connexion</h1>
                     <Grid item>
                         <TextField
                             label="Identifiant:"
@@ -85,6 +88,8 @@ class LoginScreen extends Component<IProps, IState> {
                             id="outlined-margin-normal"
                             margin="normal"
                             variant="outlined"
+                            error={(this.state.triedToLogin&&this.getUsername()==="")}
+                            helperText={(this.state.triedToLogin&&this.getUsername()==="") ? 'Manquant' : ' '}
                         />
                     </Grid>
                     <Grid item>
@@ -95,6 +100,8 @@ class LoginScreen extends Component<IProps, IState> {
                             id="outlined-margin-normal"
                             margin="normal"
                             variant="outlined"
+                            error={(this.state.triedToLogin&&this.getPassword()==="")}
+                            helperText={(this.state.triedToLogin&&this.getPassword()==="") ? 'Manquant' : ' '}
                         />
                     </Grid>
                     <Grid>

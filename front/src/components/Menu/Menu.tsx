@@ -4,6 +4,7 @@ import {
 } from "react-router-dom";
 import {Button} from '@material-ui/core';
 import API from "../../network/API";
+import styles from './Menu.module.css';
 
 interface IProps {
 
@@ -18,9 +19,9 @@ function RedirectionIfNotConnected() {
         temp = "";
     }
     let token: string = temp;
-    if (token==="") {
+    if (token === "") {
         return <Redirect to="/login"/>
-    }else{
+    } else {
         return <div/>
     }
 }
@@ -34,28 +35,28 @@ class Menu extends React.Component<IProps, IState> {
 
     render() {
         var usersList;
-        if (API.getRole() === "serge"||true) {//TODO remove true
-            usersList = <Link to="/users" style={{margin: 20}}>
-                <Button variant="contained">
+        if (API.getRole() === "serge" || true) {//TODO remove true
+            usersList = <Link to="/users" >
+                <Button variant="contained" className={styles.MyButton}>
                     Liste utilisateurs
                 </Button>
             </Link>
-            ;
+
         } else {
             usersList = <div/>;
         }
 
 
         return (
-            <div style={{margin: 50}}>
+            <div className={styles.MyDiv}>
                 <RedirectionIfNotConnected/>
-                <Link to="/requestsList" style={{margin: 20}}>
-                    <Button variant="contained">
+                <Link to="/requestsList" >
+                    <Button variant="contained" className={styles.MyButton}>
                         Liste de demandes
                     </Button>
                 </Link>
-                <Link to="/serviceList" style={{margin: 20}}>
-                    <Button variant="contained">
+                <Link to="/serviceList" >
+                    <Button variant="contained" className={styles.MyButton}>
                         Nouvelle demande
                     </Button>
                 </Link>
