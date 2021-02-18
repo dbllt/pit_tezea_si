@@ -1,7 +1,10 @@
 package tezea.si.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,8 +25,8 @@ public class ClientController {
     ClientDAO clientDAO;
 	
 	@Operation(summary = "get clients based on json filter")
-    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "get clients based on json filter") })
-    @RequestMapping(value = "/clients", method = RequestMethod.POST)
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "get clients") })
+    @RequestMapping(value = "/clients", method = RequestMethod.GET)
     public ResponseEntity<Iterable<Client>> getClients() {
 	     Iterable<Client> clientsIt = clientDAO.findAll();
 	     return ResponseEntity.ok(clientsIt);
@@ -43,6 +46,18 @@ public class ClientController {
     @RequestMapping(value = "/createparticulier", method = RequestMethod.POST)
     public void saveClient(@RequestBody Particulier c) {
 	     clientDAO.save(c);
+	     
+    }
+	
+	@Operation(summary = "edit client")
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "modify client based on json") })
+    @RequestMapping(value = "/editclient/{id}", method = RequestMethod.POST)
+    public void modifyClient(@RequestBody Client c, @PathVariable Long id) {
+	     Optional<Client> client = clientDAO.findById(id);
+	     if(client.get()!=null) {
+	    	 client.get().updateFrom(c);
+	    	 clientDAO.save(client.get());
+	     }
 	     
     }
 	
