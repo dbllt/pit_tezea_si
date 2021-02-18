@@ -79,8 +79,8 @@ class LoginScreen extends Component<IProps, IState> {
         return (
             <div className={styles.LoginScreen}>
                 <RedirectionIfNotConnected/>
+                <h1>Connexion</h1>
                 <Grid container direction="column" justify="center" alignItems="center" spacing={5}>
-                    <h1>Connexion</h1>
                     <Grid item>
                         <TextField
                             label="Identifiant:"

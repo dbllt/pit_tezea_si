@@ -85,8 +85,8 @@ class NewUserScreen extends Component<IProps, IState> {
         return (
             <div>
                 <RedirectionIfNotConnected/>
+                <h1>Nouvel utilisateur</h1>
                 <Grid container direction="column" justify="center" alignItems="center" spacing={5}>
-                    <h1>Nouvel utilisateur</h1>
                     <Grid item>
                         <TextField
                             inputRef={this.username}
