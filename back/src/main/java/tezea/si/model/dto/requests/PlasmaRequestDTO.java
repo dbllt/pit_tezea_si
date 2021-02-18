@@ -16,4 +16,12 @@ public class PlasmaRequestDTO extends RequestDTO implements Serializable {
         PlasmaRequest r = (PlasmaRequest) copy;
         this.appointmentDate = r.getAppointmentDate();
     }
+
+    public Date getAppointmentDate() {
+        return appointmentDate;
+    }
+
+    public void setAppointmentDate(Date appointmentDate) {
+        this.appointmentDate = appointmentDate;
+    }
 }

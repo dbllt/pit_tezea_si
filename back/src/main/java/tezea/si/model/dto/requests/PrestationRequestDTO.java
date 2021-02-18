@@ -17,4 +17,12 @@ public class PrestationRequestDTO extends RequestDTO implements Serializable {
         this.estimation = new EstimationDTO(r.getEstimation());
         this.prestation = new PrestationDTO(r.getPrestation());
     }
+
+    public EstimationDTO getEstimation() {
+        return estimation;
+    }
+
+    public void setEstimation(EstimationDTO estimation) {
+        this.estimation = estimation;
+    }
 }

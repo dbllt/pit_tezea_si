@@ -38,7 +38,7 @@ public class EstimationDTO implements Serializable {
         return requestId;
     }
 
-    public void setRequest(long requestId) {
+    public void setRequestId(long requestId) {
         this.requestId = requestId;
     }
 

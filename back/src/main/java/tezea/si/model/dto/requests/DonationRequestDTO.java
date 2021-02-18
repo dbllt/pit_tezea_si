@@ -23,4 +23,6 @@ public class DonationRequestDTO extends RequestDTO implements Serializable {
     public void setAmount(double amount) {
         this.amount = amount;
     }
+
+    
 }
