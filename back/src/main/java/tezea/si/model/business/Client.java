@@ -1,7 +1,8 @@
 package tezea.si.model.business;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,22 +17,22 @@ public abstract class Client implements Serializable{
 	private static final long serialVersionUID = 6515822297439920891L;
 	protected long id;
 	protected String email;
-	protected String telephone;
-	protected Date dateAjout;
-	protected String adresse;
+	protected String phone;
+	protected Date addDate;
+	protected String adress;
 	protected String codePostal;
-	protected String ville;
+	protected String city;
 	
 	public Client() {}
 	
 	public Client(String email, String tel, String adresse, String codePostal, String ville) {
 		this.email = email;
-		this.telephone = tel;
-		this.adresse = adresse;
+		this.phone = tel;
+		this.adress = adresse;
 		this.codePostal = codePostal;
-		this.ville = ville;
-		
-		this.dateAjout = new Date(1000);
+		this.city = ville;
+		Calendar today = Calendar.getInstance();
+		this.addDate = today.getTime();
 	}
 	
 	@Id
@@ -51,23 +52,23 @@ public abstract class Client implements Serializable{
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getTelephone() {
-		return telephone;
+	public String getPhone() {
+		return phone;
 	}
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
+	public void setPhone(String telephone) {
+		this.phone = telephone;
 	}
-	public Date getDateAjout() {
-		return dateAjout;
+	public Date getAddDate() {
+		return addDate;
 	}
-	public void setDateAjout(Date dateAjout) {
-		this.dateAjout = dateAjout;
+	public void setAddDate(Date dateAjout) {
+		this.addDate = dateAjout;
 	}
-	public String getAdresse() {
-		return adresse;
+	public String getAdress() {
+		return adress;
 	}
-	public void setAdresse(String adresse) {
-		this.adresse = adresse;
+	public void setAdress(String adresse) {
+		this.adress = adresse;
 	}
 	public String getCodePostal() {
 		return codePostal;
@@ -75,36 +76,36 @@ public abstract class Client implements Serializable{
 	public void setCodePostal(String codePostal) {
 		this.codePostal = codePostal;
 	}
-	public String getVille() {
-		return ville;
+	public String getCity() {
+		return city;
 	}
-	public void setVille(String ville) {
-		this.ville = ville;
+	public void setCity(String ville) {
+		this.city = ville;
 	}
 
 	public void updateFrom(Client c) {
-		if(c.adresse != null) {
-			this.adresse = c.adresse;
+		if(c.adress != null) {
+			this.adress = c.adress;
 		}
 		
 		if(c.codePostal != null) {
 			this.codePostal = c.codePostal;
 		}
 		
-		if(c.dateAjout != null) {
-			this.dateAjout = c.dateAjout;
+		if(c.addDate != null) {
+			this.addDate = c.addDate;
 		}
 		
 		if(c.email != null) {
 			this.email = c.email;
 		}
 		
-		if(c.telephone != null) {
-			this.telephone = c.telephone;
+		if(c.phone != null) {
+			this.phone = c.phone;
 		}
 		
-		if(c.ville != null) {
-			this.ville = c.ville;
+		if(c.city != null) {
+			this.city = c.city;
 		}
 		
 	}
