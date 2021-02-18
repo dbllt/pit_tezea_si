@@ -11,6 +11,7 @@ interface IProps {
 
 interface IState {
     redirect: boolean
+    triedToCreate:boolean
 }
 
 function RedirectionIfNotConnected() {
@@ -33,6 +34,7 @@ class NewUserScreen extends Component<IProps, IState> {
 
     state = {
         redirect: false,
+        triedToCreate:false,
     }
 
     constructor(props: IProps) {
@@ -73,6 +75,7 @@ class NewUserScreen extends Component<IProps, IState> {
     };
 
     addUser() {
+        this.setState({triedToCreate:true})
         if (this.getUsername() !== "" && this.getRole() !== ""&& this.getPassword() !== "") {
             API.addUser(this.getUsername(),this.getPassword(), this.getRole()).then(() => this.setState({redirect: true}));
         }
@@ -91,6 +94,8 @@ class NewUserScreen extends Component<IProps, IState> {
                             id="outlined-margin-normal"
                             margin="normal"
                             variant="outlined"
+                            error={(this.state.triedToCreate&&this.getUsername()==="")}
+                            helperText={(this.state.triedToCreate&&this.getUsername()==="") ? 'Manquant' : ' '}
                         />
                     </Grid>
                     <Grid item>
@@ -101,6 +106,8 @@ class NewUserScreen extends Component<IProps, IState> {
                             id="outlined-margin-normal"
                             margin="normal"
                             variant="outlined"
+                            error={(this.state.triedToCreate&&this.getPassword()==="")}
+                            helperText={(this.state.triedToCreate&&this.getPassword()==="") ? 'Manquant' : ' '}
                         />
                     </Grid>
                     <Grid item>
@@ -110,6 +117,8 @@ class NewUserScreen extends Component<IProps, IState> {
                             id="outlined-margin-normal"
                             margin="normal"
                             variant="outlined"
+                            error={(this.state.triedToCreate&&this.getRole()==="")}
+                            helperText={(this.state.triedToCreate&&this.getRole()==="") ? 'Manquant' : ' '}
                         />
                     </Grid>
                     <Grid>
