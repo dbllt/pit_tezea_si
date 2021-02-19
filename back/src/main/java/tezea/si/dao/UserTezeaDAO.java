@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import tezea.si.model.business.UserTezea;
 
 @Repository
-public interface UserTezeaDAO extends JpaRepository<UserTezea, Long>{
+public interface UserTezeaDAO extends JpaRepository<UserTezea, Long> {
 	@Query(value="SELECT * FROM user u WHERE u.username = :username",nativeQuery = true)
 	public UserTezea getUserByName(@Param("username") String username);
 	

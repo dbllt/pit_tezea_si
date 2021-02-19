@@ -15,8 +15,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import tezea.si.dao.ClientDAO;
 import tezea.si.model.business.Client;
-import tezea.si.model.business.Entreprise;
-import tezea.si.model.business.Particulier;
+import tezea.si.model.business.Enterprise;
+import tezea.si.model.business.Individual;
 
 @RestController
 public class ClientController {
@@ -36,7 +36,7 @@ public class ClientController {
 	@Operation(summary = "save client")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "create entreprise client based on json") })
     @RequestMapping(value = "/createentreprise", method = RequestMethod.POST)
-    public void saveEntreprise(@RequestBody Entreprise c) {
+    public void saveEntreprise(@RequestBody Enterprise c) {
 	     clientDAO.save(c);
 	     
     }
@@ -44,7 +44,7 @@ public class ClientController {
 	@Operation(summary = "save client")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "create client based on json") })
     @RequestMapping(value = "/createparticulier", method = RequestMethod.POST)
-    public void saveClient(@RequestBody Particulier c) {
+    public void saveClient(@RequestBody Individual c) {
 	     clientDAO.save(c);
 	     
     }
