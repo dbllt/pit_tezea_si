@@ -9,7 +9,7 @@ import {Link, Redirect} from "react-router-dom";
 import "./NewRequest.css";
 import {RouteComponentProps} from "react-router-dom";
 import FormClient from "../FormClient/FormClient";
-import ImageUploading,{ ImageListType } from "react-images-uploading";
+import { ImageListType } from "react-images-uploading";
 
 
 type StateType = {
