@@ -13,26 +13,26 @@ public class Individual extends Client {
 	 * 
 	 */
 	private static final long serialVersionUID = -2675066872546116276L;
-	private String nom;
-	private String prenom;
+	private String lastname;
+	private String firstname;
 	private HonorificTitle honorificTitle;
 	
 	public Individual() {}
 
-	public String getNom() {
-		return nom;
+	public String getLastname() {
+		return lastname;
 	}
 
-	public void setNom(String nom) {
-		this.nom = nom;
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
 
-	public String getPrenom() {
-		return prenom;
+	public String getFirstname() {
+		return firstname;
 	}
 
-	public void setPrenom(String prenom) {
-		this.prenom = prenom;
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
 	}
 
 	@Enumerated(EnumType.STRING)
@@ -42,6 +42,21 @@ public class Individual extends Client {
 
 	public void setHonorificTitle(HonorificTitle honorificTitle) {
 		this.honorificTitle = honorificTitle;
+	}
+	
+	public void updateFrom(Individual c) {
+		super.updateFrom(c);
+		
+		if(c.firstname != null) {
+			this.firstname = c.firstname;
+		}
+		if(c.lastname != null) {
+			this.lastname = c.lastname;
+		}
+		if(c.honorificTitle != null) {
+			this.honorificTitle = c.honorificTitle;
+		}
+		
 	}
 
 }

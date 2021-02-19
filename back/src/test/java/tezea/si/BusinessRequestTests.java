@@ -83,13 +83,13 @@ public class BusinessRequestTests {
 	private void start1() {
 		clean();
 		c = new Enterprise();
-		c.setAdresse("28 rue de la patate");
+		c.setAddress("28 rue de la patate");
 		c.setCodePostal("25000");
 		c.setEmail("m@m.fr");
-		c.setDateAjout(new Date(1234));
-		c.setNom("Apple inc.");
-		c.setTelephone("+33650505050");
-		c.setVille("New York");
+		c.setAddDate(new Date(1234));
+		c.setName("Apple inc.");
+		c.setPhoneNumber("+33650505050");
+		c.setCity("New York");
 		c = clientDao.save(c);
 
 		u = new UserTezea();
@@ -186,13 +186,13 @@ public class BusinessRequestTests {
 		assertNotNull(re.getHonorificTitle(), "re honorific title");
 		assertNotNull(re.getPhone(), "re phone");
 		
-		assertNotNull(c.getAdresse(), "c address");
+		assertNotNull(c.getAddress(), "c address");
 		assertNotNull(c.getCodePostal(), "c getCodePostal");
-		assertNotNull(c.getDateAjout(), "c getDateAjout");
+		assertNotNull(c.getAddDate(), "c getDateAjout");
 		assertNotNull(c.getEmail(), "c getEmail");
-		assertNotNull(c.getNom(), "c getNom");
-		assertNotNull(c.getTelephone(), "c getTelephone");
-		assertNotNull(c.getVille(), "c getVille");
+		assertNotNull(c.getName(), "c getNom");
+		assertNotNull(c.getPhoneNumber(), "c getTelephone");
+		assertNotNull(c.getCity(), "c getVille");
 		assertNotNull(c.getRequests(), "c getRequests");
 		assertFalse(c.getRequests().isEmpty(), "c getRequests isEmpty");
 		assertEquals(c.getRequests().size(), 1, "c getRequests size");

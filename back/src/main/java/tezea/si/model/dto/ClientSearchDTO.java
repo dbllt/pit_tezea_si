@@ -28,10 +28,10 @@ public abstract class ClientSearchDTO implements Serializable {
 		setId(copy.getId());
 		setEmail(copy.getEmail());
 		setCodePostal(copy.getCodePostal());
-		setDate(copy.getDateAjout());
-		setTel(copy.getTelephone());
-		setCity(copy.getVille());
-		setAddress(copy.getAdresse());
+		setDate(copy.getAddDate());
+		setTel(copy.getPhoneNumber());
+		setCity(copy.getCity());
+		setAddress(copy.getAddress());
 		//copy.getRequests()
 	}
 	

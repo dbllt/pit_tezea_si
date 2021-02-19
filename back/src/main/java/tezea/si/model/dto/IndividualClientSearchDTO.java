@@ -19,8 +19,8 @@ public class IndividualClientSearchDTO extends ClientSearchDTO implements Serial
 		super(copy);
 		assert(copy instanceof Individual);
 		Individual p = (Individual)copy;
-		setNom(p.getNom());
-		setPrenom(p.getPrenom());
+		setNom(p.getFirstname());
+		setPrenom(p.getLastname());
 		setHonorificTitle(p.getHonorificTitle());
 	}
 

@@ -16,7 +16,7 @@ public class EnterpriseClientSearchDTO extends ClientSearchDTO implements Serial
 		super(copy);
 		assert(copy instanceof Enterprise);
 		Enterprise e = (Enterprise)copy;
-		setName(e.getNom());
+		setName(e.getName());
 	}
 
 	public String getName() {

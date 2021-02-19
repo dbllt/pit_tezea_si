@@ -3,6 +3,7 @@ package tezea.si.model.business;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
+import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -23,18 +24,17 @@ import tezea.si.model.business.request.Request;
 @DiscriminatorColumn(name="client_type", discriminatorType = DiscriminatorType.STRING)
 public abstract class Client implements Serializable {
     
-	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6515822297439920891L;
 	protected long id;
 	protected String email;
-	protected String telephone;
-	protected Date dateAjout;
-	protected String adresse;
+	protected String phoneNumber;
+	protected Date addDate;
+	protected String address;
 	protected String codePostal;
-	protected String ville;
+	protected String city;
 	protected List<Request> requests;
 
 	private String clientType;
@@ -49,14 +49,13 @@ public abstract class Client implements Serializable {
 	public Client() {
 	}
 
-	public Client(String email, String tel, String adresse, String codePostal, String ville) {
+	public Client(String email, String tel, String adresse, String codePostal, String city) {
 		this.email = email;
-		this.telephone = tel;
-		this.adresse = adresse;
+		this.phoneNumber = tel;
+		this.address = adresse;
 		this.codePostal = codePostal;
-		this.ville = ville;
-
-		this.dateAjout = new Date(1000);
+		this.city = city;
+		this.addDate = new Date(1000);
 	}
 
 	@Id
@@ -78,28 +77,28 @@ public abstract class Client implements Serializable {
 		this.email = email;
 	}
 
-	public String getTelephone() {
-		return telephone;
+	public String getPhoneNumber() {
+		return phoneNumber;
 	}
 
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
+	public void setPhoneNumber(String phone) {
+		this.phoneNumber = phone;
 	}
 
-	public Date getDateAjout() {
-		return dateAjout;
+	public Date getAddDate() {
+		return addDate;
 	}
 
-	public void setDateAjout(Date dateAjout) {
-		this.dateAjout = dateAjout;
+	public void setAddDate(Date addDate) {
+		this.addDate = addDate;
 	}
 
-	public String getAdresse() {
-		return adresse;
+	public String getAddress() {
+		return address;
 	}
 
-	public void setAdresse(String adresse) {
-		this.adresse = adresse;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public String getCodePostal() {
@@ -110,12 +109,12 @@ public abstract class Client implements Serializable {
 		this.codePostal = codePostal;
 	}
 
-	public String getVille() {
-		return ville;
+	public String getCity() {
+		return city;
 	}
-
-	public void setVille(String ville) {
-		this.ville = ville;
+	
+	public void setCity(String ville) {
+		this.city = ville;
 	}
 
 	@OneToMany(mappedBy = "client", orphanRemoval = true, fetch = FetchType.LAZY)
@@ -128,28 +127,28 @@ public abstract class Client implements Serializable {
 	}
 
 	public void updateFrom(Client c) {
-		if(c.adresse != null) {
-			this.adresse = c.adresse;
+		if(c.address != null) {
+			this.address = c.address;
 		}
 		
 		if(c.codePostal != null) {
 			this.codePostal = c.codePostal;
 		}
 		
-		if(c.dateAjout != null) {
-			this.dateAjout = c.dateAjout;
+		if(c.addDate != null) {
+			this.addDate = c.addDate;
 		}
 		
 		if(c.email != null) {
 			this.email = c.email;
 		}
 		
-		if(c.telephone != null) {
-			this.telephone = c.telephone;
+		if(c.phoneNumber != null) {
+			this.phoneNumber = c.phoneNumber;
 		}
 		
-		if(c.ville != null) {
-			this.ville = c.ville;
+		if(c.city != null) {
+			this.city = c.city;
 		}
 		
 	}
