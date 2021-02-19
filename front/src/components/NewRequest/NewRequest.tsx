@@ -54,7 +54,8 @@ class NewRequest extends Component<IndexProps, IState> {
         this.task = createRef();
         this.getTask = this.getTask.bind(this);
         this.addRequest = this.addRequest.bind(this);
-        this.changeImages = this.changeImages.bind(this);
+        //this.changeImages = this.changeImages.bind(this); //upload images
+        this.readFile = this.readFile.bind(this);
     }
 
     getTask(): string {
@@ -82,14 +83,18 @@ class NewRequest extends Component<IndexProps, IState> {
         }
     }
 
-    changeImages (
-        imageList: ImageListType,
-        addUpdateIndex: number[] | undefined
-      ) {
-        // data for submit
-        console.log(imageList, addUpdateIndex);
-        this.setState({images : imageList as never[]});
-    };
+    // changeImages ( 
+    //     imageList: ImageListType,
+    //     addUpdateIndex: number[] | undefined
+    //   ) {
+    //     // data for submit
+    //     console.log(imageList, addUpdateIndex);
+    //     this.setState({images : imageList as never[]});
+    // }; // upload images
+
+    readFile(file : FileList | null){
+        console.log(file);
+    }
 
     render() {
         return (
@@ -232,10 +237,10 @@ class NewRequest extends Component<IndexProps, IState> {
                         </Grid>
                     </Grid>
                     <Grid container direction="row" justify="flex-start" alignItems="flex-start" spacing={1}>
-                        <h4 className="h4">Joindre des images</h4>
+                        <h4 className="h4">Joindre une image</h4>
                         <Grid container justify={"space-evenly"}>
                             <Grid item>
-                                <ImageUploading
+                                {/* <ImageUploading 
                                     multiple
                                     value={this.state.images}
                                     onChange={this.changeImages}
@@ -281,7 +286,14 @@ class NewRequest extends Component<IndexProps, IState> {
                                         ))}
                                     </div>
                                     )}
-                                </ImageUploading>
+                                </ImageUploading> */} 
+
+                                <input type="file" accept="image/*"
+                                        onChange={(event)=> { 
+                                            this.readFile(event.target.files) 
+                                        }}
+                                />
+
                             </Grid>
                         </Grid>
                     </Grid>
