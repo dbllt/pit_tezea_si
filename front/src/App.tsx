@@ -10,6 +10,7 @@ import LoginScreen from "./components/LoginScreen/LoginScreen";
 import NewUserScreen from "./components/NewUserScreen/NewUserScreen";
 import UsersScreen from "./components/UsersScreen/UsersScreen";
 import API from "./network/API";
+import logo from './assets/logo.png';
 
 
 class App extends Component {
@@ -27,14 +28,23 @@ class App extends Component {
             <div className="App">
                 <HashRouter>
                     <div>
-                        <AppBar position="static" style={{background: '#8fbe40'}}>
+                        <AppBar position="static" style={{
+                            background: '#8fbe40', minHeight: 80,
+                            display: "flex",
+                            justifyContent: "center",
+                        }}>
                             <Toolbar>
-                                <Link to="/">
+                                <Link to="/" style={{
+                                    float: "left"
+                                }}>
                                     <img
-                                        src="https://tezea.fr/wp-content/uploads/2018/02/Logo-Tezea-Horizontal-sur-aplat-blanc-150-170x95-3997.png"
+                                        src={logo}
                                         alt=""
-                                        width="auto"
-                                        height="50"
+                                        width="70%"
+                                        height="auto"
+                                        style={{
+                                            display: "block"
+                                        }}
                                     />
                                 </Link>
                                 <Button onClick={this.disconnect} className={"toolbarButtons"}>
