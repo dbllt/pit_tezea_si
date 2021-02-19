@@ -1,25 +1,25 @@
 package tezea.si.model.dto;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class RequestsSearchDTO {
+import tezea.si.model.business.UserTezea;
+import tezea.si.model.business.request.Priority;
+
+public class RequestsSearchDTO implements Serializable {
 
 	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate startDate;
 	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate endDate;
-	private List<Urgency> urgency;
+	private List<Priority> urgency;
 	private List<Site> site;
 	private List<Service> service;
 	private ClientSearchDTO client;
 	private PaginationDTO pagination;
-
-	public enum Urgency {
-		LOW, NORMAL, AVERAGE, HIGH, VERY_HIGH
-	}
 
 	public enum Site {
 		MENUISERIE, NETTOYAGE
@@ -29,6 +29,10 @@ public class RequestsSearchDTO {
 		SERVICE, DONATION, SERVICE_DONATION, PLASMA, INFORMATION
 	}
 
+	public RequestsSearchDTO() {
+		
+	}
+	
 	public LocalDate getStartDate() {
 		return startDate;
 	}
@@ -45,11 +49,11 @@ public class RequestsSearchDTO {
 		this.endDate = endDate;
 	}
 
-	public List<Urgency> getUrgency() {
+	public List<Priority> getUrgency() {
 		return urgency;
 	}
 
-	public void setUrgency(List<Urgency> urgency) {
+	public void setUrgency(List<Priority> urgency) {
 		this.urgency = urgency;
 	}
 

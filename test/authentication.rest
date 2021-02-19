@@ -6,7 +6,7 @@ POST http://localhost:8080/clients
 
 ### Adding an account
 POST http://localhost:8080/register
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJncm9ndSIsInRva2VuX3R5cGUiOiJBQ0NFU1NfVE9LRU4iLCJleHAiOjE2MTM0MTUwNjAsImlhdCI6MTYxMzM5NzA2MH0.ATzDsq5h8aW6z_AGoYbliHLF7zwC9OqSdN8noi37XEpMqS9KF71FogQ7Gsp-zQ_iwM5QL71aZh98Ltafvt30Jw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzZXJnZSIsInRva2VuX3R5cGUiOiJBQ0NFU1NfVE9LRU4iLCJleHAiOjE2MTM3NDc5NDMsImlhdCI6MTYxMzc0NzA0M30.6b-yQRNk_OOf6dNkUQ4krZVXgJF8-n3MBkcMLTTEPXSAP2CIN6IMD205fWSt_EXvc6pWvbbjvyKLHbajMqxHdQ
 Content-Type: application/json
 
 {
@@ -19,7 +19,7 @@ POST http://localhost:8080/auth/authenticate
 Content-Type: application/json
 
 {
-    "username":"grogu",
+    "username":"serge",
     "password":"password"
 }
 
@@ -45,6 +45,9 @@ Content-Type: application/json
 GET http://localhost:8080/hello
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXMydCIsInRva2VuX3R5cGUiOiJBQ0NFU1NfVE9LRU4iLCJleHAiOjE2MTM0NzM3MjgsImlhdCI6MTYxMzQ3MzY5OH0.SY3JoM8Yq2AxZ_3f1lSLHRprmq198MxoX18FWY1qJaS8wnDaDstm9QFnHnNW54t9o5pCivd8-ZNdMPr_AqZ-MA
 
+### Get users
+GET http://localhost:8080/users
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzZXJnZSIsInRva2VuX3R5cGUiOiJBQ0NFU1NfVE9LRU4iLCJleHAiOjE2MTM3NDc5NDMsImlhdCI6MTYxMzc0NzA0M30.6b-yQRNk_OOf6dNkUQ4krZVXgJF8-n3MBkcMLTTEPXSAP2CIN6IMD205fWSt_EXvc6pWvbbjvyKLHbajMqxHdQ
 ### Unauthorized
 POST http://localhost:8080/test
 
