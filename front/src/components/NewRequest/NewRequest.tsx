@@ -9,6 +9,7 @@ import {Link, Redirect} from "react-router-dom";
 import "./NewRequest.css";
 import {RouteComponentProps} from "react-router-dom";
 import FormClient from "../FormClient/FormClient";
+import { ImageListType } from "react-images-uploading";
 
 
 type StateType = {
@@ -18,7 +19,9 @@ type StateType = {
 
 interface IState {
     service: string,
-    redirect: boolean
+    redirect: boolean,
+    images: ImageListType;
+    maxImageNumber: number;
 }
 
 type IndexProps = RouteComponentProps<{}, {}, StateType>;
@@ -41,11 +44,18 @@ class NewRequest extends Component<IndexProps, IState> {
 
     constructor(props: IndexProps) {
         super(props);
-        this.state = {service: localStorage.getItem('service') || "", redirect: false};
+        this.state = {
+            service: localStorage.getItem('service') || "", 
+            redirect: false,
+            images : [],
+            maxImageNumber : 9
+        };
 
         this.task = createRef();
         this.getTask = this.getTask.bind(this);
         this.addRequest = this.addRequest.bind(this);
+        //this.changeImages = this.changeImages.bind(this); //upload images
+        this.readFile = this.readFile.bind(this);
     }
 
     getTask(): string {
@@ -71,6 +81,19 @@ class NewRequest extends Component<IndexProps, IState> {
             this.setState({service: res.service});
             localStorage.setItem('service', res.service);
         }
+    }
+
+    // changeImages ( 
+    //     imageList: ImageListType,
+    //     addUpdateIndex: number[] | undefined
+    //   ) {
+    //     // data for submit
+    //     console.log(imageList, addUpdateIndex);
+    //     this.setState({images : imageList as never[]});
+    // }; // upload images
+
+    readFile(file : FileList | null){
+        console.log(file);
     }
 
     render() {
@@ -210,6 +233,67 @@ class NewRequest extends Component<IndexProps, IState> {
                                     rows={4}
                                     variant="outlined"
                                 />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid container direction="row" justify="flex-start" alignItems="flex-start" spacing={1}>
+                        <h4 className="h4">Joindre une image</h4>
+                        <Grid container justify={"space-evenly"}>
+                            <Grid item>
+                                {/* <ImageUploading 
+                                    multiple
+                                    value={this.state.images}
+                                    onChange={this.changeImages}
+                                    maxNumber={this.state.maxImageNumber}
+                                >
+                                    {({
+                                    imageList,
+                                    onImageUpload,
+                                    onImageRemoveAll,
+                                    onImageUpdate,
+                                    onImageRemove,
+                                    isDragging,
+                                    dragProps
+                                    }:
+                                    {
+                                    imageList : ImageListType,
+                                    onImageUpload : any,
+                                    onImageRemoveAll : any,
+                                    onImageUpdate : any,
+                                    onImageRemove : any,
+                                    isDragging : any,
+                                    dragProps :any
+                                    }) => (
+                                    // write your building UI
+                                    <div className="upload__image-wrapper">
+                                        <button
+                                        style={isDragging ? { color: "red" } : undefined}
+                                        onClick={onImageUpload}
+                                        {...dragProps}
+                                        >
+                                        Click or Drop here
+                                        </button>
+                                        &nbsp;
+                                        <button onClick={onImageRemoveAll}>Remove all images</button>
+                                        {imageList.map((image, index) => (
+                                        <div key={index} className="image-item">
+                                            <img src={image.dataURL} alt="" width="100" />
+                                            <div className="image-item__btn-wrapper">
+                                            <button onClick={() => onImageUpdate(index)}>Update</button>
+                                            <button onClick={() => onImageRemove(index)}>Remove</button>
+                                            </div>
+                                        </div>
+                                        ))}
+                                    </div>
+                                    )}
+                                </ImageUploading> */} 
+
+                                <input type="file" accept="image/*"
+                                        onChange={(event)=> { 
+                                            this.readFile(event.target.files) 
+                                        }}
+                                />
+
                             </Grid>
                         </Grid>
                     </Grid>

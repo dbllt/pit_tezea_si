@@ -50,15 +50,16 @@ interface filter {
     site: string,
 
 }
+
 function RedirectionIfNotConnected() {
     let temp = localStorage.getItem('token');
     if (temp === null) {
         temp = "";
     }
     let token: string = temp;
-    if (token==="") {
+    if (token === "") {
         return <Redirect to="/login"/>
-    }else{
+    } else {
         return <div/>
     }
 }
@@ -96,8 +97,11 @@ function Row(props: { row: Request }) {
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box margin={1}>
                             <Typography variant="h6" gutterBottom component="div">
-                                Contact client <button>ICI Bouton: Détails demande (ouvre popup ou page detaillée de la
-                                demande ??)</button>
+                                Contact client <button>
+                                {/*ICI Bouton: Détails demande (ouvre popup ou page detaillée de la*/}
+                                {/*demande ??)*/}
+                                Détails
+                            </button>
                             </Typography>
                             <Table size="small" aria-label="purchases">
                                 <TableHead>
