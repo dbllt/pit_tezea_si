@@ -1,6 +1,5 @@
 package tezea.si.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,13 +17,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import tezea.si.dao.UserTezeaDAO;
-import tezea.si.model.dto.admin.JwtRegisterRequest;
-
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-
+import tezea.si.dao.UserTezeaDAO;
+import tezea.si.model.dto.UserTezeaDTO;
+import tezea.si.model.dto.admin.JwtRegisterRequest;
 import tezea.si.service.JwtUserDetailsService;
 import tezea.si.utils.auth.GrantedAutorities;
 import tezea.si.utils.errors.UserAlreadyExistsException;
@@ -83,13 +84,15 @@ public class AdminController {
      * @throws Exception
      */
     @Operation(summary = "Get users")
+    @ApiResponses(value = { @ApiResponse(responseCode = "201", description = "List of users", content = @Content(array = @ArraySchema(schema = @Schema(implementation = UserTezeaDTO.class)))),
+            @ApiResponse(responseCode = "401", description = "If not admin") })
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public ResponseEntity<?> getUsers() throws Exception {
         checkIfAdmin();
 
-        // TODO send UserTezeaDTO with userDao
-        
-        return ResponseEntity.ok(new ArrayList<>());
+       List<UserTezeaDTO> list = userDao.findAll().stream().map(user -> new UserTezeaDTO(user)).collect(Collectors.toList());
+       
+        return ResponseEntity.ok(list);
     }
 
     private void checkIfAdmin() throws AccessDeniedException {
