@@ -1,4 +1,4 @@
-import React, {Component, createRef} from 'react';
+import React, {Component} from 'react';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -11,8 +11,6 @@ import {Link, Redirect} from "react-router-dom";
 import "./UsersScreen.css";
 import API from "../../network/API";
 import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
-import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
-import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 
 
 const tableHeadNames = ["Identifiant", "Rôle", ""];

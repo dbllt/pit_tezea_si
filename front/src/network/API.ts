@@ -128,12 +128,21 @@ const API = {
                     localStorage.setItem('token', token)
                     const refreshToken = data.refreshtoken
                     localStorage.setItem('refreshToken', refreshToken)
+                    localStorage.setItem('username', username)
                     found = true;
                 }
             }).catch(error => {
                 console.error('There was an error!', error);
             })
         return found;
+    },
+
+    getUsername: async function (): Promise<string> {
+        var temp = localStorage.getItem('username');
+        if (temp === null) {
+            temp = "";
+        }
+        return temp;
     },
 
     disconnect: async function (): Promise<any> {
@@ -160,7 +169,7 @@ const API = {
 
         await fetch('/auth/token', requestOptions)
             .then(async response => {
-                if (response.status!==204) {
+                if (response.status !== 204) {
                     return Promise.reject(response);
                 } else {
                     console.log('user disconnected');

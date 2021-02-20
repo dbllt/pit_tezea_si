@@ -1,22 +1,33 @@
 import React from 'react';
-import {Link, Route, RouteComponentProps} from "react-router-dom";
+import {Link, RouteComponentProps} from "react-router-dom";
 import {AppBar, Button, Toolbar} from "@material-ui/core";
 import API from "../../network/API";
 import logo from '../../assets/logo.png';
 import {withRouter} from 'react-router';
+import './CustomAppBar.css'
 
 interface IState {
+    username: string
 }
 
-interface IProps{
+interface IProps {
     handler: () => void
 
 }
 
-type IndexProps = RouteComponentProps<{}, {}, {}>;
 
 
-class CustomAppBar extends React.Component<RouteComponentProps & IProps, any> {
+class CustomAppBar extends React.Component<RouteComponentProps & IProps, IState> {
+
+    state = {
+        username: ""
+    }
+
+    componentDidMount() {
+        API.getUsername().then((data => {
+            this.setState({username: data})
+        }));
+    }
 
     disconnect = () => {
         API.disconnect().then(() => {
@@ -26,6 +37,11 @@ class CustomAppBar extends React.Component<RouteComponentProps & IProps, any> {
         );
     };
 
+    DisplayName() {
+        if (this.props.location.pathname !== "/login") {
+            return <div>Bonjour {this.state.username} </div>
+        }
+    }
 
     DisplayDisconnect() {
         if (this.props.location.pathname !== "/login") {
@@ -57,6 +73,7 @@ class CustomAppBar extends React.Component<RouteComponentProps & IProps, any> {
                                 }}
                             />
                         </Link>
+                        {this.DisplayName()}
                         {this.DisplayDisconnect()}
                     </Toolbar>
                 </AppBar>
