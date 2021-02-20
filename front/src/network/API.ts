@@ -328,6 +328,13 @@ const API = {
         }
     },
 
+    removeUserByName: async function (name: string): Promise<any> {
+        let index = users.findIndex(x => x.username === name);
+        if (index > -1) {
+            users.splice(index, 1);
+        }
+    },
+
 
 }
 

@@ -6,12 +6,13 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import {Box, Collapse, IconButton, TextField, Typography} from "@material-ui/core";
+import {Box, Button, Collapse, IconButton, TextField, Typography} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import API from "../../network/API";
-import {Redirect} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
+import "./BusinessTable.css"
 
 const useRowStyles = makeStyles({
     root: {
@@ -72,7 +73,7 @@ function Row(props: { row: Request }) {
     return (
         <React.Fragment>
             <RedirectionIfNotConnected/>
-            <TableRow hover>
+            <TableRow hover className={""}>
                 <TableCell>
                     <IconButton
                         aria-label="expand row"
@@ -97,11 +98,18 @@ function Row(props: { row: Request }) {
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box margin={1}>
                             <Typography variant="h6" gutterBottom component="div">
-                                Contact client <button>
-                                {/*ICI Bouton: Détails demande (ouvre popup ou page detaillée de la*/}
-                                {/*demande ??)*/}
-                                Détails
-                            </button>
+                                Contact client
+
+                                <Link to={{
+                                    pathname: '/newRequest',
+                                    state: {
+                                        service: row.site
+                                    }
+                                }} style={{margin: 20}}>
+                                    <Button variant="contained">
+                                        Détails
+                                    </Button>
+                                </Link>
                             </Typography>
                             <Table size="small" aria-label="purchases">
                                 <TableHead>

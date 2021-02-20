@@ -1,57 +1,34 @@
-import React, {Component} from 'react';
+import React from 'react';
 import './App.css';
 import Menu from "./components/Menu/Menu";
-import {HashRouter, Link, Route} from "react-router-dom";
+import {HashRouter, Route} from "react-router-dom";
 import RequestsList from "./components/RequestsList/RequestsList";
 import NewRequest from "./components/NewRequest/NewRequest";
-import {AppBar, Button, Toolbar} from "@material-ui/core";
 import ServiceList from "./components/ServiceList/ServiceList";
 import LoginScreen from "./components/LoginScreen/LoginScreen";
 import NewUserScreen from "./components/NewUserScreen/NewUserScreen";
 import UsersScreen from "./components/UsersScreen/UsersScreen";
-import API from "./network/API";
-import logo from './assets/logo.png';
+import CustomAppBar from "./components/CustomAppBar/CustomAppBar";
 
 
-class App extends Component {
+class App extends React.Component {
+    constructor(props:React.Props<any>) {
+        super(props)
 
-    disconnect = () => {
-        API.disconnect().then(() => {
-                this.forceUpdate();
-            }
-        );
-    };
+        this.handler = this.handler.bind(this)
+    }
 
+    handler() {
+        this.setState({
+        })
+    }
 
     render() {
         return (
             <div className="App">
                 <HashRouter>
                     <div>
-                        <AppBar position="static" style={{
-                            background: '#8fbe40', minHeight: 80,
-                            display: "flex",
-                            justifyContent: "center",
-                        }}>
-                            <Toolbar>
-                                <Link to="/" style={{
-                                    float: "left"
-                                }}>
-                                    <img
-                                        src={logo}
-                                        alt=""
-                                        width="70%"
-                                        height="auto"
-                                        style={{
-                                            display: "block"
-                                        }}
-                                    />
-                                </Link>
-                                <Button onClick={this.disconnect} className={"toolbarButtons"}>
-                                    Déconnexion
-                                </Button>
-                            </Toolbar>
-                        </AppBar>
+                        <CustomAppBar handler = {this.handler}/>
 
                         <div className="content">
                             <Route path="/login" component={LoginScreen}/>
@@ -68,5 +45,6 @@ class App extends Component {
         );
     }
 }
+
 
 export default App;
