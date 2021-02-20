@@ -3,7 +3,7 @@ import './App.css';
 import Menu from "./components/Menu/Menu";
 import {HashRouter, Route} from "react-router-dom";
 import RequestsList from "./components/RequestsList/RequestsList";
-import NewRequest from "./components/NewRequest/NewRequest";
+import Request from "./components/Request/Request";
 import ServiceList from "./components/ServiceList/ServiceList";
 import LoginScreen from "./components/LoginScreen/LoginScreen";
 import NewUserScreen from "./components/NewUserScreen/NewUserScreen";
@@ -33,7 +33,7 @@ class App extends React.Component {
                         <div className="content">
                             <Route path="/login" component={LoginScreen}/>
                             <Route path="/requestsList" component={RequestsList}/>
-                            <Route path="/newRequest" component={NewRequest}/>
+                            <Route path="/request" component={Request}/>
                             <Route path="/serviceList" component={ServiceList}/>
                             <Route exact path="/" component={Menu}/>
                             <Route path="/addUser" component={NewUserScreen}/>

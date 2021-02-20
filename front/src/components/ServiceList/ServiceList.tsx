@@ -9,9 +9,9 @@ function RedirectionIfNotConnected() {
         temp = "";
     }
     let token: string = temp;
-    if (token==="") {
+    if (token === "") {
         return <Redirect to="/login"/>
-    }else{
+    } else {
         return <div/>
     }
 }
@@ -22,9 +22,12 @@ class ServiceList extends Component {
             <div style={{margin: 50}}>
                 <RedirectionIfNotConnected/>
                 <Link to={{
-                    pathname: '/newRequest',
+                    pathname: '/request',
                     state: {
                         service: "Menuiserie",
+                        requestContent: {
+                            concierge: ""
+                        }
                     }
                 }} style={{margin: 20}}>
                     <Button variant="contained">
@@ -32,9 +35,12 @@ class ServiceList extends Component {
                     </Button>
                 </Link>
                 <Link to={{
-                    pathname: '/newRequest',
+                    pathname: '/request',
                     state: {
                         service: "Nettoyage",
+                        requestContent: {
+                            concierge: ""
+                        }
                     }
                 }} style={{margin: 20}}>
                     <Button variant="contained">

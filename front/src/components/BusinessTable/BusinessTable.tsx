@@ -101,9 +101,13 @@ function Row(props: { row: Request }) {
                                 Contact client
 
                                 <Link to={{
-                                    pathname: '/newRequest',
+                                    pathname: '/request',
                                     state: {
-                                        service: row.site
+                                        service: row.site,
+                                        requestContent: {
+                                            concierge: row.concierge,
+                                        }
+
                                     }
                                 }} style={{margin: 20}}>
                                     <Button variant="contained">

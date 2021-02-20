@@ -6,14 +6,19 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import {Link, Redirect} from "react-router-dom";
-import "./NewRequest.css";
+import "./Request.css";
 import {RouteComponentProps} from "react-router-dom";
 import FormClient from "../FormClient/FormClient";
-import { ImageListType } from "react-images-uploading";
+import {ImageListType} from "react-images-uploading";
 
 
 type StateType = {
+    requestContent: any;
     service: string
+}
+
+interface requestContent {
+    concierge: string,
 }
 
 
@@ -22,6 +27,7 @@ interface IState {
     redirect: boolean,
     images: ImageListType;
     maxImageNumber: number;
+    requestContent: requestContent
 }
 
 type IndexProps = RouteComponentProps<{}, {}, StateType>;
@@ -32,23 +38,27 @@ function RedirectionIfNotConnected() {
         temp = "";
     }
     let token: string = temp;
-    if (token==="") {
+    if (token === "") {
         return <Redirect to="/login"/>
-    }else{
+    } else {
         return <div/>
     }
 }
-class NewRequest extends Component<IndexProps, IState> {
+
+class Request extends Component<IndexProps, IState> {
     private task: React.RefObject<any>;
 
 
     constructor(props: IndexProps) {
         super(props);
         this.state = {
-            service: localStorage.getItem('service') || "", 
+            service: localStorage.getItem('service') || "",
             redirect: false,
-            images : [],
-            maxImageNumber : 9
+            images: [],
+            maxImageNumber: 9,
+            requestContent: {
+                concierge: localStorage.getItem('concierge') || "",
+            }
         };
 
         this.task = createRef();
@@ -80,6 +90,15 @@ class NewRequest extends Component<IndexProps, IState> {
         if (res) {
             this.setState({service: res.service});
             localStorage.setItem('service', res.service);
+
+            console.log(res.requestContent)
+            this.setState({
+                requestContent: {
+                    concierge: res.requestContent.concierge,
+                }
+            });
+
+            localStorage.setItem('concierge', res.requestContent.concierge);
         }
     }
 
@@ -92,7 +111,7 @@ class NewRequest extends Component<IndexProps, IState> {
     //     this.setState({images : imageList as never[]});
     // }; // upload images
 
-    readFile(file : FileList | null){
+    readFile(file: FileList | null) {
         console.log(file);
     }
 
@@ -236,6 +255,19 @@ class NewRequest extends Component<IndexProps, IState> {
                             </Grid>
                         </Grid>
                     </Grid>
+
+                    <Grid container direction="row" justify="flex-start" alignItems="flex-start" spacing={1}>
+                        <h4 className="h4">Concierge</h4>
+                        <Grid container justify={"space-evenly"}>
+                            <Grid item>
+                                <TextField
+                                    value={this.state.requestContent.concierge}
+                                    id="outlined-multiline-static"
+                                    variant="outlined"
+                                />
+                            </Grid>
+                        </Grid>
+                    </Grid>
                     <Grid container direction="row" justify="flex-start" alignItems="flex-start" spacing={1}>
                         <h4 className="h4">Joindre une image</h4>
                         <Grid container justify={"space-evenly"}>
@@ -286,12 +318,12 @@ class NewRequest extends Component<IndexProps, IState> {
                                         ))}
                                     </div>
                                     )}
-                                </ImageUploading> */} 
+                                </ImageUploading> */}
 
                                 <input type="file" accept="image/*"
-                                        onChange={(event)=> { 
-                                            this.readFile(event.target.files) 
-                                        }}
+                                       onChange={(event) => {
+                                           this.readFile(event.target.files)
+                                       }}
                                 />
 
                             </Grid>
@@ -316,4 +348,4 @@ class NewRequest extends Component<IndexProps, IState> {
     }
 }
 
-export default NewRequest
+export default Request
