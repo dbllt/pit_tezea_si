@@ -11,7 +11,7 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import API from "../../network/API";
-import {Link, Redirect} from "react-router-dom";
+import {Link} from "react-router-dom";
 import "./BusinessTable.css"
 
 const useRowStyles = makeStyles({
@@ -52,19 +52,6 @@ interface filter {
 
 }
 
-function RedirectionIfNotConnected() {
-    let temp = localStorage.getItem('token');
-    if (temp === null) {
-        temp = "";
-    }
-    let token: string = temp;
-    if (token === "") {
-        return <Redirect to="/login"/>
-    } else {
-        return <div/>
-    }
-}
-
 function Row(props: { row: Request }) {
     const {row} = props;
     const [open, setOpen] = React.useState(false);
@@ -72,7 +59,6 @@ function Row(props: { row: Request }) {
 
     return (
         <React.Fragment>
-            <RedirectionIfNotConnected/>
             <TableRow hover className={""}>
                 <TableCell>
                     <IconButton
@@ -157,10 +143,10 @@ interface IState {
 
 
 class BusinessTable extends Component<IProps, IState> {
-    private site: React.RefObject<any>;
     state = {
         requests: []
     }
+    private readonly site: React.RefObject<any>;
 
     constructor(props: IProps) {
         super(props);

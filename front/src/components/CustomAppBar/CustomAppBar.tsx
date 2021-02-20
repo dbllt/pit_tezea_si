@@ -16,7 +16,6 @@ interface IProps {
 }
 
 
-
 class CustomAppBar extends React.Component<RouteComponentProps & IProps, IState> {
 
     state = {

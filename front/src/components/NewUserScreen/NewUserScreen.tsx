@@ -1,17 +1,15 @@
 import React, {Component, createRef} from 'react';
 import {Button, TextField} from "@material-ui/core";
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import API from "../../network/API";
-
-import {Redirect} from 'react-router-dom';
 
 interface IProps {
 }
 
 interface IState {
     redirect: boolean
-    triedToCreate:boolean
+    triedToCreate: boolean
 }
 
 function RedirectionIfNotConnected() {
@@ -20,22 +18,21 @@ function RedirectionIfNotConnected() {
         temp = "";
     }
     let token: string = temp;
-    if (token==="") {
+    if (token === "") {
         return <Redirect to="/login"/>
-    }else{
+    } else {
         return <div/>
     }
 }
 
 class NewUserScreen extends Component<IProps, IState> {
-    private username: React.RefObject<any>;
-    private password: React.RefObject<any>;
-    private role: React.RefObject<any>;
-
     state = {
         redirect: false,
-        triedToCreate:false,
+        triedToCreate: false,
     }
+    private readonly username: React.RefObject<any>;
+    private readonly password: React.RefObject<any>;
+    private readonly role: React.RefObject<any>;
 
     constructor(props: IProps) {
         super(props);
@@ -75,9 +72,9 @@ class NewUserScreen extends Component<IProps, IState> {
     };
 
     addUser() {
-        this.setState({triedToCreate:true})
-        if (this.getUsername() !== "" && this.getRole() !== ""&& this.getPassword() !== "") {
-            API.addUser(this.getUsername(),this.getPassword(), this.getRole()).then(() => this.setState({redirect: true}));
+        this.setState({triedToCreate: true})
+        if (this.getUsername() !== "" && this.getRole() !== "" && this.getPassword() !== "") {
+            API.addUser(this.getUsername(), this.getPassword(), this.getRole()).then(() => this.setState({redirect: true}));
         }
     }
 
@@ -94,8 +91,8 @@ class NewUserScreen extends Component<IProps, IState> {
                             id="outlined-margin-normal"
                             margin="normal"
                             variant="outlined"
-                            error={(this.state.triedToCreate&&this.getUsername()==="")}
-                            helperText={(this.state.triedToCreate&&this.getUsername()==="") ? 'Manquant' : ' '}
+                            error={(this.state.triedToCreate && this.getUsername() === "")}
+                            helperText={(this.state.triedToCreate && this.getUsername() === "") ? 'Manquant' : ' '}
                         />
                     </Grid>
                     <Grid item>
@@ -106,8 +103,8 @@ class NewUserScreen extends Component<IProps, IState> {
                             id="outlined-margin-normal"
                             margin="normal"
                             variant="outlined"
-                            error={(this.state.triedToCreate&&this.getPassword()==="")}
-                            helperText={(this.state.triedToCreate&&this.getPassword()==="") ? 'Manquant' : ' '}
+                            error={(this.state.triedToCreate && this.getPassword() === "")}
+                            helperText={(this.state.triedToCreate && this.getPassword() === "") ? 'Manquant' : ' '}
                         />
                     </Grid>
                     <Grid item>
@@ -117,8 +114,8 @@ class NewUserScreen extends Component<IProps, IState> {
                             id="outlined-margin-normal"
                             margin="normal"
                             variant="outlined"
-                            error={(this.state.triedToCreate&&this.getRole()==="")}
-                            helperText={(this.state.triedToCreate&&this.getRole()==="") ? 'Manquant' : ' '}
+                            error={(this.state.triedToCreate && this.getRole() === "")}
+                            helperText={(this.state.triedToCreate && this.getRole() === "") ? 'Manquant' : ' '}
                         />
                     </Grid>
                     <Grid>

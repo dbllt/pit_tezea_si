@@ -2,12 +2,9 @@ import React, {Component, createRef} from "react";
 import {Button, Container, TextField} from "@material-ui/core";
 import Form from "@material-ui/core/FormControl";
 import Grid from "@material-ui/core/Grid";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import {Link, Redirect} from "react-router-dom";
+import {Link, Redirect, RouteComponentProps} from "react-router-dom";
 import "./Request.css";
-import {RouteComponentProps} from "react-router-dom";
 import FormClient from "../FormClient/FormClient";
 import {ImageListType} from "react-images-uploading";
 
@@ -31,6 +28,27 @@ interface IState {
 }
 
 type IndexProps = RouteComponentProps<{}, {}, StateType>;
+
+
+const regularity = [
+    {
+        value: 'day',
+        label: 'jour',
+    },
+    {
+        value: 'week',
+        label: 'semaine',
+    },
+    {
+        value: 'month',
+        label: 'mois',
+    },
+    {
+        value: 'year',
+        label: 'année',
+    },
+];
+
 
 function RedirectionIfNotConnected() {
     let temp = localStorage.getItem('token');
@@ -86,12 +104,10 @@ class Request extends Component<IndexProps, IState> {
 
     componentDidMount() {
 
-        var res = this.props.location.state;
+        const res = this.props.location.state;
         if (res) {
             this.setState({service: res.service});
             localStorage.setItem('service', res.service);
-
-            console.log(res.requestContent)
             this.setState({
                 requestContent: {
                     concierge: res.requestContent.concierge,
@@ -213,17 +229,17 @@ class Request extends Component<IndexProps, IState> {
                                 <p>par</p>
                             </Grid>
                             <Grid item>
-                                <FormControl variant="outlined" className="formControl">
-                                    <Select
-                                        labelId="demo-simple-select-outlined-label"
-                                        id="demo-simple-select-outlined"
-                                    >
-                                        <MenuItem value="day">jour</MenuItem>
-                                        <MenuItem value="week">semaine</MenuItem>
-                                        <MenuItem value="month">mois</MenuItem>
-                                        <MenuItem value="year">année</MenuItem>
-                                    </Select>
-                                </FormControl>
+                                <TextField
+                                    id="standard-select-currency"
+                                    select
+                                    value={'day'}
+                                >
+                                    {regularity.map((option) => (
+                                        <MenuItem key={option.value} value={option.value}>
+                                            {option.label}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -272,7 +288,7 @@ class Request extends Component<IndexProps, IState> {
                         <h4 className="h4">Joindre une image</h4>
                         <Grid container justify={"space-evenly"}>
                             <Grid item>
-                                {/* <ImageUploading 
+                                {/* <ImageUploading
                                     multiple
                                     value={this.state.images}
                                     onChange={this.changeImages}

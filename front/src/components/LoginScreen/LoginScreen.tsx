@@ -11,7 +11,7 @@ interface IProps {
 
 interface IState {
     redirect: boolean
-    triedToLogin:boolean
+    triedToLogin: boolean
 }
 
 function RedirectionIfNotConnected() {
@@ -28,13 +28,12 @@ function RedirectionIfNotConnected() {
 }
 
 class LoginScreen extends Component<IProps, IState> {
-    private username: React.RefObject<any>;
-    private password: React.RefObject<any>;
-
     state = {
         redirect: false,
-        triedToLogin:false,
+        triedToLogin: false,
     }
+    private readonly username: React.RefObject<any>;
+    private readonly password: React.RefObject<any>;
 
     constructor(props: IProps) {
         super(props);
@@ -47,7 +46,7 @@ class LoginScreen extends Component<IProps, IState> {
     }
 
     login() {
-        this.setState({triedToLogin:true})
+        this.setState({triedToLogin: true})
         if (this.getUsername() !== "" && this.getPassword() !== "") {
             API.login(this.getUsername(), this.getPassword()).then((b) => {
                     if (b) {
@@ -88,8 +87,8 @@ class LoginScreen extends Component<IProps, IState> {
                             id="outlined-margin-normal"
                             margin="normal"
                             variant="outlined"
-                            error={(this.state.triedToLogin&&this.getUsername()==="")}
-                            helperText={(this.state.triedToLogin&&this.getUsername()==="") ? 'Manquant' : ' '}
+                            error={(this.state.triedToLogin && this.getUsername() === "")}
+                            helperText={(this.state.triedToLogin && this.getUsername() === "") ? 'Manquant' : ' '}
                         />
                     </Grid>
                     <Grid item>
@@ -100,8 +99,8 @@ class LoginScreen extends Component<IProps, IState> {
                             id="outlined-margin-normal"
                             margin="normal"
                             variant="outlined"
-                            error={(this.state.triedToLogin&&this.getPassword()==="")}
-                            helperText={(this.state.triedToLogin&&this.getPassword()==="") ? 'Manquant' : ' '}
+                            error={(this.state.triedToLogin && this.getPassword() === "")}
+                            helperText={(this.state.triedToLogin && this.getPassword() === "") ? 'Manquant' : ' '}
                         />
                     </Grid>
                     <Grid>

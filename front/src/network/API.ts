@@ -109,7 +109,7 @@ const API = {
 
 
     login: async function (username: string, password: string): Promise<boolean> {
-        var found = false;
+        let found = false;
 
         const requestOptions = {
             method: 'POST',
@@ -138,7 +138,7 @@ const API = {
     },
 
     getUsername: async function (): Promise<string> {
-        var temp = localStorage.getItem('username');
+        let temp = localStorage.getItem('username');
         if (temp === null) {
             temp = "";
         }
@@ -188,8 +188,7 @@ const API = {
     },
 
     getRequests: async function (filter: filter): Promise<Request[]> {
-        let ret = requests.filter((request => request.site.toLocaleLowerCase().includes(filter.site.toLocaleLowerCase())))
-        return ret;
+        return requests.filter((request => request.site.toLocaleLowerCase().includes(filter.site.toLocaleLowerCase())))
     },
     addRequest: async function (requestNumber: string, date: string, hour: string, concierge: string, site: string, serviceType: string, requestStatus: string, requestAssignment: string, emergency: string,
                                 clientStatus: string, company: string, gender: string, lName: string, fName: string, phone: string, email: string, address: string, cp: string, city: string): Promise<any> {

@@ -52,6 +52,15 @@ function RedirectionIfNotConnected() {
 
 class UsersScreen extends Component<IProps, IState> {
 
+    state = {
+        users: []
+    }
+
+    constructor(props: React.ClassAttributes<any>) {
+        super(props)
+        this.handler = this.handler.bind(this)
+    }
+
     row(props: {
         row: ReturnType<typeof createRequestData>,
         handler: () => void
@@ -68,7 +77,7 @@ class UsersScreen extends Component<IProps, IState> {
                 <TableRow hover>
                     <TableCell align="center">{row.username}</TableCell>
                     <TableCell align="center">{row.role}</TableCell>
-                    <TableCell align="center" style={{width:"10%"}}>
+                    <TableCell align="center" style={{width: "10%"}}>
 
                         <IconButton
                             aria-label="expand row"
@@ -82,16 +91,6 @@ class UsersScreen extends Component<IProps, IState> {
             </React.Fragment>
         )
             ;
-    }
-
-
-    constructor(props: React.Props<any>) {
-        super(props)
-        this.handler = this.handler.bind(this)
-    }
-
-    state = {
-        users: []
     }
 
     handler() {

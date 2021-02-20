@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ClassAttributes} from 'react';
 import './App.css';
 import Menu from "./components/Menu/Menu";
 import {HashRouter, Route} from "react-router-dom";
@@ -12,15 +12,14 @@ import CustomAppBar from "./components/CustomAppBar/CustomAppBar";
 
 
 class App extends React.Component {
-    constructor(props:React.Props<any>) {
+    constructor(props: ClassAttributes<any>) {
         super(props)
 
         this.handler = this.handler.bind(this)
     }
 
     handler() {
-        this.setState({
-        })
+        this.setState({})
     }
 
     render() {
@@ -28,7 +27,7 @@ class App extends React.Component {
             <div className="App">
                 <HashRouter>
                     <div>
-                        <CustomAppBar handler = {this.handler}/>
+                        <CustomAppBar handler={this.handler}/>
 
                         <div className="content">
                             <Route path="/login" component={LoginScreen}/>
