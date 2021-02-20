@@ -52,23 +52,30 @@ function RedirectionIfNotConnected() {
 
 class UsersScreen extends Component<IProps, IState> {
 
-    row(props: { row: ReturnType<typeof createRequestData> }) {
-        const {row} = props;
+    row(props: {
+        row: ReturnType<typeof createRequestData>,
+        handler: () => void
+    }) {
+        const {row, handler} = props;
+
+        function removeUser(name: string) {
+            API.removeUserByName(name).then(() =>
+                handler())
+        }
 
         return (
             <React.Fragment>
                 <TableRow hover>
                     <TableCell align="center">{row.username}</TableCell>
                     <TableCell align="center">{row.role}</TableCell>
-                    <TableCell align="center">
+                    <TableCell align="center" style={{width:"10%"}}>
 
                         <IconButton
                             aria-label="expand row"
                             size="small"
-                            //onClick={() => this.removeUser(row.username)}
-                            //TODO fix this
+                            onClick={() => removeUser(row.username)}
                         >
-                            <CancelOutlinedIcon/>
+                            <CancelOutlinedIcon style={{color: "red"}}/>
                         </IconButton>
                     </TableCell>
                 </TableRow>
@@ -80,16 +87,16 @@ class UsersScreen extends Component<IProps, IState> {
 
     constructor(props: React.Props<any>) {
         super(props)
-        this.removeUser = this.removeUser.bind(this)
+        this.handler = this.handler.bind(this)
     }
 
     state = {
         users: []
     }
 
-
-    removeUser(name: string) {
-        API.removeUser(name).then(() => this.setState({}))
+    handler() {
+        console.log("allo")
+        this.setState({})
     }
 
     componentDidMount() {
@@ -116,7 +123,7 @@ class UsersScreen extends Component<IProps, IState> {
                         </TableHead>
                         <TableBody>
                             {this.state.users.map((user: User) => (
-                                <this.row key={user.id} row={user}/>
+                                <this.row key={user.id} row={user} handler={this.handler}/>
                             ))}
                         </TableBody>
                     </Table>
