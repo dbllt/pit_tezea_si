@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import tezea.si.dao.SmallClientDAO;
 import tezea.si.dao.SmallRequestDAO;
 import tezea.si.model.business.request.SmallRequest;
 import tezea.si.model.dto.SmallRequestSearchDTO;
@@ -27,7 +28,10 @@ public class RequestController {
 
 	@Autowired
 	SmallRequestDAO dao;
-	
+
+	@Autowired
+	SmallClientDAO clientDao;
+
 	@Autowired
 	SmallRequestSearchService searchService;
 
@@ -61,6 +65,11 @@ public class RequestController {
 			@ApiResponse(responseCode = "400", description = "If the input request body could not be parsed") })
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<SmallRequest> createRequest(@RequestBody SmallRequest request) {
+		request.setId(0);
+		if (request.getClient() != null) {
+			request.getClient().setId(0);
+			clientDao.save(request.getClient());
+		}
 		return ResponseEntity.status(HttpStatus.CREATED).body(dao.save(request));
 	}
 

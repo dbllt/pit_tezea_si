@@ -2,7 +2,6 @@ package tezea.si;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
@@ -29,7 +28,7 @@ import tezea.si.utils.TestUtils;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class RequestsControllerTests {
+public class GetRequestsControllerTests {
 
 	private static final String REQUESTS_URL = "/requests";
 
@@ -115,26 +114,6 @@ public class RequestsControllerTests {
 				});
 		assertThat(resultList).usingRecursiveFieldByFieldElementComparator()
 				.isEqualTo(expectedList);
-	}
-
-	@Test
-	public void createEmptyRequestReturnsRequest() throws Exception {
-		// Arrange
-		SmallRequest request = new SmallRequest();
-
-		// Act
-		String response = this.mockMvc
-				.perform(post(REQUESTS_URL).contentType(MediaType.APPLICATION_JSON)
-						.content(mapper.writeValueAsString(request))
-						.headers(TestUtils.userAuthorizationHeader(mockMvc)))
-				.andExpect(status().isCreated()).andReturn().getResponse()
-				.getContentAsString();
-
-		// Assert
-		SmallRequest result = mapper.readValue(response, SmallRequest.class);
-		assertThat(result).usingRecursiveComparison().ignoringFields("id")
-				.isEqualTo(request);
-		assertThat(result.getId()).isNotZero();
 	}
 
 	@Test
@@ -294,5 +273,4 @@ public class RequestsControllerTests {
 		assertThat(resultList).usingRecursiveFieldByFieldElementComparator()
 				.isEqualTo(expectedList);
 	}
-
 }
