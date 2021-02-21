@@ -85,11 +85,11 @@ class AuthenticationTests {
                 .andExpect(status().isUnauthorized());
         
         // Simple user
-        this.mockMvc.perform(post(REGISTER_URL).headers(TestUtils.userAuthorizationHeader())
+        this.mockMvc.perform(post(REGISTER_URL).headers(TestUtils.userAuthorizationHeader(mockMvc))
                 .contentType(MediaType.APPLICATION_JSON).content(form)).andExpect(status().isUnauthorized());
 
         // Admin
-        this.mockMvc.perform(post(REGISTER_URL).headers(TestUtils.adminAuthorizationHeader())
+        this.mockMvc.perform(post(REGISTER_URL).headers(TestUtils.adminAuthorizationHeader(mockMvc))
                 .contentType(MediaType.APPLICATION_JSON).content(form)).andExpect(status().isCreated());
     }
 
@@ -103,11 +103,10 @@ class AuthenticationTests {
                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
         // Assert
-        Map<String, String> resultMap = TestUtils.getJsonAsMap(result);
-        assertThat(resultMap).hasFieldOrProperty("refreshToken");
-        assertThat(resultMap.get("refreshToken")).hasSizeGreaterThan(0);
-        assertThat(resultMap).hasFieldOrProperty("token");
-        assertThat(resultMap.get("token")).hasSizeGreaterThan(0);
+        assertThat(result).contains("\"refreshToken\"");
+        assertThat(TestUtils.getValueFromJson("refreshToken", result)).hasSizeGreaterThan(0);
+        assertThat(result).contains("\"token\"");
+        assertThat(TestUtils.getValueFromJson("token", result)).hasSizeGreaterThan(0);
     }
 
     @Test
@@ -135,7 +134,7 @@ class AuthenticationTests {
         String url = "/hello";
 
         // Act, assert
-        this.mockMvc.perform(get(url).headers(TestUtils.adminAuthorizationHeader())).andExpect(status().isOk());
+        this.mockMvc.perform(get(url).headers(TestUtils.adminAuthorizationHeader(mockMvc))).andExpect(status().isOk());
     }
 
     @Test
@@ -144,14 +143,14 @@ class AuthenticationTests {
         String url = "/hello";
 
         // Act, assert
-        this.mockMvc.perform(get(url).header("Authorization", "Bearer " + TestUtils.adminRefreshToken()))
+        this.mockMvc.perform(get(url).header("Authorization", "Bearer " + TestUtils.adminRefreshToken(mockMvc)))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     public void canRefreshToken() throws Exception {
         // Arrange
-        Map<String, String> authentication = TestUtils.authenticateAdmin();
+        Map<String, String> authentication = TestUtils.authenticateAdmin(mockMvc);
         String refreshToken = authentication.get("refreshToken");
         String oldToken = authentication.get("token");
         String form = TestUtils.createJsonString("refreshToken", refreshToken);
@@ -182,7 +181,7 @@ class AuthenticationTests {
     @Test
     public void canUseNewToken() throws Exception {
         // Arrange
-        String refreshToken = TestUtils.adminRefreshToken();
+        String refreshToken = TestUtils.adminRefreshToken(mockMvc);
         String form = TestUtils.createJsonString("refreshToken", refreshToken);
         String newToken = TestUtils.getJsonAsMap(
                 this.mockMvc.perform(post(REFRESH_URL).contentType(MediaType.APPLICATION_JSON).content(form))
@@ -196,7 +195,7 @@ class AuthenticationTests {
     @Test
     public void invalidateRefreshToken() throws Exception {
         // Arrange
-        String refreshToken = TestUtils.adminRefreshToken();
+        String refreshToken = TestUtils.adminRefreshToken(mockMvc);
         String form = TestUtils.createJsonString("refreshToken", refreshToken);
 
         // Act
