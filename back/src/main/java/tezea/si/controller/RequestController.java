@@ -1,8 +1,12 @@
 package tezea.si.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,17 +31,31 @@ public class RequestController {
 			@ApiResponse(responseCode = "200", description = "The list of requests corresponding to your search"),
 			@ApiResponse(responseCode = "400", description = "If the search body could not be parsed") })
 	@RequestMapping(method = RequestMethod.GET)
-	public List<SmallRequest> getRequests(@RequestBody RequestsSearchDTO search) {
-		return dao.findAll();
+	public ResponseEntity<List<SmallRequest>> getRequests(
+			@RequestBody RequestsSearchDTO search) {
+		return ResponseEntity.ok(dao.findAll());
 	}
-	
+
+	@Operation(summary = "Get one request by id")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "The request with this id"),
+			@ApiResponse(responseCode = "404", description = "If there is no request with this id") })
+	@RequestMapping(path = "/{id}", method = RequestMethod.GET)
+	public ResponseEntity<SmallRequest> getRequests(@PathVariable Long id) {
+		Optional<SmallRequest> request = dao.findById(id);
+		if (request.isPresent()) {
+			return ResponseEntity.ok(request.get());
+		}
+		return ResponseEntity.notFound().build();
+	}
+
 	@Operation(summary = "Create a request")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "The new request"),
+			@ApiResponse(responseCode = "201", description = "The new request"),
 			@ApiResponse(responseCode = "400", description = "If the input request body could not be parsed") })
 	@RequestMapping(method = RequestMethod.POST)
-	public SmallRequest createRequest(@RequestBody SmallRequest request) {
-		return dao.save(request);
+	public ResponseEntity<SmallRequest> createRequest(@RequestBody SmallRequest request) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(dao.save(request));
 	}
 
 }
