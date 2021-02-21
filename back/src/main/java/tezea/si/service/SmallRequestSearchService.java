@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
+import tezea.si.model.business.SmallClient_;
 import tezea.si.model.business.request.SmallRequest;
 import tezea.si.model.business.request.SmallRequest_;
 import tezea.si.model.dto.SmallRequestSearchDTO;
@@ -16,11 +17,12 @@ public class SmallRequestSearchService {
 	SpecificationBuilder<SmallRequest> builder;
 
 	public Specification<SmallRequest> convert(SmallRequestSearchDTO smallRequest) {
-		System.out.println("convert");
 		if (smallRequest.getDescription() != null) {
-			System.out.println("not null");
 			builder.with(SmallRequest_.description, SearchOperations.CONTAINS,
 					smallRequest.getDescription());
+		}
+		if(smallRequest.getClient() != null) {
+			builder.with(SmallRequest_.client, SmallClient_.lastName, SearchOperations.CONTAINS, smallRequest.getClient().getLastName());
 		}
 		return builder.build();
 	}

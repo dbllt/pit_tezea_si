@@ -15,14 +15,20 @@ import tezea.si.utils.search.SearchSpecification;
 
 @Component
 public class SpecificationBuilder<T> {
-	private final List<SearchCriteria<T>> params = new ArrayList<SearchCriteria<T>>();
+	private final List<SearchCriteria> params = new ArrayList<SearchCriteria>();
 
 	public SpecificationBuilder() {
 	}
 
 	public SpecificationBuilder<T> with(SingularAttribute<T, ?> key,
 			SearchOperations operation, Object value) {
-		params.add(new SearchCriteria<T>(key, operation, value));
+		params.add(new SearchCriteria(key, operation, value));
+		return this;
+	}
+
+	public SpecificationBuilder<T> with(SingularAttribute<T, ?> key,
+			SingularAttribute<?, ?> nestedKey, SearchOperations operation, Object value) {
+		params.add(new SearchCriteria(key, nestedKey, operation, value));
 		return this;
 	}
 

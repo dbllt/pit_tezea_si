@@ -68,7 +68,7 @@ public class ClientSearchTests {
 	public void findByPostCodeContains() {
 		// Arrange
 		SearchSpecification<SmallClient> spec = new SearchSpecification<SmallClient>(
-				new SearchCriteria<SmallClient>(SmallClient_.postCode, SearchOperations.CONTAINS,
+				new SearchCriteria(SmallClient_.postCode, SearchOperations.CONTAINS,
 						"7"));
 
 		// Act
@@ -83,7 +83,7 @@ public class ClientSearchTests {
 	public void findByPostCodeStartsWith() {
 		// Arrange
 		SearchSpecification<SmallClient> spec = new SearchSpecification<SmallClient>(
-				new SearchCriteria<SmallClient>(SmallClient_.postCode,
+				new SearchCriteria(SmallClient_.postCode,
 						SearchOperations.STARTSWITH, "35"));
 
 		// Act
@@ -98,7 +98,7 @@ public class ClientSearchTests {
 	public void findEmptyByPostCodeContains() {
 		// Arrange
 		SearchSpecification<SmallClient> spec = new SearchSpecification<SmallClient>(
-				new SearchCriteria<SmallClient>(SmallClient_.postCode, SearchOperations.CONTAINS,
+				new SearchCriteria(SmallClient_.postCode, SearchOperations.CONTAINS,
 						"5"));
 
 		// Act
@@ -113,7 +113,7 @@ public class ClientSearchTests {
 	public void findEmptyByPostCodeEquals() {
 		// Arrange
 		SearchSpecification<SmallClient> spec = new SearchSpecification<SmallClient>(
-				new SearchCriteria<SmallClient>(SmallClient_.postCode, SearchOperations.EQUALS,
+				new SearchCriteria(SmallClient_.postCode, SearchOperations.EQUALS,
 						"700"));
 
 		// Act
@@ -127,7 +127,7 @@ public class ClientSearchTests {
 	public void findByPostCodeEquals() {
 		// Arrange
 		SearchSpecification<SmallClient> spec = new SearchSpecification<SmallClient>(
-				new SearchCriteria<SmallClient>(SmallClient_.postCode, SearchOperations.EQUALS,
+				new SearchCriteria(SmallClient_.postCode, SearchOperations.EQUALS,
 						"35700"));
 
 		// Act

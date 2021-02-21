@@ -19,8 +19,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import tezea.si.dao.SmallClientDAO;
 import tezea.si.dao.SmallRequestDAO;
 import tezea.si.dao.UserTezeaDAO;
+import tezea.si.model.business.SmallClient;
 import tezea.si.model.business.UserTezea;
 import tezea.si.model.business.request.SmallRequest;
 import tezea.si.utils.TestUtils;
@@ -36,6 +38,9 @@ public class RequestsControllerTests {
 
 	@Autowired
 	SmallRequestDAO requestDao;
+
+	@Autowired
+	SmallClientDAO clientDao;
 
 	@Autowired
 	ObjectMapper mapper;
@@ -192,7 +197,7 @@ public class RequestsControllerTests {
 	}
 
 	@Test
-	public void returnsRequestsEnptySearchByDescription() throws Exception {
+	public void returnsRequestsEmptySearchByDescription() throws Exception {
 		// Arrange
 		String input = TestUtils.createJsonString("description", "not present");
 
@@ -217,7 +222,7 @@ public class RequestsControllerTests {
 		// Assert
 		assertThat(result).isEqualTo(expected);
 	}
-	
+
 	@Test
 	public void returnsAllRequestsWithSearchByDescription() throws Exception {
 		// Arrange
@@ -232,6 +237,47 @@ public class RequestsControllerTests {
 		SmallRequest matching2 = requestDao.save(request2);
 
 		List<SmallRequest> expectedList = List.of(matching, matching2);
+
+		// Act
+		String result = this.mockMvc
+				.perform(get(REQUESTS_URL).contentType(MediaType.APPLICATION_JSON)
+						.content(input)
+						.headers(TestUtils.userAuthorizationHeader(mockMvc)))
+				.andExpect(status().isOk()).andReturn().getResponse()
+				.getContentAsString();
+
+		// Assert
+		List<SmallRequest> resultList = mapper.readValue(result,
+				new TypeReference<List<SmallRequest>>() {
+				});
+		assertThat(resultList).usingRecursiveFieldByFieldElementComparator()
+				.isEqualTo(expectedList);
+	}
+
+	@Test
+	public void returnsRequestsWithSearchByClientLastName() throws Exception {
+		// Arrange
+		SmallClient client = new SmallClient();
+		SmallClient client2 = new SmallClient();
+		client.setLastName("Dula");
+		client2.setLastName("Lars");
+		clientDao.save(client);
+		clientDao.save(client2);
+
+		SmallRequest request = new SmallRequest();
+		SmallRequest request2 = new SmallRequest();
+		request.setClient(client);
+		request2.setClient(client2);
+
+		SmallRequest matching = requestDao.save(request);
+		requestDao.save(request2);
+
+		String inputClient = TestUtils.createJsonString("lastName", "ul");
+		String input = TestUtils.createJsonString("client", inputClient);
+		input = input.replaceAll("\"\\{", "{");
+		input = input.replaceAll("\\}\"", "}");
+
+		List<SmallRequest> expectedList = List.of(matching);
 
 		// Act
 		String result = this.mockMvc

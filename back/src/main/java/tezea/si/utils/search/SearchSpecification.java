@@ -2,6 +2,7 @@ package tezea.si.utils.search;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -11,9 +12,9 @@ import tezea.si.utils.errors.InvalidSearchTypeException;
 
 public class SearchSpecification<T> implements Specification<T> {
 	private static final long serialVersionUID = 1L;
-	private SearchCriteria<T> criteria;
+	private SearchCriteria criteria;
 
-	public SearchSpecification(SearchCriteria<T> searchCriteria) {
+	public SearchSpecification(SearchCriteria searchCriteria) {
 		this.criteria = searchCriteria;
 	}
 
@@ -23,13 +24,13 @@ public class SearchSpecification<T> implements Specification<T> {
 		if (criteria.getJavaClass() == String.class) {
 			switch (criteria.getOperation()) {
 			case EQUALS:
-				return builder.equal(root.<String>get(criteria.getKey()),
+				return builder.equal(constructKey(root, criteria),
 						criteria.getValue().toString());
 			case STARTSWITH:
-				return builder.like(root.<String>get(criteria.getKey()),
+				return builder.like(constructKey(root, criteria),
 						criteria.getValue() + "%");
 			case CONTAINS:
-				return builder.like(root.<String>get(criteria.getKey()),
+				return builder.like(constructKey(root, criteria),
 						"%" + criteria.getValue() + "%");
 			default:
 				throw new InvalidSearchTypeException(
@@ -40,4 +41,10 @@ public class SearchSpecification<T> implements Specification<T> {
 				"Cannot search on type " + criteria.getJavaClass());
 	}
 
+	private Expression<String> constructKey(Root<T> root, SearchCriteria criteria) {
+		if (criteria.hasNestedKey()) {
+			return root.get(criteria.getKey()).<String>get(criteria.getNestedKey());
+		}
+		return root.<String>get(criteria.getKey());
+	}
 }
