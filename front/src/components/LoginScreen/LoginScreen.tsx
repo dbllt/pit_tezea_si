@@ -82,7 +82,7 @@ class LoginScreen extends Component<IProps, IState> {
                 <Grid container direction="column" justify="center" alignItems="center" spacing={5}>
                     <Grid item>
                         <TextField
-                            label="Identifiant:"
+                            label="Identifiant"
                             inputRef={this.username}
                             id="outlined-margin-normal"
                             margin="normal"

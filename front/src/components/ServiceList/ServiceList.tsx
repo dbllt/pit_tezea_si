@@ -24,27 +24,79 @@ class ServiceList extends Component {
                 <Link to={{
                     pathname: '/request',
                     state: {
-                        service: "Menuiserie",
+                        service: "Bois",
                         requestContent: {
                             concierge: ""
                         }
                     }
                 }} style={{margin: 20}}>
                     <Button variant="contained">
-                        Service Menuiserie
+                        Service Bois
                     </Button>
                 </Link>
                 <Link to={{
                     pathname: '/request',
                     state: {
-                        service: "Nettoyage",
+                        service: "Couture",
                         requestContent: {
                             concierge: ""
                         }
                     }
                 }} style={{margin: 20}}>
                     <Button variant="contained">
-                        Service Nettoyage
+                        Service Couture
+                    </Button>
+                </Link>
+                <Link to={{
+                    pathname: '/request',
+                    state: {
+                        service: "Tri",
+                        requestContent: {
+                            concierge: ""
+                        }
+                    }
+                }} style={{margin: 20}}>
+                    <Button variant="contained">
+                        Service Trie
+                    </Button>
+                </Link>
+                <Link to={{
+                    pathname: '/request',
+                    state: {
+                        service: "Recyclerie",
+                        requestContent: {
+                            concierge: ""
+                        }
+                    }
+                }} style={{margin: 20}}>
+                    <Button variant="contained">
+                        Service Recyclerie
+                    </Button>
+                </Link>
+                <Link to={{
+                    pathname: '/request',
+                    state: {
+                        service: "Enlèvements",
+                        requestContent: {
+                            concierge: ""
+                        }
+                    }
+                }} style={{margin: 20}}>
+                    <Button variant="contained">
+                        Service Enlèvements
+                    </Button>
+                </Link>
+                <Link to={{
+                    pathname: '/request',
+                    state: {
+                        service: "Estimateur",
+                        requestContent: {
+                            concierge: ""
+                        }
+                    }
+                }} style={{margin: 20}}>
+                    <Button variant="contained">
+                        Estimateur
                     </Button>
                 </Link>
             </div>

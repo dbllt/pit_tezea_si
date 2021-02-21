@@ -11,7 +11,7 @@ import UsersScreen from "./components/UsersScreen/UsersScreen";
 import CustomAppBar from "./components/CustomAppBar/CustomAppBar";
 
 
-class App extends React.Component {
+class App extends React.Component { 
     constructor(props: ClassAttributes<any>) {
         super(props)
 

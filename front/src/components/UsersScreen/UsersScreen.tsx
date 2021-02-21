@@ -15,9 +15,9 @@ import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
 
 const tableHeadNames = ["Identifiant", "Rôle", ""];
 
-function createRequestData(username: string, role: string) {
+function createRequestData(username: string, authorities: string[]) {
     return {
-        username, role,
+        username, authorities,
     };
 }
 
@@ -25,7 +25,7 @@ function createRequestData(username: string, role: string) {
 interface User {
     id: string;
     username: string;
-    role: string;
+    authorities: string[]
 }
 
 
@@ -76,7 +76,7 @@ class UsersScreen extends Component<IProps, IState> {
             <React.Fragment>
                 <TableRow hover>
                     <TableCell align="center">{row.username}</TableCell>
-                    <TableCell align="center">{row.role}</TableCell>
+                    <TableCell align="center">{row.authorities[0]}</TableCell>
                     <TableCell align="center" style={{width: "10%"}}>
 
                         <IconButton
@@ -94,7 +94,6 @@ class UsersScreen extends Component<IProps, IState> {
     }
 
     handler() {
-        console.log("allo")
         this.setState({})
     }
 
