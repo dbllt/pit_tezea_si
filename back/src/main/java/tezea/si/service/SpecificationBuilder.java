@@ -39,6 +39,7 @@ public class SpecificationBuilder<T> {
 		for (int i = 1; i < params.size(); i++) {
 			result = Specification.where(result).and(specs.get(i));
 		}
+		params.clear();
 		return result;
 	}
 }

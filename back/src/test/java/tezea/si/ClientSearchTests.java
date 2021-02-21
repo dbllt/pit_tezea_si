@@ -11,53 +11,52 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.jpa.domain.Specification;
 
-import tezea.si.dao.ClientDAO;
-import tezea.si.model.business.Client;
-import tezea.si.model.business.Client_;
-import tezea.si.model.business.Particulier;
-import tezea.si.model.dto.ClientSearchDTO;
-import tezea.si.service.ClientSearchService;
+import tezea.si.dao.SmallClientDAO;
+import tezea.si.model.business.SmallClient;
+import tezea.si.model.business.SmallClient_;
+import tezea.si.model.dto.SmallClientSearchDTO;
+import tezea.si.service.SmallClientSearchService;
 import tezea.si.service.SpecificationBuilder;
-import tezea.si.utils.search.SearchSpecification;
 import tezea.si.utils.search.SearchCriteria;
 import tezea.si.utils.search.SearchOperations;
+import tezea.si.utils.search.SearchSpecification;
 
 @SpringBootTest
 public class ClientSearchTests {
 
 	@Autowired
-	private ClientDAO clientDao;
+	private SmallClientDAO clientDao;
 
 	@Autowired
-	private SpecificationBuilder<Client> builder;
+	private SpecificationBuilder<SmallClient> builder;
 
 	@Autowired
-	private ClientSearchService searchService;
+	private SmallClientSearchService searchService;
 
-	private Particulier jeanNoix35700;
-	private Particulier jeannetteNoisette35200;
-	private Particulier liseOlli53500;
+	private SmallClient jeanNoix35700;
+	private SmallClient jeannetteNoisette35200;
+	private SmallClient liseOlli53500;
 
 	@BeforeEach
 	public void init() {
-		Particulier particulier = new Particulier();
-		particulier.setNom("Noix");
-		particulier.setPrenom("Jean");
-		particulier.setCodePostal("35700");
-		particulier.setVille("rennes");
-		jeanNoix35700 = clientDao.save(particulier);
-		Particulier particulier2 = new Particulier();
-		particulier2.setNom("Noisette");
-		particulier2.setPrenom("Jeannette");
-		particulier2.setCodePostal("35200");
-		particulier2.setVille("rennes");
-		jeannetteNoisette35200 = clientDao.save(particulier2);
-		Particulier particulier3 = new Particulier();
-		particulier3.setNom("Olli");
-		particulier3.setPrenom("Lise");
-		particulier3.setCodePostal("53500");
-		particulier3.setVille("ailleurs");
-		liseOlli53500 = clientDao.save(particulier3);
+		SmallClient SmallClient = new SmallClient();
+		SmallClient.setLastName("Noix");
+		SmallClient.setFirstName("Jean");
+		SmallClient.setPostCode("35700");
+		SmallClient.setCity("rennes");
+		jeanNoix35700 = clientDao.save(SmallClient);
+		SmallClient SmallClient2 = new SmallClient();
+		SmallClient2.setLastName("Noisette");
+		SmallClient2.setFirstName("Jeannette");
+		SmallClient2.setPostCode("35200");
+		SmallClient2.setCity("rennes");
+		jeannetteNoisette35200 = clientDao.save(SmallClient2);
+		SmallClient SmallClient3 = new SmallClient();
+		SmallClient3.setLastName("Olli");
+		SmallClient3.setFirstName("Lise");
+		SmallClient3.setPostCode("53500");
+		SmallClient3.setCity("ailleurs");
+		liseOlli53500 = clientDao.save(SmallClient3);
 	}
 
 	@AfterEach
@@ -68,12 +67,12 @@ public class ClientSearchTests {
 	@Test
 	public void findByPostCodeContains() {
 		// Arrange
-		SearchSpecification<Client> spec = new SearchSpecification<Client>(
-				new SearchCriteria<Client>(Client_.codePostal, SearchOperations.CONTAINS,
+		SearchSpecification<SmallClient> spec = new SearchSpecification<SmallClient>(
+				new SearchCriteria<SmallClient>(SmallClient_.postCode, SearchOperations.CONTAINS,
 						"7"));
 
 		// Act
-		List<Client> results = clientDao.findAll(spec);
+		List<SmallClient> results = clientDao.findAll(spec);
 
 		// Assert
 		assertThat(results).usingRecursiveFieldByFieldElementComparator()
@@ -83,12 +82,12 @@ public class ClientSearchTests {
 	@Test
 	public void findByPostCodeStartsWith() {
 		// Arrange
-		SearchSpecification<Client> spec = new SearchSpecification<Client>(
-				new SearchCriteria<Client>(Client_.codePostal,
+		SearchSpecification<SmallClient> spec = new SearchSpecification<SmallClient>(
+				new SearchCriteria<SmallClient>(SmallClient_.postCode,
 						SearchOperations.STARTSWITH, "35"));
 
 		// Act
-		List<Client> results = clientDao.findAll(spec);
+		List<SmallClient> results = clientDao.findAll(spec);
 
 		// Assert
 		assertThat(results).usingRecursiveFieldByFieldElementComparator()
@@ -98,12 +97,12 @@ public class ClientSearchTests {
 	@Test
 	public void findEmptyByPostCodeContains() {
 		// Arrange
-		SearchSpecification<Client> spec = new SearchSpecification<Client>(
-				new SearchCriteria<Client>(Client_.codePostal, SearchOperations.CONTAINS,
+		SearchSpecification<SmallClient> spec = new SearchSpecification<SmallClient>(
+				new SearchCriteria<SmallClient>(SmallClient_.postCode, SearchOperations.CONTAINS,
 						"5"));
 
 		// Act
-		List<Client> results = clientDao.findAll(spec);
+		List<SmallClient> results = clientDao.findAll(spec);
 
 		// Assert
 		assertThat(results).usingRecursiveFieldByFieldElementComparator()
@@ -113,12 +112,12 @@ public class ClientSearchTests {
 	@Test
 	public void findEmptyByPostCodeEquals() {
 		// Arrange
-		SearchSpecification<Client> spec = new SearchSpecification<Client>(
-				new SearchCriteria<Client>(Client_.codePostal, SearchOperations.EQUALS,
+		SearchSpecification<SmallClient> spec = new SearchSpecification<SmallClient>(
+				new SearchCriteria<SmallClient>(SmallClient_.postCode, SearchOperations.EQUALS,
 						"700"));
 
 		// Act
-		List<Client> results = clientDao.findAll(spec);
+		List<SmallClient> results = clientDao.findAll(spec);
 
 		// Assert
 		assertThat(results).usingRecursiveFieldByFieldElementComparator().isEmpty();
@@ -127,12 +126,12 @@ public class ClientSearchTests {
 	@Test
 	public void findByPostCodeEquals() {
 		// Arrange
-		SearchSpecification<Client> spec = new SearchSpecification<Client>(
-				new SearchCriteria<Client>(Client_.codePostal, SearchOperations.EQUALS,
+		SearchSpecification<SmallClient> spec = new SearchSpecification<SmallClient>(
+				new SearchCriteria<SmallClient>(SmallClient_.postCode, SearchOperations.EQUALS,
 						"35700"));
 
 		// Act
-		List<Client> results = clientDao.findAll(spec);
+		List<SmallClient> results = clientDao.findAll(spec);
 
 		// Assert
 		assertThat(results).usingRecursiveFieldByFieldElementComparator()
@@ -142,10 +141,10 @@ public class ClientSearchTests {
 	@Test
 	public void findWithBuiltSpec() {
 		// Act
-		Specification<Client> spec = builder
-				.with(Client_.codePostal, SearchOperations.CONTAINS, "352")
-				.with(Client_.ville, SearchOperations.CONTAINS, "ennes").build();
-		List<Client> results = clientDao.findAll(spec);
+		Specification<SmallClient> spec = builder
+				.with(SmallClient_.postCode, SearchOperations.CONTAINS, "352")
+				.with(SmallClient_.city, SearchOperations.CONTAINS, "ennes").build();
+		List<SmallClient> results = clientDao.findAll(spec);
 
 		// Assert
 		assertThat(results).usingRecursiveFieldByFieldElementComparator()
@@ -155,12 +154,12 @@ public class ClientSearchTests {
 	@Test
 	public void findWithService() {
 		// Arrange
-		ClientSearchDTO dto = new ClientSearchDTO();
-		dto.setAddress("352");
+		SmallClientSearchDTO dto = new SmallClientSearchDTO();
+		dto.setPostCode("352");
 
 		// Act
-		Specification<Client> spec = searchService.convert(dto);
-		List<Client> results = clientDao.findAll(spec);
+		Specification<SmallClient> spec = searchService.convert(dto);
+		List<SmallClient> results = clientDao.findAll(spec);
 
 		// Assert
 		assertThat(results).usingRecursiveFieldByFieldElementComparator()

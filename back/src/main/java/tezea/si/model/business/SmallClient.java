@@ -10,11 +10,11 @@ public class SmallClient {
 	private String email;
 	private String phoneNumber;
 	private String address;
-	private String codePostal;
+	private String postCode;
 	private String city;
 	private String companyName;
-	private String lastname;
-	private String firstname;
+	private String lastName;
+	private String firstName;
 	private HonorificTitle honorificTitle;
 
 	@Id
@@ -51,12 +51,12 @@ public class SmallClient {
 		this.address = address;
 	}
 
-	public String getCodePostal() {
-		return codePostal;
+	public String getPostCode() {
+		return postCode;
 	}
 
-	public void setCodePostal(String codePostal) {
-		this.codePostal = codePostal;
+	public void setPostCode(String postCode) {
+		this.postCode = postCode;
 	}
 
 	public String getCity() {
@@ -75,20 +75,20 @@ public class SmallClient {
 		this.companyName = companyName;
 	}
 
-	public String getLastname() {
-		return lastname;
+	public String getLastName() {
+		return lastName;
 	}
 
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
-	public String getFirstname() {
-		return firstname;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
 	public HonorificTitle getHonorificTitle() {

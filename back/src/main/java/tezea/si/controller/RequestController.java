@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +18,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import tezea.si.dao.SmallRequestDAO;
 import tezea.si.model.business.request.SmallRequest;
-import tezea.si.model.dto.RequestsSearchDTO;
+import tezea.si.model.dto.SmallRequestSearchDTO;
+import tezea.si.service.SmallRequestSearchService;
 
 @RestController
 @RequestMapping(value = "/requests")
@@ -25,6 +27,9 @@ public class RequestController {
 
 	@Autowired
 	SmallRequestDAO dao;
+	
+	@Autowired
+	SmallRequestSearchService searchService;
 
 	@Operation(summary = "Search for requests")
 	@ApiResponses(value = {
@@ -32,8 +37,9 @@ public class RequestController {
 			@ApiResponse(responseCode = "400", description = "If the search body could not be parsed") })
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<SmallRequest>> getRequests(
-			@RequestBody RequestsSearchDTO search) {
-		return ResponseEntity.ok(dao.findAll());
+			@RequestBody SmallRequestSearchDTO search) {
+		Specification<SmallRequest> spec = searchService.convert(search);
+		return ResponseEntity.ok(dao.findAll(spec));
 	}
 
 	@Operation(summary = "Get one request by id")

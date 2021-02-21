@@ -65,7 +65,6 @@ public class TestUtils {
 			MockMvc mockMvc) throws Exception {
 		String authForm = createJsonString("username", username, "password", password);
 
-		System.out.println(mockMvc);
 		String result = mockMvc
 				.perform(post(AUTH_URL).contentType(MediaType.APPLICATION_JSON)
 						.content(authForm))

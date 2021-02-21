@@ -160,4 +160,93 @@ public class RequestsControllerTests {
 		assertThat(result.getId()).isNotZero();
 	}
 
+	@Test
+	public void returnsRequestsWithSearchByDescription() throws Exception {
+		// Arrange
+		String input = TestUtils.createJsonString("description", "be");
+
+		SmallRequest request = new SmallRequest();
+		request.setDescription("as if");
+		requestDao.save(request);
+
+		SmallRequest request2 = new SmallRequest();
+		request2.setDescription("won't be done");
+		SmallRequest matching = requestDao.save(request2);
+
+		List<SmallRequest> expectedList = List.of(matching);
+
+		// Act
+		String result = this.mockMvc
+				.perform(get(REQUESTS_URL).contentType(MediaType.APPLICATION_JSON)
+						.content(input)
+						.headers(TestUtils.userAuthorizationHeader(mockMvc)))
+				.andExpect(status().isOk()).andReturn().getResponse()
+				.getContentAsString();
+
+		// Assert
+		List<SmallRequest> resultList = mapper.readValue(result,
+				new TypeReference<List<SmallRequest>>() {
+				});
+		assertThat(resultList).usingRecursiveFieldByFieldElementComparator()
+				.isEqualTo(expectedList);
+	}
+
+	@Test
+	public void returnsRequestsEnptySearchByDescription() throws Exception {
+		// Arrange
+		String input = TestUtils.createJsonString("description", "not present");
+
+		SmallRequest request = new SmallRequest();
+		request.setDescription("as if");
+		requestDao.save(request);
+
+		SmallRequest request2 = new SmallRequest();
+		request2.setDescription("won't be done");
+		requestDao.save(request2);
+
+		String expected = "[]";
+
+		// Act
+		String result = this.mockMvc
+				.perform(get(REQUESTS_URL).contentType(MediaType.APPLICATION_JSON)
+						.content(input)
+						.headers(TestUtils.userAuthorizationHeader(mockMvc)))
+				.andExpect(status().isOk()).andReturn().getResponse()
+				.getContentAsString();
+
+		// Assert
+		assertThat(result).isEqualTo(expected);
+	}
+	
+	@Test
+	public void returnsAllRequestsWithSearchByDescription() throws Exception {
+		// Arrange
+		String input = TestUtils.createJsonString("description", "i");
+
+		SmallRequest request = new SmallRequest();
+		request.setDescription("as if");
+		SmallRequest matching = requestDao.save(request);
+
+		SmallRequest request2 = new SmallRequest();
+		request2.setDescription("will not be done");
+		SmallRequest matching2 = requestDao.save(request2);
+
+		List<SmallRequest> expectedList = List.of(matching, matching2);
+
+		// Act
+		String result = this.mockMvc
+				.perform(get(REQUESTS_URL).contentType(MediaType.APPLICATION_JSON)
+						.content(input)
+						.headers(TestUtils.userAuthorizationHeader(mockMvc)))
+				.andExpect(status().isOk()).andReturn().getResponse()
+				.getContentAsString();
+
+		// Assert
+		List<SmallRequest> resultList = mapper.readValue(result,
+				new TypeReference<List<SmallRequest>>() {
+				});
+		assertThat(resultList).usingRecursiveFieldByFieldElementComparator()
+				.isEqualTo(expectedList);
+	}
+
 }
