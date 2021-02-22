@@ -32,6 +32,8 @@ class App extends React.Component<IProps,IState> {
 
     handler2(username: string) {
         this.setState({username})
+        localStorage.setItem('username', username);
+        this.forceUpdate();
     }
 
     render() {

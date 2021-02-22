@@ -28,6 +28,7 @@ class CustomAppBar extends React.Component<RouteComponentProps & IProps, IState>
 
     disconnect = () => {
         API.disconnect().then(() => {
+                 localStorage.setItem('username', "");
                 this.forceUpdate();
                 this.props.handler();
             }
