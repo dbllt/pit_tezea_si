@@ -1,30 +1,26 @@
-package tezea.si.model.business.request;
+package tezea.si.model;
 
 import java.time.LocalDate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import tezea.si.model.business.Site;
-import tezea.si.model.business.SmallClient;
-import tezea.si.model.business.UserTezea;
+import tezea.si.model.business.request.Priority;
+import tezea.si.model.business.request.RequestStatus;
+import tezea.si.model.business.request.SatisfactionLevel;
+import tezea.si.model.business.request.Service;
+import tezea.si.model.business.request.TimeUnit;
 
-@Entity
-public class SmallRequest {
+public class SmallRequestDTO {
 	private long id;
 	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate date;
-	private Site site;
-	private UserTezea responsable;
-	private SmallClient client;
+	private SmallSiteDTO site;
+	private SmallUserDTO responsable;
+	private SmallClientDTO client;
 	private Priority priority;
 	private String description;
 	private RequestStatus status;
-	private UserTezea closedBy;
+	private SmallUserDTO closedBy;
 	private String accessDetails;
 	private int repetitionTime;
 	private TimeUnit repetitionUnit;
@@ -34,15 +30,13 @@ public class SmallRequest {
 	private double amountDonated;
 	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate appointmentPlasmaDate;
-	private SmallEstimation estimation;
+	private SmallEstimationDTO estimation;
 
 	private SatisfactionLevel satisfactionLevel;
 	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate lastUpdated;
-	private UserTezea lastUpdatedBy;
+	private SmallUserDTO lastUpdatedBy;
 
-	@Id
-	@GeneratedValue
 	public long getId() {
 		return id;
 	}
@@ -59,30 +53,27 @@ public class SmallRequest {
 		this.date = date;
 	}
 
-	@OneToOne
-	public Site getSite() {
+	public SmallSiteDTO getSite() {
 		return site;
 	}
 
-	public void setSite(Site site) {
+	public void setSite(SmallSiteDTO site) {
 		this.site = site;
 	}
 
-	@OneToOne
-	public UserTezea getResponsable() {
+	public SmallUserDTO getResponsable() {
 		return responsable;
 	}
 
-	public void setResponsable(UserTezea responsable) {
+	public void setResponsable(SmallUserDTO responsable) {
 		this.responsable = responsable;
 	}
 
-	@OneToOne
-	public SmallClient getClient() {
+	public SmallClientDTO getClient() {
 		return client;
 	}
 
-	public void setClient(SmallClient client) {
+	public void setClient(SmallClientDTO client) {
 		this.client = client;
 	}
 
@@ -110,12 +101,11 @@ public class SmallRequest {
 		this.status = status;
 	}
 
-	@OneToOne
-	public UserTezea getClosedBy() {
+	public SmallUserDTO getClosedBy() {
 		return closedBy;
 	}
 
-	public void setClosedBy(UserTezea closedBy) {
+	public void setClosedBy(SmallUserDTO closedBy) {
 		this.closedBy = closedBy;
 	}
 
@@ -167,6 +157,14 @@ public class SmallRequest {
 		this.appointmentPlasmaDate = appointmentPlasmaDate;
 	}
 
+	public SmallEstimationDTO getEstimation() {
+		return estimation;
+	}
+
+	public void setEstimation(SmallEstimationDTO estimation) {
+		this.estimation = estimation;
+	}
+
 	public SatisfactionLevel getSatisfactionLevel() {
 		return satisfactionLevel;
 	}
@@ -183,21 +181,11 @@ public class SmallRequest {
 		this.lastUpdated = lastUpdated;
 	}
 
-	@OneToOne
-	public SmallEstimation getEstimation() {
-		return estimation;
-	}
-
-	public void setEstimation(SmallEstimation estimation) {
-		this.estimation = estimation;
-	}
-
-	@OneToOne
-	public UserTezea getLastUpdatedBy() {
+	public SmallUserDTO getLastUpdatedBy() {
 		return lastUpdatedBy;
 	}
 
-	public void setLastUpdatedBy(UserTezea lastUpdatedBy) {
+	public void setLastUpdatedBy(SmallUserDTO lastUpdatedBy) {
 		this.lastUpdatedBy = lastUpdatedBy;
 	}
 

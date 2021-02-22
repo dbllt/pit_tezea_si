@@ -18,8 +18,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import tezea.si.dao.SmallClientDAO;
 import tezea.si.dao.SmallRequestDAO;
+import tezea.si.dao.UserTezeaDAO;
+import tezea.si.model.SmallRequestDTO;
 import tezea.si.model.business.request.SmallRequest;
 import tezea.si.model.dto.SmallRequestSearchDTO;
+import tezea.si.service.EntityCreationFromDTOService;
+import tezea.si.service.EntityToDTOService;
 import tezea.si.service.SmallRequestSearchService;
 
 @RestController
@@ -32,6 +36,15 @@ public class RequestController {
 	@Autowired
 	SmallClientDAO clientDao;
 
+	@Autowired
+	UserTezeaDAO userDao;
+
+	@Autowired
+	EntityCreationFromDTOService creator;
+	
+	@Autowired
+	EntityToDTOService toDTO;
+	
 	@Autowired
 	SmallRequestSearchService searchService;
 
@@ -64,13 +77,11 @@ public class RequestController {
 			@ApiResponse(responseCode = "201", description = "The new request"),
 			@ApiResponse(responseCode = "400", description = "If the input request body could not be parsed") })
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<SmallRequest> createRequest(@RequestBody SmallRequest request) {
-		request.setId(0);
-		if (request.getClient() != null) {
-			request.getClient().setId(0);
-			clientDao.save(request.getClient());
-		}
-		return ResponseEntity.status(HttpStatus.CREATED).body(dao.save(request));
+	public ResponseEntity<SmallRequestDTO> createRequest(@RequestBody SmallRequest request) {
+		SmallRequest entity = creator.convertToEntity(request);
+		
+		SmallRequestDTO response = toDTO.convertToDTO(entity);
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
 }
