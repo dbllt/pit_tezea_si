@@ -45,6 +45,8 @@ class LoginScreen extends Component<IProps, IState> {
         this.getUsername = this.getUsername.bind(this);
         this.getPassword = this.getPassword.bind(this);
         this.login = this.login.bind(this);
+
+        this.keyPress = this.keyPress.bind(this);
     }
 
     login() {
@@ -76,6 +78,11 @@ class LoginScreen extends Component<IProps, IState> {
         }
     };
 
+    keyPress(e: React.KeyboardEvent<HTMLInputElement>) {
+        if(e.key==="Enter"){
+            this.login();
+        }
+    }
 
     render() {
         return (
@@ -104,6 +111,7 @@ class LoginScreen extends Component<IProps, IState> {
                             variant="outlined"
                             error={(this.state.triedToLogin && this.getPassword() === "")}
                             helperText={(this.state.triedToLogin && this.getPassword() === "") ? 'Manquant' : ' '}
+                            onKeyDown={this.keyPress}
                         />
                     </Grid>
                     <Grid>
