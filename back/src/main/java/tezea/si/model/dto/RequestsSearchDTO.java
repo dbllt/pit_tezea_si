@@ -6,8 +6,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import tezea.si.model.business.UserTezea;
 import tezea.si.model.business.request.Priority;
+import tezea.si.model.business.request.Service;
 
 public class RequestsSearchDTO implements Serializable {
 
@@ -25,14 +25,9 @@ public class RequestsSearchDTO implements Serializable {
 		MENUISERIE, NETTOYAGE
 	}
 
-	public enum Service {
-		SERVICE, DONATION, SERVICE_DONATION, PLASMA, INFORMATION
+	public RequestsSearchDTO() {
 	}
 
-	public RequestsSearchDTO() {
-		
-	}
-	
 	public LocalDate getStartDate() {
 		return startDate;
 	}
