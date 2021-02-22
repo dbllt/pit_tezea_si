@@ -56,15 +56,13 @@ interface filter {
 
 }
 
-// Hint : Temporary data ///////////////////////////
 const date1 = new Date(2021, 1, 28);
 const date2 = new Date(2021, 2, 5);
 const date3 = new Date(2021, 2, 15);
-/////////////////////////////////////////////////////
 
 let requests: Request[] = [];
 addRequest("1", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date1, "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
-addRequest("2", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "En cours", "Ouvrier 3", date2, "Entreprise", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("2", "2018-01-25", "10:30", "test", "Autre", "Don", "En cours", "Ouvrier 3", date2, "Entreprise", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
 addRequest("3", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date3, "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
 addRequest("4", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date1, "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
 addRequest("5", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "En cours", "Ouvrier 3", date1, "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
@@ -129,8 +127,6 @@ function addRequest(requestNumber: string, date: string, hour: string, concierge
 
 
 const API = {
-
-
     login: async function (username: string, password: string): Promise<boolean> {
         let found = false;
 
@@ -168,7 +164,7 @@ const API = {
         return found;
     },
 
-    getUsername: async function (): Promise<string> {
+    getUsername: function (): string {
         let temp = localStorage.getItem('username');
         if (temp === null) {
             temp = "";
@@ -203,7 +199,6 @@ const API = {
                 if (response.status !== 204) {
                     return Promise.reject(response);
                 } else {
-                    console.log('user disconnected');
                     localStorage.setItem('token', "")
                     localStorage.setItem('refreshToken', "")
                 }
@@ -232,12 +227,11 @@ const API = {
 
 
         const requestOptions = {
-            method: 'POST',
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': "Bearer " + token
             },
-            body: JSON.stringify({})
         };
 
         await fetch('/requests', requestOptions)
@@ -281,12 +275,13 @@ const API = {
         requests.push(request);
     },
     getRequest: async function (id: string): Promise<any> {
+        let ret = null
         requests.forEach(function (request) {
             if (request.id === id) {
-                return request;
+                ret = request;
             }
         });
-        return false;
+        return ret;
     },
 
 
@@ -394,8 +389,6 @@ const API = {
             .then(async response => {
                 if (!response.ok) {
                     return Promise.reject(response);
-                } else {
-                    console.log('user created');
                 }
             }).catch(error => {
                 console.error('There was an error!', error);

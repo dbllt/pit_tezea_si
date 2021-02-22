@@ -25,9 +25,7 @@ class ServiceList extends Component {
                     pathname: '/request',
                     state: {
                         service: "Bois",
-                        requestContent: {
-                            concierge: ""
-                        }
+                        requestId: -1,
                     }
                 }} style={{margin: 20}}>
                     <Button variant="contained">
@@ -38,9 +36,7 @@ class ServiceList extends Component {
                     pathname: '/request',
                     state: {
                         service: "Couture",
-                        requestContent: {
-                            concierge: ""
-                        }
+                        requestId: -1,
                     }
                 }} style={{margin: 20}}>
                     <Button variant="contained">
@@ -50,10 +46,7 @@ class ServiceList extends Component {
                 <Link to={{
                     pathname: '/request',
                     state: {
-                        service: "Tri",
-                        requestContent: {
-                            concierge: ""
-                        }
+                        service: "Tri", requestId: -1,
                     }
                 }} style={{margin: 20}}>
                     <Button variant="contained">
@@ -63,10 +56,7 @@ class ServiceList extends Component {
                 <Link to={{
                     pathname: '/request',
                     state: {
-                        service: "Recyclerie",
-                        requestContent: {
-                            concierge: ""
-                        }
+                        service: "Recyclerie", requestId: -1,
                     }
                 }} style={{margin: 20}}>
                     <Button variant="contained">
@@ -76,10 +66,7 @@ class ServiceList extends Component {
                 <Link to={{
                     pathname: '/request',
                     state: {
-                        service: "Enlèvements",
-                        requestContent: {
-                            concierge: ""
-                        }
+                        service: "Enlèvements", requestId: -1,
                     }
                 }} style={{margin: 20}}>
                     <Button variant="contained">
@@ -89,10 +76,7 @@ class ServiceList extends Component {
                 <Link to={{
                     pathname: '/request',
                     state: {
-                        service: "Estimateur",
-                        requestContent: {
-                            concierge: ""
-                        }
+                        service: "Estimateur", requestId: -1,
                     }
                 }} style={{margin: 20}}>
                     <Button variant="contained">

@@ -6,23 +6,42 @@ import MenuItem from "@material-ui/core/MenuItem";
 import {Link, Redirect, RouteComponentProps} from "react-router-dom";
 import "./Request.css";
 import FormClient from "../FormClient/FormClient";
+import API from "../../network/API";
 
-
-type StateType = {
-    requestContent: any;
-    service: string
+interface IRequest {
+    id: string;
+    date: string,
+    hour: string,
+    concierge: string,
+    site: string,
+    serviceType: string,
+    requestStatus: string,
+    requestAssignment: string,
+    executionDate: Date,
+    clientStatus: string,
+    company: string,
+    gender: string,
+    lName: string,
+    fName: string,
+    phone: string,
+    email: string,
+    address: string,
+    cp: string,
+    city: string
 }
 
-interface requestContent {
-    concierge: string,
+type StateType = {
+    requestId: string;
+    service: string
 }
 
 
 interface IState {
     service: string,
     redirect: boolean,
+    request: IRequest,
     images: File [];
-    requestContent: requestContent
+
 }
 
 type IndexProps = RouteComponentProps<{}, {}, StateType>;
@@ -71,11 +90,33 @@ class Request extends Component<IndexProps, IState> {
             service: localStorage.getItem('service') || "",
             redirect: false,
             images: [],
-            requestContent: {
-                concierge: localStorage.getItem('concierge') || "",
+            request: {
+                address: "",
+                city: "",
+                clientStatus: "",
+                company: "",
+                concierge: "",
+                cp: "",
+                date: "",
+                email: "",
+                executionDate: new Date(1, 1, 1),
+                fName: "",
+                gender: "",
+                hour: "",
+                id: "",
+                lName: "",
+                phone: "",
+                requestAssignment: "",
+                requestStatus: "",
+                serviceType: "",
+                site: ""
             }
-        };
+        }
 
+        let requestId = localStorage.getItem('requestId') || "";
+        if (requestId !== "") {
+            this.loadRequest(requestId);
+        }
         this.task = createRef();
         this.getTask = this.getTask.bind(this);
         this.addRequest = this.addRequest.bind(this);
@@ -98,27 +139,84 @@ class Request extends Component<IndexProps, IState> {
     }
 
 
-    componentDidMount() {
+    loadRequest(id: string) {
+        API.getRequest(id).then(r => {
+            console.log(r)
+            if (r !== null) {
+                var rr: IRequest = r;
+                const request: IRequest = {
+                    address: rr.address,
+                    city: rr.city,
+                    clientStatus: rr.clientStatus,
+                    company: rr.company,
+                    concierge: rr.concierge,
+                    cp: rr.cp,
+                    date: rr.date,
+                    email: rr.email,
+                    executionDate: rr.executionDate,
+                    fName: rr.fName,
+                    gender: rr.gender,
+                    hour: rr.hour,
+                    id: rr.id,
+                    lName: rr.lName,
+                    phone: rr.phone,
+                    requestAssignment: rr.requestAssignment,
+                    requestStatus: rr.requestStatus,
+                    serviceType: rr.serviceType,
+                    site: rr.site
 
+                }
+
+                this.setState({
+                    request: request
+                });
+            } else {
+                const request: IRequest = {
+                    address: "",
+                    city: "",
+                    clientStatus: "",
+                    company: "",
+                    concierge: "",
+                    cp: "",
+                    date: "",
+                    email: "",
+                    executionDate: new Date(1, 1, 1),
+                    fName: "",
+                    gender: "",
+                    hour: "",
+                    id: "",
+                    lName: "",
+                    phone: "",
+                    requestAssignment: "",
+                    requestStatus: "",
+                    serviceType: "",
+                    site: ""
+                }
+
+                this.setState({
+                    request: request
+                });
+            }
+        })
+    }
+
+    componentDidMount() {
         const res = this.props.location.state;
         if (res) {
             this.setState({service: res.service});
             localStorage.setItem('service', res.service);
-            this.setState({
-                requestContent: {
-                    concierge: res.requestContent.concierge,
-                }
-            });
+            localStorage.setItem('requestId', res.requestId);
+            this.loadRequest(res.requestId);
 
-            localStorage.setItem('concierge', res.requestContent.concierge);
+
         }
     }
 
-    addImage(e:any) {
-       if(this.state.images.length < 3){
-         this.state.images.push(e.target.files[0])
-         this.setState({ images : this.state.images}); 
-        } 
+    addImage(e: any) {
+        if (this.state.images.length < 3) {
+            this.state.images.push(e.target.files[0])
+            this.setState({images: this.state.images});
+        }
     }; // upload images
 
     render() {
@@ -267,7 +365,7 @@ class Request extends Component<IndexProps, IState> {
                         <Grid container justify={"space-evenly"}>
                             <Grid item>
                                 <TextField
-                                    value={this.state.requestContent.concierge}
+                                    value={this.state.request.concierge}
                                     id="outlined-multiline-static"
                                     variant="outlined"
                                 />
@@ -277,9 +375,9 @@ class Request extends Component<IndexProps, IState> {
                     <Grid container direction="row" justify="flex-start" alignItems="flex-start" spacing={3}>
                         <h4 className="h4">Joindre des images</h4>
                         <Grid container justify={"space-evenly"} spacing={2}>
-                            <Grid item>        
+                            <Grid item>
                                 <input type="file" accept="image/*" id="contained-button-file"
-                                    onChange={this.addImage} multiple style={{display : 'none'}}
+                                       onChange={this.addImage} multiple style={{display: 'none'}}
                                 />
                                 <label htmlFor="contained-button-file">
                                     <Button variant="outlined" color="primary" component="span">
@@ -292,15 +390,15 @@ class Request extends Component<IndexProps, IState> {
                                     <Grid item>
                                         <Grid container direction="column">
                                             <Grid item>
-                                             <img src={URL.createObjectURL(image)} alt="" width="150" height="100" />
+                                                <img src={URL.createObjectURL(image)} alt="" width="150" height="100"/>
                                             </Grid>
                                             <Grid item>
-                                             <Button variant="outlined" onClick={()=> {
-                                                  this.state.images.splice(index,1)
-                                                  this.setState({ images : this.state.images});
-                                             }} >Supprimer</Button>
+                                                <Button variant="outlined" onClick={() => {
+                                                    this.state.images.splice(index, 1)
+                                                    this.setState({images: this.state.images});
+                                                }}>Supprimer</Button>
                                             </Grid>
-                                        </Grid>    
+                                        </Grid>
                                     </Grid>
                                 ))}
                             </Grid>

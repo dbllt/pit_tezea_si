@@ -54,11 +54,11 @@ interface filter {
 
 }
 
-function Row(props: { row: Request, updateStatus: (name: string, id: string) => void } ) {
+function Row(props: { row: Request, updateStatus: (name: string, id: string) => void }) {
     const {row} = props;
     const [open, setOpen] = React.useState(false);
     const classes = useRowStyles();
-    const options = { year: 'numeric', month: 'numeric', day: 'numeric' }
+    const options = {year: 'numeric', month: 'numeric', day: 'numeric'}
     const executionDate = row.executionDate.toLocaleDateString('FR', options);
 
     const chooseRowEmergencyStyle = () => {
@@ -68,12 +68,12 @@ function Row(props: { row: Request, updateStatus: (name: string, id: string) => 
         const execDate = row.executionDate.getTime();
 
         return ((execDate - dateNow) <= sevenDays) ? "high_emergency_style_class" :
-            ((execDate - dateNow) <= fourteenDays) ? "medium_emergency_style_class" : '' ;
+            ((execDate - dateNow) <= fourteenDays) ? "medium_emergency_style_class" : '';
     }
 
     return (
         <React.Fragment>
-            <TableRow  className={ chooseRowEmergencyStyle() }>
+            <TableRow className={chooseRowEmergencyStyle()}>
                 <TableCell>
                     <IconButton
                         aria-label="expand row"
@@ -89,7 +89,8 @@ function Row(props: { row: Request, updateStatus: (name: string, id: string) => 
                 <TableCell align="left">{row.fName}</TableCell>
                 <TableCell align="left">{row.site}</TableCell>
                 <TableCell align="left">{row.concierge}</TableCell>
-                <SelectRequestStatusTableCell key={row.id} status={row.requestStatus} id={row.id} updateStatus={props.updateStatus}/>
+                <SelectRequestStatusTableCell key={row.id} status={row.requestStatus} id={row.id}
+                                              updateStatus={props.updateStatus}/>
                 <TableCell align="left">{row.requestAssignment}</TableCell>
             </TableRow>
             <TableRow className={classes.root}>
@@ -102,9 +103,7 @@ function Row(props: { row: Request, updateStatus: (name: string, id: string) => 
                                     pathname: '/request',
                                     state: {
                                         service: row.site,
-                                        requestContent: {
-                                            concierge: row.concierge,
-                                        }
+                                        requestId: row.id
 
                                     }
                                 }} style={{margin: 20}}>
@@ -196,7 +195,7 @@ class BusinessTable extends Component<IProps, IState> {
     };
 
     updateStatus = (name: string, id: string) => {
-      // TO-DO connecter à l'api
+        // TO-DO connecter à l'api
     };
 
 
@@ -226,7 +225,7 @@ class BusinessTable extends Component<IProps, IState> {
                         </TableHead>
                         <TableBody>
                             {this.state.requests.map((row: Request) => (
-                                <Row key={row.id} row={row} updateStatus={this.updateStatus} />
+                                <Row key={row.id} row={row} updateStatus={this.updateStatus}/>
                             ))}
                         </TableBody>
                     </Table>
