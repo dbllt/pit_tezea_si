@@ -73,7 +73,7 @@ function Row(props: { row: Request, updateStatus: (name: string, id: string) => 
 
     return (
         <React.Fragment>
-            <TableRow hover className={ chooseRowEmergencyStyle() }>
+            <TableRow  className={ chooseRowEmergencyStyle() }>
                 <TableCell>
                     <IconButton
                         aria-label="expand row"
@@ -84,14 +84,13 @@ function Row(props: { row: Request, updateStatus: (name: string, id: string) => 
                     </IconButton>
                 </TableCell>
                 <TableCell align="left">{row.id}</TableCell>
-                <TableCell align="left">{row.executionDate}</TableCell>
+                <TableCell align="left">{executionDate}</TableCell>
                 <TableCell align="left">{row.clientStatus}</TableCell>
                 <TableCell align="left">{row.fName}</TableCell>
                 <TableCell align="left">{row.site}</TableCell>
                 <TableCell align="left">{row.concierge}</TableCell>
-                <SelectRequestStatusTableCell key={row.id} status={row.requestStatus} id={row.id} updateStatus={props.updateStatus}></SelectRequestStatusTableCell>
+                <SelectRequestStatusTableCell key={row.id} status={row.requestStatus} id={row.id} updateStatus={props.updateStatus}/>
                 <TableCell align="left">{row.requestAssignment}</TableCell>
-                <TableCell align="left">{executionDate}</TableCell>
             </TableRow>
             <TableRow className={classes.root}>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={10}>

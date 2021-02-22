@@ -32,7 +32,7 @@ class SelectRequestStatusTableCell extends Component<Props, State> {
     };
 
     render() {
-        const choices = ["Nouvelle", "Devis en cours", "Devis signé", "Doublon", "Facturée", "Refusée", "Clôturée"];
+        const choices = ["Nouvelle", "En cours", "Devis signé", "Doublon", "Facturée", "Refusée", "Clôturée"];
         return (
             <TableCell>
                 <FormControl>
