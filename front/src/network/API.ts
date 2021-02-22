@@ -58,15 +58,15 @@ interface filter {
 
 
 let requests: Request[] = [];
-addRequest("1", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
-addRequest("2", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "En cours", "Ouvrier 3", "Urgent", "Entreprise", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
-addRequest("3", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
-addRequest("4", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
-addRequest("5", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "En cours", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
-addRequest("6", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
-addRequest("7", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "En cours", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
-addRequest("8", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
-addRequest("9", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("1", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "Nouvelle", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("2", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "Nouvelle", "Ouvrier 3", "Urgent", "Entreprise", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("3", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "Nouvelle", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("4", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "Nouvelle", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("5", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "Nouvelle", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("6", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "Nouvelle", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("7", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "Nouvelle", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("8", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "Nouvelle", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("9", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "Nouvelle", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
 
 
 let clients: Client[] = [];
