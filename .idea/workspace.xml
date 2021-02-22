@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="bb6b740c-9156-491c-b051-4c422086a03e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/front/src/components/BusinessTable/BusinessTable.css" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/BusinessTable/BusinessTable.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/BusinessTable/BusinessTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/BusinessTable/BusinessTable.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/NewUserScreen/NewUserScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/NewUserScreen/NewUserScreen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/Request/Request.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/Request/Request.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/UsersScreen/UsersScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/UsersScreen/UsersScreen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/network/API.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/network/API.ts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1oNjP5a2Ss6rdD8T4AaTOeGsr8k" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="ts.external.directory.path" value="$PROJECT_DIR$/front/node_modules/typescript/lib" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="bb6b740c-9156-491c-b051-4c422086a03e" name="Default Changelist" comment="" />
+      <created>1613133914927</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1613133914927</updated>
+      <workItem from="1613133916211" duration="29572000" />
+      <workItem from="1613380518327" duration="2611000" />
+      <workItem from="1613671355154" duration="5000" />
+      <workItem from="1613943861944" duration="3000" />
+      <workItem from="1613943878913" duration="4548000" />
+      <workItem from="1613948490553" duration="7857000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="100" y="100" width="1720" height="880" key="DiffContextDialog" timestamp="1613948398559">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="100" y="100" width="1720" height="880" key="DiffContextDialog/308.1080.1366.768/0.0.1920.1080@0.0.1920.1080" timestamp="1613948398559" />
+    <state width="1897" height="284" key="GridCell.Tab.0.bottom" timestamp="1613307533051">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1897" height="284" key="GridCell.Tab.0.bottom/308.1080.1366.768/0.0.1920.1080@0.0.1920.1080" timestamp="1613307533051" />
+    <state width="1897" height="284" key="GridCell.Tab.0.center" timestamp="1613307533051">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1897" height="284" key="GridCell.Tab.0.center/308.1080.1366.768/0.0.1920.1080@0.0.1920.1080" timestamp="1613307533051" />
+    <state width="1897" height="284" key="GridCell.Tab.0.left" timestamp="1613307533051">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1897" height="284" key="GridCell.Tab.0.left/308.1080.1366.768/0.0.1920.1080@0.0.1920.1080" timestamp="1613307533051" />
+    <state width="1897" height="284" key="GridCell.Tab.0.right" timestamp="1613307533051">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1897" height="284" key="GridCell.Tab.0.right/308.1080.1366.768/0.0.1920.1080@0.0.1920.1080" timestamp="1613307533051" />
+    <state width="652" height="446" key="SwitcherDM" timestamp="1613955036127">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="652" height="446" key="SwitcherDM/308.1080.1366.768/0.0.1920.1080@0.0.1920.1080" timestamp="1613955036127" />
+    <state x="651" y="279" width="790" height="522" key="find.popup" timestamp="1613951478974">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="651" y="279" width="790" height="522" key="find.popup/308.1080.1366.768/0.0.1920.1080@0.0.1920.1080" timestamp="1613951478974" />
+    <state x="624" y="245" key="run.anything.popup" timestamp="1613954835391">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="624" y="245" key="run.anything.popup/308.1080.1366.768/0.0.1920.1080@0.0.1920.1080" timestamp="1613954835391" />
+  </component>
+</project>

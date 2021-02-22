@@ -22,7 +22,7 @@ const useRowStyles = makeStyles({
     }
 });
 
-const tableHeadNames = ["N° Demande", "Date", "Heure", "Concierge", 'Site', "Prestation/Don", 'Statut Demande', "Affectation demande", 'Urgence'];
+const tableHeadNames = ["N° Demande", "Date", "Heure", "Concierge", 'Site', "Prestation/Don", 'Statut Demande', "Affectation demande", 'Date d’exécution'];
 const tableClientHeadNames = ["Statut Client", "Entreprise", "Civilité", "Nom", "Prénom", "Téléphone", "Email", "Adresse", "Code postal", "Ville"];
 
 interface Request {
@@ -34,7 +34,7 @@ interface Request {
     serviceType: string,
     requestStatus: string,
     requestAssignment: string,
-    emergency: string,
+    executionDate: Date,
     clientStatus: string,
     company: string,
     gender: string,
@@ -56,10 +56,22 @@ function Row(props: { row: Request }) {
     const {row} = props;
     const [open, setOpen] = React.useState(false);
     const classes = useRowStyles();
+    const options = { year: 'numeric', month: 'numeric', day: 'numeric' }
+    const executionDate = row.executionDate.toLocaleDateString('FR', options);
+
+    const chooseRowEmergencyStyle = () => {
+        const sevenDays = 7 * 24 * 3600 * 1000;
+        const fourteenDays = 14 * 24 * 3600 * 1000;
+        const dateNow = new Date().getTime();
+        const execDate = row.executionDate.getTime();
+
+        return ((execDate - dateNow) <= sevenDays) ? "high_emergency_style_class" :
+            ((execDate - dateNow) <= fourteenDays) ? "medium_emergency_style_class" : '' ;
+    }
 
     return (
         <React.Fragment>
-            <TableRow hover className={""}>
+            <TableRow hover className={ chooseRowEmergencyStyle() }>
                 <TableCell>
                     <IconButton
                         aria-label="expand row"
@@ -77,7 +89,7 @@ function Row(props: { row: Request }) {
                 <TableCell align="left">{row.serviceType}</TableCell>
                 <TableCell align="left">{row.requestStatus}</TableCell>
                 <TableCell align="left">{row.requestAssignment}</TableCell>
-                <TableCell align="left">{row.emergency}</TableCell>
+                <TableCell align="left">{executionDate}</TableCell>
             </TableRow>
             <TableRow className={classes.root}>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={10}>
