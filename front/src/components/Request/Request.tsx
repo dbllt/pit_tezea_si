@@ -20,6 +20,7 @@ interface requestContent {
 
 interface IState {
     service: string,
+    typeRequest: string,
     redirect: boolean,
     images: File [];
     requestContent: requestContent
@@ -69,6 +70,7 @@ class Request extends Component<IndexProps, IState> {
         super(props);
         this.state = {
             service: localStorage.getItem('service') || "",
+            typeRequest: "",
             redirect: false,
             images: [],
             requestContent: {
@@ -78,8 +80,10 @@ class Request extends Component<IndexProps, IState> {
 
         this.task = createRef();
         this.getTask = this.getTask.bind(this);
-        this.addRequest = this.addRequest.bind(this);
         this.addImage = this.addImage.bind(this); //upload images
+        this.handleChange = this.handleChange.bind(this);
+        this.addRequest = this.addRequest.bind(this);
+
     }
 
     getTask(): string {
@@ -89,14 +93,6 @@ class Request extends Component<IndexProps, IState> {
             return this.task.current.value;
         }
     };
-
-    addRequest() {
-        // if (this.getTask() !== "" || true) {//TODO remove true
-        //     API.addRequest(this.getTask(), "").then(() => this.setState({redirect: true}));
-        // }
-        this.setState({redirect: true})
-    }
-
 
     componentDidMount() {
 
@@ -120,6 +116,20 @@ class Request extends Component<IndexProps, IState> {
          this.setState({ images : this.state.images}); 
         } 
     }; // upload images
+
+    handleChange(event:any){
+
+    }
+
+    addRequest(event:any) {
+        // if (this.getTask() !== "" || true) {//TODO remove true
+        //     API.addRequest(this.getTask(), "").then(() => this.setState({redirect: true}));
+        // }
+
+
+
+        this.setState({redirect: true})
+    }
 
     render() {
         return (
