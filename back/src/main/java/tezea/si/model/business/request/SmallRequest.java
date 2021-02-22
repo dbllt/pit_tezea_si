@@ -1,7 +1,10 @@
 package tezea.si.model.business.request;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -12,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import tezea.si.model.business.Site;
 import tezea.si.model.business.SmallClient;
 import tezea.si.model.business.UserTezea;
+import tezea.si.utils.StringListConverter;
 
 @Entity
 public class SmallRequest {
@@ -40,6 +44,8 @@ public class SmallRequest {
 	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate lastUpdated;
 	private UserTezea lastUpdatedBy;
+	
+    private List<String> photos;
 
 	@Id
 	@GeneratedValue
@@ -50,6 +56,16 @@ public class SmallRequest {
 	public void setId(long id) {
 		this.id = id;
 	}
+	
+    @Column(name = "photos")
+    @Convert(converter = StringListConverter.class)
+    public List<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<String> photos) {
+        this.photos = photos;
+    }
 
 	public LocalDate getDate() {
 		return date;

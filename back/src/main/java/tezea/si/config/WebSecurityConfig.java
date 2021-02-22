@@ -38,7 +38,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/auth/*",
             // -- Swagger
             "/api-docs", "/api-docs/*", "/swagger-ui", "/swagger-ui/*",
+            // favicon
+            "/favicon.ico",
             // TEST
+//            "/upload","/user-photos/**"
     };
 
     @Autowired
@@ -89,6 +92,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         // We don't need CSRF for this example
         httpSecurity.csrf().disable()
+        //.cors().and()
                 // dont authenticate this particular request
                 .authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll()
                 // all other requests need to be authenticated

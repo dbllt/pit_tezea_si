@@ -208,6 +208,25 @@ const API = {
 
         requests.push(request);
     },
+
+    uploadFile (file: File) {
+
+        const formData  = new FormData();
+
+        formData.append('image', file);
+
+        fetch('/upload', { // Your POST endpoint
+            method: 'POST',
+            body: formData // This is your file object
+        }).then(
+            response => console.log(response) // if the response is a JSON object
+        ).then(
+            success => console.log(success) // Handle the success response object
+        ).catch(
+            error => console.log(error) // Handle the error response object
+        );
+    },
+
     getRequest: async function (id: string): Promise<any> {
         requests.forEach(function (request) {
             if (request.id === id) {
