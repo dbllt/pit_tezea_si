@@ -23,8 +23,8 @@ const useRowStyles = makeStyles({
     }
 });
 
-const tableHeadNames = ["N° Demande", "Date", "Heure", "Concierge", 'Site', "Prestation/Don", 'Statut Demande', "Affectation demande", 'Urgence'];
-const tableClientHeadNames = ["Statut Client", "Entreprise", "Civilité", "Nom", "Prénom", "Téléphone", "Email", "Adresse", "Code postal", "Ville"];
+const tableHeadNames = ["N° Demande", "Date de réalisation", "Type Client", "Nom Client", 'Site', "Concierge", 'Statut Demande', "Description"];
+const tableClientHeadNames = ["Type Client", "Entreprise", "Civilité", "Nom", "Prénom", "Téléphone", "Email", "Code postal", "Ville", "Détails"];
 
 interface Request {
     id: string;
@@ -35,7 +35,7 @@ interface Request {
     serviceType: string,
     requestStatus: string,
     requestAssignment: string,
-    emergency: string,
+    executionDate: string,
     clientStatus: string,
     company: string,
     gender: string,
@@ -71,22 +71,20 @@ function Row(props: { row: Request, updateStatus: (name: string, id: string) => 
                     </IconButton>
                 </TableCell>
                 <TableCell align="left">{row.id}</TableCell>
-                <TableCell align="left">{row.date}</TableCell>
-                <TableCell align="left">{row.hour}</TableCell>
-                <TableCell align="left">{row.concierge}</TableCell>
+                <TableCell align="left">{row.executionDate}</TableCell>
+                <TableCell align="left">{row.clientStatus}</TableCell>
+                <TableCell align="left">{row.fName}</TableCell>
                 <TableCell align="left">{row.site}</TableCell>
-                <TableCell align="left">{row.serviceType}</TableCell>
+                <TableCell align="left">{row.concierge}</TableCell>
                 <SelectRequestStatusTableCell key={row.id} status={row.requestStatus} id={row.id} updateStatus={props.updateStatus}></SelectRequestStatusTableCell>
                 <TableCell align="left">{row.requestAssignment}</TableCell>
-                <TableCell align="left">{row.emergency}</TableCell>
             </TableRow>
             <TableRow className={classes.root}>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={10}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box margin={1}>
                             <Typography variant="h6" gutterBottom component="div">
-                                Contact client
-
+                                Détails
                                 <Link to={{
                                     pathname: '/request',
                                     state: {
@@ -98,7 +96,7 @@ function Row(props: { row: Request, updateStatus: (name: string, id: string) => 
                                     }
                                 }} style={{margin: 20}}>
                                     <Button variant="contained">
-                                        Détails
+                                        Editer
                                     </Button>
                                 </Link>
                             </Typography>

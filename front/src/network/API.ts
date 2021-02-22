@@ -7,7 +7,7 @@ interface Request {
     serviceType: string,
     requestStatus: string,
     requestAssignment: string,
-    emergency: string,
+    executionDate: string,
     clientStatus: string,
     company: string,
     gender: string,
@@ -58,15 +58,15 @@ interface filter {
 
 
 let requests: Request[] = [];
-addRequest("1", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "Nouvelle", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
-addRequest("2", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "Nouvelle", "Ouvrier 3", "Urgent", "Entreprise", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
-addRequest("3", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "Nouvelle", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
-addRequest("4", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "Nouvelle", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
-addRequest("5", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "Nouvelle", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
-addRequest("6", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "Nouvelle", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
-addRequest("7", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "Nouvelle", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
-addRequest("8", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "Nouvelle", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
-addRequest("9", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "Nouvelle", "Ouvrier 3", "Urgent", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("1", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "Nouvelle", "Ouvrier 3", "2018-01-25", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("2", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "Nouvelle", "Ouvrier 3",  "2018-01-25", "Entreprise", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("3", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "Nouvelle", "Ouvrier 3",  "2018-01-25", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("4", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "Nouvelle", "Ouvrier 3",  "2018-01-25", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("5", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "Nouvelle", "Ouvrier 3",  "2018-01-25", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("6", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "Nouvelle", "Ouvrier 3",  "2018-01-25", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("7", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "Nouvelle", "Ouvrier 3",  "2018-01-25", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("8", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "Nouvelle", "Ouvrier 3",  "2018-01-25", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("9", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "Nouvelle", "Ouvrier 3",  "2018-01-25", "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
 
 
 let clients: Client[] = [];
@@ -76,7 +76,8 @@ users.push(pierre);
 clients.push(paul);
 
 
-function addRequest(requestNumber: string, date: string, hour: string, concierge: string, site: string, serviceType: string, requestStatus: string, requestAssignment: string, emergency: string,
+function addRequest(requestNumber: string, date: string, hour: string, concierge: string, site: string, serviceType: string, requestStatus: string, requestAssignment: string,
+                    executionDate: string,
                     clientStatus: string, company: string, gender: string, lName: string, fName: string, phone: string, email: string, address: string, cp: string, city: string) {
     const request = {
         id: requestNumber,
@@ -87,7 +88,7 @@ function addRequest(requestNumber: string, date: string, hour: string, concierge
         serviceType: serviceType,
         requestStatus: requestStatus,
         requestAssignment: requestAssignment,
-        emergency: emergency,
+        executionDate: executionDate,
         clientStatus: clientStatus,
         company: company,
         gender: gender,
@@ -229,7 +230,7 @@ const API = {
             })
         return requests.filter((request => request.site.toLocaleLowerCase().includes(filter.site.toLocaleLowerCase())))
     },
-    addRequest: async function (requestNumber: string, date: string, hour: string, concierge: string, site: string, serviceType: string, requestStatus: string, requestAssignment: string, emergency: string,
+    addRequest: async function (requestNumber: string, date: string, hour: string, concierge: string, site: string, serviceType: string, requestStatus: string, requestAssignment: string, executionDate: string,
                                 clientStatus: string, company: string, gender: string, lName: string, fName: string, phone: string, email: string, address: string, cp: string, city: string): Promise<any> {
         const request = {
             id: requestNumber,
@@ -240,7 +241,7 @@ const API = {
             serviceType: serviceType,
             requestStatus: requestStatus,
             requestAssignment: requestAssignment,
-            emergency: emergency,
+            executionDate: executionDate,
             clientStatus: clientStatus,
             company: company,
             gender: gender,

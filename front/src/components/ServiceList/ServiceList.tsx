@@ -57,7 +57,7 @@ class ServiceList extends Component {
                     }
                 }} style={{margin: 20}}>
                     <Button variant="contained">
-                        Service Trie
+                        Service Tri
                     </Button>
                 </Link>
                 <Link to={{
