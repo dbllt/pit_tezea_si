@@ -250,6 +250,35 @@ const API = {
 
     addRequest: async function (requestNumber: string, date: string, hour: string, concierge: string, site: string, serviceType: string, requestStatus: string, requestAssignment: string, executionDate: Date,
                                 clientStatus: string, company: string, gender: string, lName: string, fName: string, phone: string, email: string, address: string, cp: string, city: string): Promise<any> {
+
+        let temp = localStorage.getItem('token');
+        if (temp === null) {
+            temp = "";
+        }
+        let token: string = temp;
+
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + token
+            },
+            body: JSON.stringify({})
+        };
+
+        await fetch('/requests', requestOptions)
+            .then(async response => {
+                if (response.status !== 201) {
+                    return Promise.reject(response);
+                } else {
+                    console.log("request added")
+                }
+            }).catch(error => {
+                console.error('There was an error!', error);
+            })
+
+
         const request = {
             id: requestNumber,
             date: date,
@@ -275,6 +304,35 @@ const API = {
         requests.push(request);
     },
     getRequest: async function (id: string): Promise<any> {
+        let temp = localStorage.getItem('token');
+        if (temp === null) {
+            temp = "";
+        }
+        let token: string = temp;
+
+
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + token
+            },
+        };
+
+        await fetch('/request/'+id, requestOptions)
+            .then(async response => {
+                if (response.status !== 200) {
+                    return Promise.reject(response);
+                } else {
+                    const data = await response.json();
+                    console.log(data)
+                }
+            }).catch(error => {
+                console.error('There was an error!', error);
+            })
+
+
+
         let ret = null
         requests.forEach(function (request) {
             if (request.id === id) {
