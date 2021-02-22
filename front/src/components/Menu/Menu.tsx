@@ -33,7 +33,7 @@ class Menu extends React.Component<IProps, IState> {
 
     render() {
         let usersList;
-        if (API.getRole() === "serge" || true) {//TODO remove true
+        if (API.getRole() === "ADMIN") {
             usersList = <Link to="/users">
                 <Button variant="contained" className={styles.MyButton}>
                     Liste utilisateurs

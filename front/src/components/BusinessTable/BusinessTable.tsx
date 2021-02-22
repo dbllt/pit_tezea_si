@@ -13,6 +13,7 @@ import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import API from "../../network/API";
 import {Link} from "react-router-dom";
 import "./BusinessTable.css"
+import SelectRequestStatusTableCell from '../SelectRequestStatusTableCell/SelectRequestStatusTableCell';
 
 const useRowStyles = makeStyles({
     root: {
@@ -52,7 +53,7 @@ interface filter {
 
 }
 
-function Row(props: { row: Request }) {
+function Row(props: { row: Request, updateStatus: (name: string, id: string) => void } ) {
     const {row} = props;
     const [open, setOpen] = React.useState(false);
     const classes = useRowStyles();
@@ -87,7 +88,7 @@ function Row(props: { row: Request }) {
                 <TableCell align="left">{row.concierge}</TableCell>
                 <TableCell align="left">{row.site}</TableCell>
                 <TableCell align="left">{row.serviceType}</TableCell>
-                <TableCell align="left">{row.requestStatus}</TableCell>
+                <SelectRequestStatusTableCell key={row.id} status={row.requestStatus} id={row.id} updateStatus={props.updateStatus}></SelectRequestStatusTableCell>
                 <TableCell align="left">{row.requestAssignment}</TableCell>
                 <TableCell align="left">{executionDate}</TableCell>
             </TableRow>
@@ -195,6 +196,11 @@ class BusinessTable extends Component<IProps, IState> {
         }
     };
 
+    updateStatus = (name: string, id: string) => {
+      // TO-DO connecter à l'api
+    };
+
+
     render() {
         return (
             <div>
@@ -221,7 +227,7 @@ class BusinessTable extends Component<IProps, IState> {
                         </TableHead>
                         <TableBody>
                             {this.state.requests.map((row: Request) => (
-                                <Row key={row.id} row={row}/>
+                                <Row key={row.id} row={row} updateStatus={this.updateStatus} />
                             ))}
                         </TableBody>
                     </Table>

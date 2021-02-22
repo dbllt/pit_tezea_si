@@ -7,6 +7,8 @@ import API from "../../network/API";
 
 
 interface IProps {
+    handler: (arg0: string) => void
+
 }
 
 interface IState {
@@ -43,6 +45,8 @@ class LoginScreen extends Component<IProps, IState> {
         this.getUsername = this.getUsername.bind(this);
         this.getPassword = this.getPassword.bind(this);
         this.login = this.login.bind(this);
+
+        this.keyPress = this.keyPress.bind(this);
     }
 
     login() {
@@ -50,6 +54,7 @@ class LoginScreen extends Component<IProps, IState> {
         if (this.getUsername() !== "" && this.getPassword() !== "") {
             API.login(this.getUsername(), this.getPassword()).then((b) => {
                     if (b) {
+                        this.props.handler(this.getUsername())
                         this.setState({redirect: true})
                     }
                 }
@@ -73,6 +78,11 @@ class LoginScreen extends Component<IProps, IState> {
         }
     };
 
+    keyPress(e: React.KeyboardEvent<HTMLInputElement>) {
+        if(e.key==="Enter"){
+            this.login();
+        }
+    }
 
     render() {
         return (
@@ -82,7 +92,7 @@ class LoginScreen extends Component<IProps, IState> {
                 <Grid container direction="column" justify="center" alignItems="center" spacing={5}>
                     <Grid item>
                         <TextField
-                            label="Identifiant:"
+                            label="Identifiant"
                             inputRef={this.username}
                             id="outlined-margin-normal"
                             margin="normal"
@@ -101,6 +111,7 @@ class LoginScreen extends Component<IProps, IState> {
                             variant="outlined"
                             error={(this.state.triedToLogin && this.getPassword() === "")}
                             helperText={(this.state.triedToLogin && this.getPassword() === "") ? 'Manquant' : ' '}
+                            onKeyDown={this.keyPress}
                         />
                     </Grid>
                     <Grid>

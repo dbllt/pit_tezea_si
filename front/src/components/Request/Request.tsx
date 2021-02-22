@@ -6,7 +6,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import {Link, Redirect, RouteComponentProps} from "react-router-dom";
 import "./Request.css";
 import FormClient from "../FormClient/FormClient";
-import {ImageListType} from "react-images-uploading";
 
 
 type StateType = {
@@ -22,8 +21,7 @@ interface requestContent {
 interface IState {
     service: string,
     redirect: boolean,
-    images: ImageListType;
-    maxImageNumber: number;
+    images: File [];
     requestContent: requestContent
 }
 
@@ -73,7 +71,6 @@ class Request extends Component<IndexProps, IState> {
             service: localStorage.getItem('service') || "",
             redirect: false,
             images: [],
-            maxImageNumber: 9,
             requestContent: {
                 concierge: localStorage.getItem('concierge') || "",
             }
@@ -82,8 +79,7 @@ class Request extends Component<IndexProps, IState> {
         this.task = createRef();
         this.getTask = this.getTask.bind(this);
         this.addRequest = this.addRequest.bind(this);
-        //this.changeImages = this.changeImages.bind(this); //upload images
-        this.readFile = this.readFile.bind(this);
+        this.addImage = this.addImage.bind(this); //upload images
     }
 
     getTask(): string {
@@ -118,18 +114,12 @@ class Request extends Component<IndexProps, IState> {
         }
     }
 
-    // changeImages ( 
-    //     imageList: ImageListType,
-    //     addUpdateIndex: number[] | undefined
-    //   ) {
-    //     // data for submit
-    //     console.log(imageList, addUpdateIndex);
-    //     this.setState({images : imageList as never[]});
-    // }; // upload images
-
-    readFile(file: FileList | null) {
-        console.log(file);
-    }
+    addImage(e:any) {
+       if(this.state.images.length < 3){
+         this.state.images.push(e.target.files[0])
+         this.setState({ images : this.state.images}); 
+        } 
+    }; // upload images
 
     render() {
         return (
@@ -137,8 +127,8 @@ class Request extends Component<IndexProps, IState> {
                 <RedirectionIfNotConnected/>
                 <h1>Service {this.state.service}</h1>
                 <h1>Enregistrer une demande client</h1>
+                <FormClient/>
                 <Form className="form">
-                    <FormClient/>
                     <Grid container direction="row" justify="flex-start" alignItems="flex-start" spacing={1}>
                         <h4 className="h4">Demande client</h4>
                         <Grid container justify={"space-evenly"}>
@@ -284,64 +274,35 @@ class Request extends Component<IndexProps, IState> {
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid container direction="row" justify="flex-start" alignItems="flex-start" spacing={1}>
-                        <h4 className="h4">Joindre une image</h4>
-                        <Grid container justify={"space-evenly"}>
-                            <Grid item>
-                                {/* <ImageUploading
-                                    multiple
-                                    value={this.state.images}
-                                    onChange={this.changeImages}
-                                    maxNumber={this.state.maxImageNumber}
-                                >
-                                    {({
-                                    imageList,
-                                    onImageUpload,
-                                    onImageRemoveAll,
-                                    onImageUpdate,
-                                    onImageRemove,
-                                    isDragging,
-                                    dragProps
-                                    }:
-                                    {
-                                    imageList : ImageListType,
-                                    onImageUpload : any,
-                                    onImageRemoveAll : any,
-                                    onImageUpdate : any,
-                                    onImageRemove : any,
-                                    isDragging : any,
-                                    dragProps :any
-                                    }) => (
-                                    // write your building UI
-                                    <div className="upload__image-wrapper">
-                                        <button
-                                        style={isDragging ? { color: "red" } : undefined}
-                                        onClick={onImageUpload}
-                                        {...dragProps}
-                                        >
-                                        Click or Drop here
-                                        </button>
-                                        &nbsp;
-                                        <button onClick={onImageRemoveAll}>Remove all images</button>
-                                        {imageList.map((image, index) => (
-                                        <div key={index} className="image-item">
-                                            <img src={image.dataURL} alt="" width="100" />
-                                            <div className="image-item__btn-wrapper">
-                                            <button onClick={() => onImageUpdate(index)}>Update</button>
-                                            <button onClick={() => onImageRemove(index)}>Remove</button>
-                                            </div>
-                                        </div>
-                                        ))}
-                                    </div>
-                                    )}
-                                </ImageUploading> */}
-
-                                <input type="file" accept="image/*"
-                                       onChange={(event) => {
-                                           this.readFile(event.target.files)
-                                       }}
+                    <Grid container direction="row" justify="flex-start" alignItems="flex-start" spacing={3}>
+                        <h4 className="h4">Joindre des images</h4>
+                        <Grid container justify={"space-evenly"} spacing={2}>
+                            <Grid item>        
+                                <input type="file" accept="image/*" id="contained-button-file"
+                                    onChange={this.addImage} multiple style={{display : 'none'}}
                                 />
-
+                                <label htmlFor="contained-button-file">
+                                    <Button variant="outlined" color="primary" component="span">
+                                        Ajouter une image
+                                    </Button>
+                                </label>
+                            </Grid>
+                            <Grid container spacing={3} justify="center">
+                                {this.state.images.map((image, index) => (
+                                    <Grid item>
+                                        <Grid container direction="column">
+                                            <Grid item>
+                                             <img src={URL.createObjectURL(image)} alt="" width="150" height="100" />
+                                            </Grid>
+                                            <Grid item>
+                                             <Button variant="outlined" onClick={()=> {
+                                                  this.state.images.splice(index,1)
+                                                  this.setState({ images : this.state.images});
+                                             }} >Supprimer</Button>
+                                            </Grid>
+                                        </Grid>    
+                                    </Grid>
+                                ))}
                             </Grid>
                         </Grid>
                     </Grid>

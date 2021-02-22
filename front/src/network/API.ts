@@ -29,20 +29,20 @@ interface Client {
 interface User {
     id: string;
     username: string;
-    role: string;
+    authorities: string[];
 }
 
 
 const serge: User = {
     id: "0",
     username: "serge",
-    role: "serge"
+    authorities: ["serge"]
 }
 
 const pierre: User = {
     id: "1",
     username: "pierre",
-    role: "concierge"
+    authorities: ["concierge"]
 }
 
 const paul: Client = {
@@ -79,7 +79,6 @@ let users: User[] = [];
 users.push(serge);
 users.push(pierre);
 clients.push(paul);
-const role = "";
 
 
 function addRequest(requestNumber: string, date: string, hour: string, concierge: string, site: string, serviceType: string, requestStatus: string, requestAssignment: string, executionDate: Date,
@@ -134,6 +133,14 @@ const API = {
                     const refreshToken = data.refreshtoken
                     localStorage.setItem('refreshToken', refreshToken)
                     localStorage.setItem('username', username)
+                    var role: string = "";
+                    const temp = data.authorities[0]
+                    if (temp !== undefined) {
+                        role = temp.authority;
+                    } else {
+                        role = ""
+                    }
+                    localStorage.setItem('role', role)
                     found = true;
                 }
             }).catch(error => {
@@ -189,10 +196,42 @@ const API = {
     },
 
     getRole: function (): string {
-        return role;
+        var ret = localStorage.getItem('role')
+        if (ret === null) {
+            ret = ""
+        }
+        return ret;
     },
 
     getRequests: async function (filter: filter): Promise<Request[]> {
+
+        let temp = localStorage.getItem('token');
+        if (temp === null) {
+            temp = "";
+        }
+        let token: string = temp;
+
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + token
+            },
+            body: JSON.stringify({})
+        };
+
+        await fetch('/requests', requestOptions)
+            .then(async response => {
+                if (response.status !== 200) {
+                    return Promise.reject(response);
+                } else {
+                    const data = await response.json();
+                    console.log(data)
+                }
+            }).catch(error => {
+                console.error('There was an error!', error);
+            })
         return requests.filter((request => request.site.toLocaleLowerCase().includes(filter.site.toLocaleLowerCase())))
     },
     addRequest: async function (requestNumber: string, date: string, hour: string, concierge: string, site: string, serviceType: string, requestStatus: string, requestAssignment: string, executionDate: Date,
@@ -284,7 +323,35 @@ const API = {
 
 
     getUsers: async function (): Promise<User[]> {
-        return users;
+        let temp = localStorage.getItem('token');
+        if (temp === null) {
+            temp = "";
+        }
+        let token: string = temp;
+
+
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + token
+            },
+        };
+
+
+        let ret: User[] = []
+        await fetch('/users', requestOptions)
+            .then(async response => {
+                if (response.status !== 200) {
+                    return Promise.reject(response);
+                } else {
+                    const data = await response.json();
+                    ret = data;
+                }
+            }).catch(error => {
+                console.error('There was an error!', error);
+            })
+        return ret;
     },
 
     addUser: async function (username: string, password: string, role: string): Promise<any> {
