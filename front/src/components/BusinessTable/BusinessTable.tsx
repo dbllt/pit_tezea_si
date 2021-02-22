@@ -71,6 +71,7 @@ function Row(props: { row: Request, updateStatus: (name: string, id: string) => 
             ((execDate - dateNow) <= fourteenDays) ? "medium_emergency_style_class" : '';
     }
 
+
     return (
         <React.Fragment>
             <TableRow className={chooseRowEmergencyStyle()}>

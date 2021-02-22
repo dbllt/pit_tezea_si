@@ -41,7 +41,7 @@ class SelectRequestStatusTableCell extends Component<Props, State> {
                         onChange={this.handleChange}
                         inputProps={{ 'aria-label': 'Without label' }}
                     >
-                        {choices.map((value, index) => (<MenuItem value={value}>{value}</MenuItem>))}
+                        {choices.map((value, index) => (<MenuItem key={index} value={value}>{value}</MenuItem>))}
                     </Select>
                 </FormControl>
             </TableCell>

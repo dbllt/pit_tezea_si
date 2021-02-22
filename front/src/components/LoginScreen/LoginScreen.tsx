@@ -55,7 +55,6 @@ class LoginScreen extends Component<IProps, IState> {
             API.login(this.getUsername(), this.getPassword()).then((b) => {
                     if (b) {
                         this.props.handler(this.getUsername())
-                        this.setState({redirect: true})
                     }
                 }
             );
@@ -120,7 +119,6 @@ class LoginScreen extends Component<IProps, IState> {
                         </Button>
                     </Grid>
                 </Grid>
-                {this.state.redirect ? (<Redirect push to="/"/>) : null}
             </div>
         )
     }

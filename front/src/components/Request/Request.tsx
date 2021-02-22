@@ -113,10 +113,7 @@ class Request extends Component<IndexProps, IState> {
             }
         }
 
-        let requestId = localStorage.getItem('requestId') || "";
-        if (requestId !== "") {
-            this.loadRequest(requestId);
-        }
+
         this.task = createRef();
         this.getTask = this.getTask.bind(this);
         this.addRequest = this.addRequest.bind(this);
@@ -141,7 +138,6 @@ class Request extends Component<IndexProps, IState> {
 
     loadRequest(id: string) {
         API.getRequest(id).then(r => {
-            console.log(r)
             if (r !== null) {
                 var rr: IRequest = r;
                 const request: IRequest = {
@@ -208,7 +204,11 @@ class Request extends Component<IndexProps, IState> {
             localStorage.setItem('requestId', res.requestId);
             this.loadRequest(res.requestId);
 
+        }
+        let requestId = localStorage.getItem('requestId') || "";
 
+        if (!res && requestId !== "") {
+            this.loadRequest(requestId);
         }
     }
 

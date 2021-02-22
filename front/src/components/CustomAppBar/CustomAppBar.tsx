@@ -11,17 +11,20 @@ interface IState {
 
 interface IProps {
     handler: () => void
-    username:string
+    username: string
 
 }
 
 
 class CustomAppBar extends React.Component<RouteComponentProps & IProps, IState> {
 
-    state = {
+    state = {}
+
+    componentDidMount() {
+        if(this.props.username!=="") {
+            localStorage.setItem('username', this.props.username);
+        }
     }
-
-
 
     disconnect = () => {
         API.disconnect().then(() => {
@@ -33,7 +36,7 @@ class CustomAppBar extends React.Component<RouteComponentProps & IProps, IState>
 
     DisplayName() {
         if (this.props.location.pathname !== "/login") {
-            return <div>Bonjour {this.props.username} </div>
+            return <div>Bonjour {localStorage.getItem("username")} </div>
         }
     }
 
