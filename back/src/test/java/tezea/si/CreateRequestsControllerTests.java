@@ -2,10 +2,12 @@ package tezea.si;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.nio.file.Files;
 import java.time.LocalDate;
 
 import org.junit.jupiter.api.AfterEach;
@@ -304,6 +306,30 @@ public class CreateRequestsControllerTests {
         mockMvc.perform(MockMvcRequestBuilders.multipart(badUrl).file(fstmp)
                 .headers(TestUtils.userAuthorizationHeader(mockMvc)).contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isNotFound());
+
+        // Verification that images are defined in request
+        SmallRequestDTO updatedSmallReq = getSimpleRequest(smallReq.getId());
+        assertThat(updatedSmallReq).usingRecursiveComparison().ignoringFields("photos", "lastUpdated")
+                .isEqualTo(smallReq);
+        assertThat(updatedSmallReq.getId()).isNotZero();
+        assertThat(updatedSmallReq.getPhotos()).isNotEmpty();
+        assertThat(updatedSmallReq.getPhotos()).hasSize(3);
+
+        // Verification that you can get the images from server
+        byte[] firstImage = Files.readAllBytes(f.toPath());
+
+        this.mockMvc
+                .perform(get(updatedSmallReq.getPhotos().get(0)).contentType(MediaType.IMAGE_JPEG)
+                        .headers(TestUtils.userAuthorizationHeader(mockMvc)))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsByteArray().equals(firstImage);
+
+        byte[] secondImage = Files.readAllBytes(f2.toPath());
+
+        this.mockMvc
+                .perform(get(updatedSmallReq.getPhotos().get(1)).contentType(MediaType.IMAGE_JPEG)
+                        .headers(TestUtils.userAuthorizationHeader(mockMvc)))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsByteArray().equals(secondImage);
+
     }
 
     private SmallRequestDTO createSimpleRequest() throws Exception {
@@ -313,6 +339,18 @@ public class CreateRequestsControllerTests {
                         .content(mapper.writeValueAsString(request))
                         .headers(TestUtils.userAuthorizationHeader(mockMvc)))
                 .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString();
+
+        return mapper.readValue(response, SmallRequestDTO.class);
+    }
+
+    private SmallRequestDTO getSimpleRequest(Long id) throws Exception {
+        SmallRequest request = new SmallRequest();
+        String url = REQUESTS_URL + "/" + id;
+
+        String response = this.mockMvc
+                .perform(get(url).content(mapper.writeValueAsString(request))
+                        .headers(TestUtils.userAuthorizationHeader(mockMvc)))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
         return mapper.readValue(response, SmallRequestDTO.class);
     }

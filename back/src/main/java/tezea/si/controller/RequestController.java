@@ -71,7 +71,7 @@ public class RequestController {
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "The request with this id"),
             @ApiResponse(responseCode = "404", description = "If there is no request with this id") })
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<SmallRequest> getRequests(@PathVariable Long id) {
+    public ResponseEntity<SmallRequest> getRequest(@PathVariable Long id) {
         Optional<SmallRequest> request = dao.findById(id);
         if (request.isPresent()) {
             return ResponseEntity.ok(request.get());
@@ -93,19 +93,32 @@ public class RequestController {
     @Operation(summary = "Upload images for a request")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Images have been uploaded"),
             @ApiResponse(responseCode = "404", description = "If there is no request with this id"),
-            @ApiResponse(responseCode = "400", description = "If the input request body could not be parsed") })
+            @ApiResponse(responseCode = "400", description = "If the input request body could not be parsed or if images are not images") })
     @RequestMapping(path = "/{id}", method = RequestMethod.POST)
     public ResponseEntity<?> uploadImages(@PathVariable Long id, @RequestParam("images") List<MultipartFile> files) {
         Optional<SmallRequest> request = dao.findById(id);
         if (!request.isPresent())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
-        List<String> fileNames = new ArrayList<>();
-        
+        // Allows only images to be uploaded
+
+        List<String> acceptableExtentions = List.of("png", "jpg", "jpeg");
+
         for (MultipartFile multipartFile : files) {
+            Optional<String> ext = getExtension(multipartFile.getOriginalFilename());
+            if (ext.isEmpty() || !acceptableExtentions.contains(ext.get()))
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        List<String> photosUrl = new ArrayList<String>(request.get().getPhotos());
+
+        for (MultipartFile multipartFile : files) {
+
             String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
 
-            String uploadDir = "user-photos/"+id;
+            String uploadDir = "user-photos/" + id + "/";
+
+            fileName = getUniqueFileName(photosUrl, fileName, uploadDir);
 
             try {
                 FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
@@ -113,12 +126,36 @@ public class RequestController {
                 e.printStackTrace();
             }
 
-            fileNames.add(multipartFile.getOriginalFilename());
+            photosUrl.add("/" + uploadDir + fileName);
         }
-        
-//        request.get().setPhotos(fileNames); TODO
+
+        request.get().setPhotos(photosUrl);
+
+        dao.save(request.get());
 
         return ResponseEntity.ok().build();
     }
 
+    private String getUniqueFileName(List<String> photosUrl, String fileName, String uploadDir) {
+        String fileNameWithoutExt = removeFileExtension(fileName);
+        String ext = "." + getExtension(fileName).get();
+
+        int i = 0;
+        while (photosUrl.contains("/" + uploadDir + fileName)) {
+            fileName = fileNameWithoutExt + ++i + ext;
+        }
+        return fileName;
+    }
+
+    public static String removeFileExtension(String filename) {
+        if (filename == null || filename.isEmpty())
+            return filename;
+        String extPattern = "(?<!^)[.]" + ".*";
+        return filename.replaceAll(extPattern, "");
+    }
+
+    public Optional<String> getExtension(String filename) {
+        return Optional.ofNullable(filename).filter(f -> f.contains("."))
+                .map(f -> f.substring(filename.lastIndexOf(".") + 1));
+    }
 }

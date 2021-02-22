@@ -1,6 +1,7 @@
 package tezea.si.model;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -36,6 +37,8 @@ public class SmallRequestDTO {
 	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate lastUpdated;
 	private SmallUserDTO lastUpdatedBy;
+	
+	private List<String> photos;
 
 	public long getId() {
 		return id;
@@ -44,6 +47,14 @@ public class SmallRequestDTO {
 	public void setId(long id) {
 		this.id = id;
 	}
+	
+    public List<String> getPhotos() {
+        return photos;
+    }
+    
+    public void setPhotos(List<String> photos) {
+        this.photos = photos;
+    }
 
 	public LocalDate getDate() {
 		return date;
