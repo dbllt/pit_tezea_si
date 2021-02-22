@@ -11,15 +11,28 @@ import UsersScreen from "./components/UsersScreen/UsersScreen";
 import CustomAppBar from "./components/CustomAppBar/CustomAppBar";
 
 
-class App extends React.Component { 
+interface IProps {
+}
+interface IState {
+    username: string;
+}
+
+class App extends React.Component<IProps,IState> {
     constructor(props: ClassAttributes<any>) {
         super(props)
+        this.state = {username: ""}
 
         this.handler = this.handler.bind(this)
+        this.handler2 = this.handler2.bind(this)
     }
 
     handler() {
         this.setState({})
+    }
+
+    handler2(username: string) {
+        console.log(username)
+        this.setState({username})
     }
 
     render() {
@@ -27,10 +40,15 @@ class App extends React.Component {
             <div className="App">
                 <HashRouter>
                     <div>
-                        <CustomAppBar handler={this.handler}/>
+                        <CustomAppBar handler={this.handler} username={this.state.username}/>
 
                         <div className="content">
-                            <Route path="/login" component={LoginScreen}/>
+                            <Route
+                                path='/login'
+                                render={(props) => (
+                                    <LoginScreen {...props} handler={this.handler2}/>
+                                )}
+                            />
                             <Route path="/requestsList" component={RequestsList}/>
                             <Route path="/request" component={Request}/>
                             <Route path="/serviceList" component={ServiceList}/>

@@ -7,11 +7,11 @@ import {withRouter} from 'react-router';
 import './CustomAppBar.css'
 
 interface IState {
-    username: string
 }
 
 interface IProps {
     handler: () => void
+    username:string
 
 }
 
@@ -19,14 +19,9 @@ interface IProps {
 class CustomAppBar extends React.Component<RouteComponentProps & IProps, IState> {
 
     state = {
-        username: ""
     }
 
-    componentDidMount() {
-        API.getUsername().then((data => {
-            this.setState({username: data})
-        }));
-    }
+
 
     disconnect = () => {
         API.disconnect().then(() => {
@@ -38,7 +33,7 @@ class CustomAppBar extends React.Component<RouteComponentProps & IProps, IState>
 
     DisplayName() {
         if (this.props.location.pathname !== "/login") {
-            return <div>Bonjour {this.state.username} </div>
+            return <div>Bonjour {this.props.username} </div>
         }
     }
 

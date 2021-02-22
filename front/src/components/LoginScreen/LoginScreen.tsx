@@ -7,6 +7,8 @@ import API from "../../network/API";
 
 
 interface IProps {
+    handler: (arg0: string) => void
+
 }
 
 interface IState {
@@ -50,6 +52,7 @@ class LoginScreen extends Component<IProps, IState> {
         if (this.getUsername() !== "" && this.getPassword() !== "") {
             API.login(this.getUsername(), this.getPassword()).then((b) => {
                     if (b) {
+                        this.props.handler(this.getUsername())
                         this.setState({redirect: true})
                     }
                 }
