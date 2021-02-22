@@ -26,6 +26,7 @@ const useRowStyles = makeStyles({
 const tableHeadNames = ["N° Demande", "Date de réalisation", "Type Client", "Nom Client", 'Site', "Concierge", 'Statut Demande', "Description"];
 const tableClientHeadNames = ["Type Client", "Entreprise", "Civilité", "Nom", "Prénom", "Téléphone", "Email", "Code postal", "Ville", "Détails"];
 
+
 interface Request {
     id: string;
     date: string,
@@ -35,7 +36,7 @@ interface Request {
     serviceType: string,
     requestStatus: string,
     requestAssignment: string,
-    executionDate: string,
+    executionDate: Date,
     clientStatus: string,
     company: string,
     gender: string,
@@ -57,10 +58,22 @@ function Row(props: { row: Request, updateStatus: (name: string, id: string) => 
     const {row} = props;
     const [open, setOpen] = React.useState(false);
     const classes = useRowStyles();
+    const options = { year: 'numeric', month: 'numeric', day: 'numeric' }
+    const executionDate = row.executionDate.toLocaleDateString('FR', options);
+
+    const chooseRowEmergencyStyle = () => {
+        const sevenDays = 7 * 24 * 3600 * 1000;
+        const fourteenDays = 14 * 24 * 3600 * 1000;
+        const dateNow = new Date().getTime();
+        const execDate = row.executionDate.getTime();
+
+        return ((execDate - dateNow) <= sevenDays) ? "high_emergency_style_class" :
+            ((execDate - dateNow) <= fourteenDays) ? "medium_emergency_style_class" : '' ;
+    }
 
     return (
         <React.Fragment>
-            <TableRow hover className={""}>
+            <TableRow hover className={ chooseRowEmergencyStyle() }>
                 <TableCell>
                     <IconButton
                         aria-label="expand row"
@@ -78,6 +91,7 @@ function Row(props: { row: Request, updateStatus: (name: string, id: string) => 
                 <TableCell align="left">{row.concierge}</TableCell>
                 <SelectRequestStatusTableCell key={row.id} status={row.requestStatus} id={row.id} updateStatus={props.updateStatus}></SelectRequestStatusTableCell>
                 <TableCell align="left">{row.requestAssignment}</TableCell>
+                <TableCell align="left">{executionDate}</TableCell>
             </TableRow>
             <TableRow className={classes.root}>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={10}>

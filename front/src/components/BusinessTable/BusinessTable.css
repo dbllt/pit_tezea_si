@@ -1,7 +1,7 @@
-.urgent {
-    background-color: red !important;
+.high_emergency_style_class {
+    background-color: red;
 }
 
-.kindaUrgent {
-    background-color: orange !important;
+.medium_emergency_style_class {
+    background-color: orange;
 }
