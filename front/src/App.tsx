@@ -31,7 +31,6 @@ class App extends React.Component<IProps,IState> {
     }
 
     handler2(username: string) {
-        console.log(username)
         this.setState({username})
     }
 

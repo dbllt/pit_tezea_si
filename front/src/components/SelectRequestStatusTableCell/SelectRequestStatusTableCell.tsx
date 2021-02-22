@@ -4,8 +4,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
-import styles from './SelectRequestStatusTableCell.module.css';
-
 interface Props {
     status: string;
     id: string;
@@ -34,7 +32,7 @@ class SelectRequestStatusTableCell extends Component<Props, State> {
     };
 
     render() {
-        const choices = ["Nouvelle", "Devis en cours", "Devis signé", "Doublon", "Facturée", "Refusée", "Clôturée"];
+        const choices = ["Nouvelle", "En cours", "Devis signé", "Doublon", "Facturée", "Refusée", "Clôturée"];
         return (
             <TableCell>
                 <FormControl>

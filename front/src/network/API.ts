@@ -56,15 +56,13 @@ interface filter {
 
 }
 
-// Hint : Temporary data ///////////////////////////
-const date1  = new Date(2021, 1, 28);
-const date2  = new Date(2021, 2, 5);
-const date3  = new Date(2021, 2, 15);
-/////////////////////////////////////////////////////
+const date1 = new Date(2021, 1, 28);
+const date2 = new Date(2021, 2, 5);
+const date3 = new Date(2021, 2, 15);
 
 let requests: Request[] = [];
 addRequest("1", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date1, "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
-addRequest("2", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "En cours", "Ouvrier 3", date2, "Entreprise", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("2", "2018-01-25", "10:30", "test", "Autre", "Don", "En cours", "Ouvrier 3", date2, "Entreprise", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
 addRequest("3", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date3, "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
 addRequest("4", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date1, "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
 addRequest("5", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "En cours", "Ouvrier 3", date1, "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
@@ -82,7 +80,26 @@ clients.push(paul);
 
 
 function addRequest(requestNumber: string, date: string, hour: string, concierge: string, site: string, serviceType: string, requestStatus: string, requestAssignment: string, executionDate: Date,
-                    clientStatus: string, company: string, gender: string, lName: string, fName: string, phone: string, email: string, address: string, cp: string, city: string) {
+                    clientStatus: string, company
+                        :
+                        string, gender
+                        :
+                        string, lName
+                        :
+                        string, fName
+                        :
+                        string, phone
+                        :
+                        string, email
+                        :
+                        string, address
+                        :
+                        string, cp
+                        :
+                        string, city
+                        :
+                        string
+) {
     const request = {
         id: requestNumber,
         date: date,
@@ -110,8 +127,6 @@ function addRequest(requestNumber: string, date: string, hour: string, concierge
 
 
 const API = {
-
-
     login: async function (username: string, password: string): Promise<boolean> {
         let found = false;
 
@@ -149,7 +164,7 @@ const API = {
         return found;
     },
 
-    getUsername: async function (): Promise<string> {
+    getUsername: function (): string {
         let temp = localStorage.getItem('username');
         if (temp === null) {
             temp = "";
@@ -184,7 +199,6 @@ const API = {
                 if (response.status !== 204) {
                     return Promise.reject(response);
                 } else {
-                    console.log('user disconnected');
                     localStorage.setItem('token', "")
                     localStorage.setItem('refreshToken', "")
                 }
@@ -213,12 +227,11 @@ const API = {
 
 
         const requestOptions = {
-            method: 'POST',
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': "Bearer " + token
             },
-            body: JSON.stringify({})
         };
 
         await fetch('/requests', requestOptions)
@@ -234,8 +247,38 @@ const API = {
             })
         return requests.filter((request => request.site.toLocaleLowerCase().includes(filter.site.toLocaleLowerCase())))
     },
+
     addRequest: async function (requestNumber: string, date: string, hour: string, concierge: string, site: string, serviceType: string, requestStatus: string, requestAssignment: string, executionDate: Date,
                                 clientStatus: string, company: string, gender: string, lName: string, fName: string, phone: string, email: string, address: string, cp: string, city: string): Promise<any> {
+
+        let temp = localStorage.getItem('token');
+        if (temp === null) {
+            temp = "";
+        }
+        let token: string = temp;
+
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + token
+            },
+            body: JSON.stringify({})
+        };
+
+        await fetch('/requests', requestOptions)
+            .then(async response => {
+                if (response.status !== 201) {
+                    return Promise.reject(response);
+                } else {
+                    console.log("request added")
+                }
+            }).catch(error => {
+                console.error('There was an error!', error);
+            })
+
+
         const request = {
             id: requestNumber,
             date: date,
@@ -261,12 +304,42 @@ const API = {
         requests.push(request);
     },
     getRequest: async function (id: string): Promise<any> {
+        let temp = localStorage.getItem('token');
+        if (temp === null) {
+            temp = "";
+        }
+        let token: string = temp;
+
+
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + token
+            },
+        };
+
+        await fetch('/request/'+id, requestOptions)
+            .then(async response => {
+                if (response.status !== 200) {
+                    return Promise.reject(response);
+                } else {
+                    const data = await response.json();
+                    console.log(data)
+                }
+            }).catch(error => {
+                console.error('There was an error!', error);
+            })
+
+
+
+        let ret = null
         requests.forEach(function (request) {
             if (request.id === id) {
-                return request;
+                ret = request;
             }
         });
-        return false;
+        return ret;
     },
 
 
@@ -374,8 +447,6 @@ const API = {
             .then(async response => {
                 if (!response.ok) {
                     return Promise.reject(response);
-                } else {
-                    console.log('user created');
                 }
             }).catch(error => {
                 console.error('There was an error!', error);
