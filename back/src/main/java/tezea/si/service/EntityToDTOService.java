@@ -30,6 +30,8 @@ public class EntityToDTOService {
 		result.setType(request.getType());
 		result.setPhotos(request.getPhotos());
 		result.setSite(request.getSite());
+		result.setNumberEmployeesNeeded(request.getNumberEmployeesNeeded());
+		result.setInternalInfo(request.getInternalInfo());
 
 		result.setClient(convertToDTO(request.getClient()));
 		result.setResponsable(convertToDTO(request.getResponsable()));

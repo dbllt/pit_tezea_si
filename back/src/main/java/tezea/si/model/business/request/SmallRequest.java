@@ -46,6 +46,10 @@ public class SmallRequest {
 	private LocalDate lastUpdated;
 	private UserTezea lastUpdatedBy;
 	
+	private int numberEmployeesNeeded;
+	private String internalInfo;
+
+	
     private List<String> photos;
 
 	@Id
@@ -223,6 +227,22 @@ public class SmallRequest {
 
 	public void setType(Service type) {
 		this.type = type;
+	}
+
+	public int getNumberEmployeesNeeded() {
+		return numberEmployeesNeeded;
+	}
+
+	public void setNumberEmployeesNeeded(int numberEmployeesNeeded) {
+		this.numberEmployeesNeeded = numberEmployeesNeeded;
+	}
+
+	public String getInternalInfo() {
+		return internalInfo;
+	}
+
+	public void setInternalInfo(String internalInfo) {
+		this.internalInfo = internalInfo;
 	}
 
 }

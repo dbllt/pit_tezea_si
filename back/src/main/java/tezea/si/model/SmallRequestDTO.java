@@ -39,6 +39,9 @@ public class SmallRequestDTO {
 	private LocalDate lastUpdated;
 	private SmallUserDTO lastUpdatedBy;
 	
+	private int numberEmployeesNeeded;
+	private String internalInfo;
+	
 	private List<String> photos;
 
 	public long getId() {
@@ -207,6 +210,22 @@ public class SmallRequestDTO {
 
 	public void setType(Service type) {
 		this.type = type;
+	}
+
+	public int getNumberEmployeesNeeded() {
+		return numberEmployeesNeeded;
+	}
+
+	public void setNumberEmployeesNeeded(int numberEmployeesNeeded) {
+		this.numberEmployeesNeeded = numberEmployeesNeeded;
+	}
+
+	public String getInternalInfo() {
+		return internalInfo;
+	}
+
+	public void setInternalInfo(String internalInfo) {
+		this.internalInfo = internalInfo;
 	}
 
 }

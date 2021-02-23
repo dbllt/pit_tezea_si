@@ -41,6 +41,8 @@ public class EntityCreationFromDTOService {
 		result.setSatisfactionLevel(request.getSatisfactionLevel());
 		result.setType(request.getType());
 		result.setSite(request.getSite());
+		result.setNumberEmployeesNeeded(request.getNumberEmployeesNeeded());
+		result.setInternalInfo(request.getInternalInfo());
 
 		result.setClient(convertToEntity(request.getClient()));
 		result.setResponsable(convertToEntity(request.getResponsable()));

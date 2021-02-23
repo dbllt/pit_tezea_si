@@ -196,10 +196,12 @@ public class CreateRequestsControllerTests {
         String companyName = "Gateaux";
         String lastName = "Brindacier";
         String firstName = "Fifi";
+        String internal = "check phone number";
         HonorificTitle title = HonorificTitle.MME;
         int reps = 5;
         int wood = 12;
         int donated = 50;
+        int nbPeople = 3;
         LocalDate date = LocalDate.now();
 
         UserTezea user = new UserTezea();
@@ -230,6 +232,8 @@ public class CreateRequestsControllerTests {
         request.setAppointmentPlasmaDate(date);
         request.setSatisfactionLevel(SatisfactionLevel.NOT_SATISFIED);
         request.setType(Service.DONATION);
+        request.setNumberEmployeesNeeded(nbPeople);
+        request.setInternalInfo(internal);
 
         request.setClient(client);
         request.setSite(Site.COUTURE);
@@ -266,6 +270,8 @@ public class CreateRequestsControllerTests {
         expected.setAppointmentPlasmaDate(date);
         expected.setSatisfactionLevel(SatisfactionLevel.NOT_SATISFIED);
         expected.setType(Service.DONATION);
+        expected.setNumberEmployeesNeeded(nbPeople);
+        expected.setInternalInfo(internal);
 
         expected.setClient(expectedClient);
         expected.setSite(Site.COUTURE);
