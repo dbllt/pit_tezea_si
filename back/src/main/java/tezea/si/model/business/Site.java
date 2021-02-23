@@ -17,14 +17,14 @@ public enum Site {
 	ESTIMATEUR("Estimateur"),
 	@JsonProperty("Conciergerie")
 	CONCIERGERIE("Conciergerie");
-	
-    private String message;
 
-    private Site(String s){
-        this.message=s;
-    }
+	private String message;
 
-    public String getMessage() {
-        return message;
-    }
+	private Site(String s) {
+		this.message = s;
+	}
+
+	public String getMessage() {
+		return message;
+	}
 }
