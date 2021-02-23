@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import tezea.si.model.business.Site;
 import tezea.si.model.business.request.Priority;
 import tezea.si.model.business.request.RequestStatus;
 import tezea.si.model.business.request.SatisfactionLevel;
@@ -15,7 +16,7 @@ public class SmallRequestDTO {
 	private long id;
 	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate date;
-	private SmallSiteDTO site;
+	private Site site;
 	private SmallUserDTO responsable;
 	private SmallClientDTO client;
 	private Priority priority;
@@ -37,7 +38,9 @@ public class SmallRequestDTO {
 	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate lastUpdated;
 	private SmallUserDTO lastUpdatedBy;
-	
+
+	private String internalInfo;
+
 	private List<String> photos;
 
 	public long getId() {
@@ -47,14 +50,14 @@ public class SmallRequestDTO {
 	public void setId(long id) {
 		this.id = id;
 	}
-	
-    public List<String> getPhotos() {
-        return photos;
-    }
-    
-    public void setPhotos(List<String> photos) {
-        this.photos = photos;
-    }
+
+	public List<String> getPhotos() {
+		return photos;
+	}
+
+	public void setPhotos(List<String> photos) {
+		this.photos = photos;
+	}
 
 	public LocalDate getDate() {
 		return date;
@@ -64,11 +67,11 @@ public class SmallRequestDTO {
 		this.date = date;
 	}
 
-	public SmallSiteDTO getSite() {
+	public Site getSite() {
 		return site;
 	}
 
-	public void setSite(SmallSiteDTO site) {
+	public void setSite(Site site) {
 		this.site = site;
 	}
 
@@ -206,6 +209,14 @@ public class SmallRequestDTO {
 
 	public void setType(Service type) {
 		this.type = type;
+	}
+
+	public String getInternalInfo() {
+		return internalInfo;
+	}
+
+	public void setInternalInfo(String internalInfo) {
+		this.internalInfo = internalInfo;
 	}
 
 }

@@ -1,14 +1,16 @@
 package tezea.si;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.time.LocalDate;
+import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,14 +26,15 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import tezea.si.dao.SiteDAO;
 import tezea.si.dao.SmallClientDAO;
+import tezea.si.dao.SmallEstimationDAO;
 import tezea.si.dao.SmallRequestDAO;
 import tezea.si.dao.UserTezeaDAO;
 import tezea.si.model.SmallClientDTO;
+import tezea.si.model.SmallEstimationDTO;
 import tezea.si.model.SmallRequestDTO;
-import tezea.si.model.SmallSiteDTO;
 import tezea.si.model.SmallUserDTO;
+import tezea.si.model.business.HonorificTitle;
 import tezea.si.model.business.Site;
 import tezea.si.model.business.SmallClient;
 import tezea.si.model.business.UserTezea;
@@ -39,8 +42,11 @@ import tezea.si.model.business.request.Priority;
 import tezea.si.model.business.request.RequestStatus;
 import tezea.si.model.business.request.SatisfactionLevel;
 import tezea.si.model.business.request.Service;
+import tezea.si.model.business.request.SmallEstimation;
 import tezea.si.model.business.request.SmallRequest;
 import tezea.si.model.business.request.TimeUnit;
+import tezea.si.model.business.request.Tool;
+import tezea.si.model.business.request.Vehicle;
 import tezea.si.utils.TestUtils;
 
 @SpringBootTest
@@ -57,9 +63,9 @@ public class CreateRequestsControllerTests {
 
     @Autowired
     SmallClientDAO clientDao;
-
+    
     @Autowired
-    SiteDAO siteDao;
+    SmallEstimationDAO estimationDao;
 
     @Autowired
     ObjectMapper mapper;
@@ -74,15 +80,12 @@ public class CreateRequestsControllerTests {
         user.setPassword("$2a$10$sDP3s/p0M1TCOW6FizwLWulsnwT2BryFkLHqKusRRljaYKYOWVE7u");
         userDao.save(user);
 
-        Site site = new Site();
-        site.setNom("conciergerie");
-        siteDao.save(site);
     }
 
     @AfterEach
     public void destroy() {
         requestDao.deleteAll();
-        siteDao.deleteAll();
+        estimationDao.deleteAll();
         userDao.deleteAll();
     }
 
@@ -193,24 +196,48 @@ public class CreateRequestsControllerTests {
     @Test
     public void createFullRequest() throws Exception {
         // Arrange
-        String siteName = "conciergerie";
         String username = "jean";
         String access = "difficult";
         String description = "some service";
         String address = "45 rue";
+        String email = "zet@ok.com";
+        String phone = "+330756874512";
+        String postCode = "35000";
+        String city = "Rennes";
+        String companyName = "Gateaux";
+        String lastName = "Brindacier";
+        String firstName = "Fifi";
+        String internal = "check phone number";
+        String otherTools = "chair";
+        HonorificTitle title = HonorificTitle.MME;
         int reps = 5;
         int wood = 12;
         int donated = 50;
+        int nbPeople = 3;
+        int duration = 4;
         LocalDate date = LocalDate.now();
-
-        Site site = new Site();
-        site.setNom(siteName);
 
         UserTezea user = new UserTezea();
         user.setUsername(username);
+        
+        SmallEstimation estimation = new SmallEstimation();
+        estimation.setEstimationResponsable(user);
+        estimation.setNumberEmployeesNeeded(nbPeople);
+        estimation.setToolsNeeded(List.of(Tool.FOR_SERVICE, Tool.SPECIFIC));
+        estimation.setOtherTools(otherTools);
+        estimation.setVehiclesNeeded(List.of(Vehicle.BENNE));
+        estimation.setExpectedDuration(duration);
 
         SmallClient client = new SmallClient();
+        client.setEmail(email);
+        client.setPhoneNumber(phone);
         client.setAddress(address);
+        client.setPostCode(postCode);
+        client.setCity(city);
+        client.setCompanyName(companyName);
+        client.setLastName(lastName);
+        client.setFirstName(firstName);
+        client.setHonorificTitle(title);
 
         SmallRequest request = new SmallRequest();
         request.setAccessDetails(access);
@@ -218,7 +245,6 @@ public class CreateRequestsControllerTests {
         request.setDate(date);
         request.setRepetitionTime(reps);
         request.setRepetitionUnit(TimeUnit.MONTH);
-        // ?? maybe not let client set this
         request.setStatus(RequestStatus.NEW);
         request.setPriority(Priority.HIGH);
         request.setAmountWood(wood);
@@ -226,23 +252,37 @@ public class CreateRequestsControllerTests {
         request.setAppointmentPlasmaDate(date);
         request.setSatisfactionLevel(SatisfactionLevel.NOT_SATISFIED);
         request.setType(Service.DONATION);
+        request.setInternalInfo(internal);
+        request.setSite(Site.COUTURE);
 
         request.setClient(client);
-        request.setSite(site);
         request.setResponsable(user);
         request.setClosedBy(user);
         request.setLastUpdatedBy(user);
+        request.setEstimation(estimation);
 
-//		private SmallEstimation estimation;
-
-        SmallSiteDTO expectedSite = new SmallSiteDTO();
-        expectedSite.setName(siteName);
-
+        
         SmallUserDTO expectedUser = new SmallUserDTO();
         expectedUser.setUsername(username);
+        
+		SmallEstimationDTO expectedEstimation = new SmallEstimationDTO();
+		expectedEstimation.setEstimationResponsable(expectedUser);
+		expectedEstimation.setNumberEmployeesNeeded(nbPeople);
+		expectedEstimation.setToolsNeeded(List.of(Tool.FOR_SERVICE, Tool.SPECIFIC));
+		expectedEstimation.setOtherTools(otherTools);
+		expectedEstimation.setVehiclesNeeded(List.of(Vehicle.BENNE));
+		expectedEstimation.setExpectedDuration(duration);
 
         SmallClientDTO expectedClient = new SmallClientDTO();
+        expectedClient.setEmail(email);
+        expectedClient.setPhoneNumber(phone);
         expectedClient.setAddress(address);
+        expectedClient.setPostCode(postCode);
+        expectedClient.setCity(city);
+        expectedClient.setCompanyName(companyName);
+        expectedClient.setLastName(lastName);
+        expectedClient.setFirstName(firstName);
+        expectedClient.setHonorificTitle(title);
 
         SmallRequestDTO expected = new SmallRequestDTO();
         expected.setAccessDetails(access);
@@ -257,19 +297,21 @@ public class CreateRequestsControllerTests {
         expected.setAppointmentPlasmaDate(date);
         expected.setSatisfactionLevel(SatisfactionLevel.NOT_SATISFIED);
         expected.setType(Service.DONATION);
+        expected.setInternalInfo(internal);
+        expected.setSite(Site.COUTURE);
 
         expected.setClient(expectedClient);
-        expected.setSite(expectedSite);
         expected.setResponsable(expectedUser);
         expected.setClosedBy(expectedUser);
         expected.setLastUpdatedBy(expectedUser);
+        expected.setEstimation(expectedEstimation);
 
         // Act
         String response = this.mockMvc
                 .perform(post(REQUESTS_URL).contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(request))
                         .headers(TestUtils.userAuthorizationHeader(mockMvc)))
-                .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString();
+                .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
 
         // Assert
         SmallRequestDTO result = mapper.readValue(response, SmallRequestDTO.class);

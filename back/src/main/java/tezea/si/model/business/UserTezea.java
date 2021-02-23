@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -33,7 +34,6 @@ public class UserTezea {
     public void removeDependencies() {
     	closedBy.forEach(e -> e.setClosedBy(null));
     	responsabilities.forEach(e -> e.setResponsable(null));
-    	sites.forEach(e -> e.setResponsable(null));
     	estimations.forEach(e -> e.setEstimationResponsable(null));
     }
     
@@ -73,7 +73,7 @@ public class UserTezea {
 		return estimations;
 	}
 
-	@OneToMany(mappedBy="responsable", fetch = FetchType.LAZY)
+	@ElementCollection
 	public List<Site> getSites() {
 		return sites;
 	}
