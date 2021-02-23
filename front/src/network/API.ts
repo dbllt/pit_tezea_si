@@ -520,6 +520,9 @@ const API = {
         return ret;
     },
 
+    getUsername(){
+        return localStorage.getItem('username');
+    }
 
 
 

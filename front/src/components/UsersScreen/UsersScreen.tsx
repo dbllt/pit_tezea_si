@@ -74,20 +74,29 @@ class UsersScreen extends Component<IProps, IState> {
             )
         }
 
+        function DisplayRemove(username:string) {
+            if (username !== API.getUsername()) {
+                return <IconButton
+                    aria-label="expand row"
+                    size="small"
+                    onClick={() => removeUser(row.username)}
+                >
+                    <CancelOutlinedIcon style={{color: "red"}}/>
+                </IconButton>
+            } else {
+            return <div/>
+            }
+        }
+
         return (
             <React.Fragment>
                 <TableRow hover>
                     <TableCell align="center">{row.username}</TableCell>
                     <TableCell align="center">{row.authorities[0]}</TableCell>
                     <TableCell align="center" style={{width: "10%"}}>
+                        {DisplayRemove(row.username)}
 
-                        <IconButton
-                            aria-label="expand row"
-                            size="small"
-                            onClick={() => removeUser(row.username)}
-                        >
-                            <CancelOutlinedIcon style={{color: "red"}}/>
-                        </IconButton>
+
                     </TableCell>
                 </TableRow>
             </React.Fragment>
@@ -103,7 +112,7 @@ class UsersScreen extends Component<IProps, IState> {
         this.loadUsers()
     }
 
-    loadUsers(){
+    loadUsers() {
         API.getUsers().then((data => {
             this.setState({users: data})
         }));
