@@ -218,8 +218,8 @@ class Request extends Component<IndexProps, IState> {
         // if (this.getTask() !== "" || true) {//TODO remove true
         //     API.addRequest(this.getTask(), "").then(() => this.setState({redirect: true}));
         // }
-        alert(this.state.typeRequest)
-        //this.setState({redirect: true})
+
+        this.setState({redirect: true})
     }
 
     render() {
@@ -423,7 +423,7 @@ class Request extends Component<IndexProps, IState> {
                                     </Grid>
                                     <Grid container spacing={3} justify="center">
                                         {this.state.images.map((image, index) => (
-                                            <Grid item>
+                                            <Grid item key={index}>
                                                 <Grid container direction="column">
                                                     <Grid item>
                                                         <img src={URL.createObjectURL(image)} alt="" width="150" height="100"/>
