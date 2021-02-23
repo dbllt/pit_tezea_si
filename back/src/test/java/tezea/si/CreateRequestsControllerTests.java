@@ -227,7 +227,6 @@ public class CreateRequestsControllerTests {
         estimation.setOtherTools(otherTools);
         estimation.setVehiclesNeeded(List.of(Vehicle.BENNE));
         estimation.setExpectedDuration(duration);
-        estimation.setExpectedDurationUnit(TimeUnit.HOUR);
 
         SmallClient client = new SmallClient();
         client.setEmail(email);
@@ -273,7 +272,6 @@ public class CreateRequestsControllerTests {
 		expectedEstimation.setOtherTools(otherTools);
 		expectedEstimation.setVehiclesNeeded(List.of(Vehicle.BENNE));
 		expectedEstimation.setExpectedDuration(duration);
-		expectedEstimation.setExpectedDurationUnit(TimeUnit.HOUR);
 
         SmallClientDTO expectedClient = new SmallClientDTO();
         expectedClient.setEmail(email);

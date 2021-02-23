@@ -65,7 +65,6 @@ public class EntityCreationFromDTOService {
 		SmallEstimation result = new SmallEstimation();
 		result.setEstimationResponsable(convertToEntity(estimation.getEstimationResponsable()));
 		result.setExpectedDuration(estimation.getExpectedDuration());
-		result.setExpectedDurationUnit(estimation.getExpectedDurationUnit());
 		result.setNumberEmployeesNeeded(estimation.getNumberEmployeesNeeded());
 		result.setOtherTools(estimation.getOtherTools());
 		result.setToolsNeeded(estimation.getToolsNeeded());

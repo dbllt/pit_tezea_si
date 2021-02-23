@@ -2,7 +2,6 @@ package tezea.si.model;
 
 import java.util.List;
 
-import tezea.si.model.business.request.TimeUnit;
 import tezea.si.model.business.request.Tool;
 import tezea.si.model.business.request.Vehicle;
 
@@ -14,7 +13,6 @@ public class SmallEstimationDTO {
 	private String otherTools;
 	private List<Vehicle> vehiclesNeeded;
 	private int expectedDuration;
-	private TimeUnit expectedDurationUnit;
 
 	public long getId() {
 		return id;
@@ -62,14 +60,6 @@ public class SmallEstimationDTO {
 
 	public void setExpectedDuration(int expectedDuration) {
 		this.expectedDuration = expectedDuration;
-	}
-
-	public TimeUnit getExpectedDurationUnit() {
-		return expectedDurationUnit;
-	}
-
-	public void setExpectedDurationUnit(TimeUnit expectedDurationUnit) {
-		this.expectedDurationUnit = expectedDurationUnit;
 	}
 
 	public String getOtherTools() {

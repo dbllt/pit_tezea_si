@@ -19,7 +19,6 @@ public class SmallEstimation {
 	private String otherTools;
 	private List<Vehicle> vehiclesNeeded;
 	private int expectedDuration;
-	private TimeUnit expectedDurationUnit;
 
 	@Id
 	@GeneratedValue
@@ -72,14 +71,6 @@ public class SmallEstimation {
 
 	public void setExpectedDuration(int expectedDuration) {
 		this.expectedDuration = expectedDuration;
-	}
-
-	public TimeUnit getExpectedDurationUnit() {
-		return expectedDurationUnit;
-	}
-
-	public void setExpectedDurationUnit(TimeUnit expectedDurationUnit) {
-		this.expectedDurationUnit = expectedDurationUnit;
 	}
 
 	public String getOtherTools() {
