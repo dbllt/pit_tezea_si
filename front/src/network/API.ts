@@ -490,19 +490,37 @@ const API = {
         }
     },
 
-    removeUser: async function (id: string): Promise<any> {
-        let index = users.findIndex(x => x.id === id);
-        if (index > -1) {
-            users.splice(index, 1);
+    removeUserByUsername: async function (username: string): Promise<boolean> {
+        let temp = localStorage.getItem('token');
+        if (temp === null) {
+            temp = "";
         }
+        let token: string = temp;
+
+
+        const requestOptions = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + token
+            },
+            body: JSON.stringify({username: username})
+        };
+        let ret =false;
+        await fetch('/removeUser', requestOptions)
+            .then(async response => {
+                if (response.status !== 200) {
+                    return Promise.reject(response);
+                } else {
+                    ret=true;
+                }
+            }).catch(error => {
+                console.error('There was an error!', error);
+            })
+        return ret;
     },
 
-    removeUserByName: async function (name: string): Promise<any> {
-        let index = users.findIndex(x => x.username === name);
-        if (index > -1) {
-            users.splice(index, 1);
-        }
-    },
+
 
 
 }

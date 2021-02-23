@@ -68,8 +68,10 @@ class UsersScreen extends Component<IProps, IState> {
         const {row, handler} = props;
 
         function removeUser(name: string) {
-            API.removeUserByName(name).then(() =>
-                handler())
+            API.removeUserByUsername(name).then(() => {
+                    handler();
+                }
+            )
         }
 
         return (
@@ -94,15 +96,19 @@ class UsersScreen extends Component<IProps, IState> {
     }
 
     handler() {
-        this.setState({})
+        this.loadUsers()
     }
 
     componentDidMount() {
+        this.loadUsers()
+    }
+
+    loadUsers(){
         API.getUsers().then((data => {
             this.setState({users: data})
         }));
-    }
 
+    }
 
     render() {
         return (
