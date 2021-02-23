@@ -1,12 +1,11 @@
 package tezea.si.model.business.request;
 
-import java.sql.Date;
 import java.util.List;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 
 import tezea.si.model.business.UserTezea;
@@ -15,13 +14,11 @@ import tezea.si.model.business.UserTezea;
 public class SmallEstimation {
 	private long id;
 	private UserTezea estimationResponsable;
-	private Date date;
-	private double amount;
 	private int numberEmployeesNeeded;
 	private List<Tool> toolsNeeded;
+	private String otherTools;
 	private List<Vehicle> vehiclesNeeded;
 	private int expectedDuration;
-	private TimeUnit expectedDurationUnit;
 
 	@Id
 	@GeneratedValue
@@ -42,22 +39,6 @@ public class SmallEstimation {
 		this.estimationResponsable = estimationResponsable;
 	}
 
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
-	public double getAmount() {
-		return amount;
-	}
-
-	public void setAmount(double amount) {
-		this.amount = amount;
-	}
-
 	public int getNumberEmployeesNeeded() {
 		return numberEmployeesNeeded;
 	}
@@ -66,7 +47,7 @@ public class SmallEstimation {
 		this.numberEmployeesNeeded = numberEmployeesNeeded;
 	}
 
-	@ManyToMany
+	@ElementCollection
 	public List<Tool> getToolsNeeded() {
 		return toolsNeeded;
 	}
@@ -75,7 +56,7 @@ public class SmallEstimation {
 		this.toolsNeeded = toolsNeeded;
 	}
 
-	@ManyToMany
+	@ElementCollection
 	public List<Vehicle> getVehiclesNeeded() {
 		return vehiclesNeeded;
 	}
@@ -92,12 +73,12 @@ public class SmallEstimation {
 		this.expectedDuration = expectedDuration;
 	}
 
-	public TimeUnit getExpectedDurationUnit() {
-		return expectedDurationUnit;
+	public String getOtherTools() {
+		return otherTools;
 	}
 
-	public void setExpectedDurationUnit(TimeUnit expectedDurationUnit) {
-		this.expectedDurationUnit = expectedDurationUnit;
+	public void setOtherTools(String otherTools) {
+		this.otherTools = otherTools;
 	}
 
 }

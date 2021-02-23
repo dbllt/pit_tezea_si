@@ -1,4 +1,4 @@
-import React, {Component, createRef} from 'react';
+import React, {Component} from 'react';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -6,12 +6,16 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import {Box, Collapse, IconButton, TextField, Typography} from "@material-ui/core";
+import {Box, Button, Collapse, IconButton, Typography} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import API from "../../network/API";
-import {Redirect} from "react-router-dom";
+import {Link} from "react-router-dom";
+import "./BusinessTable.css"
+import SelectRequestStatusTableCell from '../SelectRequestStatusTableCell/SelectRequestStatusTableCell';
+import BusinessTableFilter, {Filter} from '../BusinessTableFilter/BusinessTableFilter';
+
 
 const useRowStyles = makeStyles({
     root: {
@@ -21,8 +25,9 @@ const useRowStyles = makeStyles({
     }
 });
 
-const tableHeadNames = ["N° Demande", "Date", "Heure", "Concierge", 'Site', "Prestation/Don", 'Statut Demande', "Affectation demande", 'Urgence'];
-const tableClientHeadNames = ["Statut Client", "Entreprise", "Civilité", "Nom", "Prénom", "Téléphone", "Email", "Adresse", "Code postal", "Ville"];
+const tableHeadNames = ["N° Demande", "Date de réalisation", "Type Client", "Nom Client", 'Site', "Concierge", 'Statut Demande', "Description"];
+const tableClientHeadNames = ["Type Client", "Entreprise", "Civilité", "Nom", "Prénom", "Téléphone", "Email", "Adresse", "Code Postal", "Ville"];
+
 
 interface Request {
     id: string;
@@ -30,10 +35,22 @@ interface Request {
     hour: string,
     concierge: string,
     site: string,
-    serviceType: string,
     requestStatus: string,
     requestAssignment: string,
-    emergency: string,
+    executionDate: Date,
+    typeRequest: string,
+    requestDesc: string,
+    numberPerson: string,
+    place: string,
+    regularity: string,
+    duration: string,
+    material: string,
+    internalInfo: string,
+    images: File [],
+    client:IClient
+}
+
+interface IClient {
     clientStatus: string,
     company: string,
     gender: string,
@@ -46,33 +63,27 @@ interface Request {
     city: string
 }
 
-interface filter {
-    site: string,
-
-}
-
-function RedirectionIfNotConnected() {
-    let temp = localStorage.getItem('token');
-    if (temp === null) {
-        temp = "";
-    }
-    let token: string = temp;
-    if (token === "") {
-        return <Redirect to="/login"/>
-    } else {
-        return <div/>
-    }
-}
-
-function Row(props: { row: Request }) {
+function Row(props: { row: Request, updateStatus: (name: string, id: string) => void }) {
     const {row} = props;
     const [open, setOpen] = React.useState(false);
     const classes = useRowStyles();
+    const options = {year: 'numeric', month: 'numeric', day: 'numeric'}
+    const executionDate = row.executionDate.toLocaleDateString('FR', options);
+
+    const chooseRowEmergencyStyle = () => {
+        const sevenDays = 7 * 24 * 3600 * 1000;
+        const fourteenDays = 14 * 24 * 3600 * 1000;
+        const dateNow = new Date().getTime();
+        const execDate = row.executionDate.getTime();
+
+        return ((execDate - dateNow) <= sevenDays) ? "high_emergency_style_class" :
+            ((execDate - dateNow) <= fourteenDays) ? "medium_emergency_style_class" : '';
+    }
+
 
     return (
         <React.Fragment>
-            <RedirectionIfNotConnected/>
-            <TableRow hover>
+            <TableRow className={chooseRowEmergencyStyle()}>
                 <TableCell>
                     <IconButton
                         aria-label="expand row"
@@ -83,25 +94,33 @@ function Row(props: { row: Request }) {
                     </IconButton>
                 </TableCell>
                 <TableCell align="left">{row.id}</TableCell>
-                <TableCell align="left">{row.date}</TableCell>
-                <TableCell align="left">{row.hour}</TableCell>
-                <TableCell align="left">{row.concierge}</TableCell>
+                <TableCell align="left">{executionDate}</TableCell>
+                <TableCell align="left">{row.client.clientStatus}</TableCell>
+                <TableCell align="left">{row.client.fName}</TableCell>
                 <TableCell align="left">{row.site}</TableCell>
-                <TableCell align="left">{row.serviceType}</TableCell>
-                <TableCell align="left">{row.requestStatus}</TableCell>
-                <TableCell align="left">{row.requestAssignment}</TableCell>
-                <TableCell align="left">{row.emergency}</TableCell>
+                <TableCell align="left">{row.concierge}</TableCell>
+                <SelectRequestStatusTableCell key={row.id} status={row.requestStatus} id={row.id}
+                                              updateStatus={props.updateStatus}/>
+                <TableCell align="left">{row.requestDesc}</TableCell>
             </TableRow>
             <TableRow className={classes.root}>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={10}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box margin={1}>
                             <Typography variant="h6" gutterBottom component="div">
-                                Contact client <button>
-                                {/*ICI Bouton: Détails demande (ouvre popup ou page detaillée de la*/}
-                                {/*demande ??)*/}
                                 Détails
-                            </button>
+                                <Link to={{
+                                    pathname: '/request',
+                                    state: {
+                                        service: row.site,
+                                        requestId: row.id
+
+                                    }
+                                }} style={{margin: 20}}>
+                                    <Button variant="contained">
+                                        Editer
+                                    </Button>
+                                </Link>
                             </Typography>
                             <Table size="small" aria-label="purchases">
                                 <TableHead>
@@ -115,16 +134,16 @@ function Row(props: { row: Request }) {
                                 </TableHead>
                                 <TableBody>
                                     <TableRow hover>
-                                        <TableCell>{row.clientStatus}</TableCell>
-                                        <TableCell align="left">{row.company}</TableCell>
-                                        <TableCell align="left">{row.gender}</TableCell>
-                                        <TableCell align="left">{row.lName}</TableCell>
-                                        <TableCell align="left">{row.fName}</TableCell>
-                                        <TableCell align="left">{row.phone}</TableCell>
-                                        <TableCell align="left">{row.email}</TableCell>
-                                        <TableCell align="left">{row.address}</TableCell>
-                                        <TableCell align="left">{row.cp}</TableCell>
-                                        <TableCell align="left">{row.city}</TableCell>
+                                        <TableCell>{row.client.clientStatus}</TableCell>
+                                        <TableCell align="left">{row.client.company}</TableCell>
+                                        <TableCell align="left">{row.client.gender}</TableCell>
+                                        <TableCell align="left">{row.client.lName}</TableCell>
+                                        <TableCell align="left">{row.client.fName}</TableCell>
+                                        <TableCell align="left">{row.client.phone}</TableCell>
+                                        <TableCell align="left">{row.client.email}</TableCell>
+                                        <TableCell align="left">{row.client.address}</TableCell>
+                                        <TableCell align="left">{row.client.cp}</TableCell>
+                                        <TableCell align="left">{row.client.city}</TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>
@@ -145,58 +164,26 @@ interface IState {
 
 
 class BusinessTable extends Component<IProps, IState> {
-    private site: React.RefObject<any>;
-    state = {
+    state: IState = {
         requests: []
-    }
-
-    constructor(props: IProps) {
-        super(props);
-        this.site = createRef();
-
-        this.getSite = this.getSite.bind(this);
-        this.refresh = this.refresh.bind(this);
-    }
-
-
-    componentDidMount() {
-        let filter: filter = {
-            site: ""
-        }
-        API.getRequests(filter).then((data => {
-            this.setState({requests: data})
-        }));
-    }
-
-    refresh() {
-        let filter: filter = {
-            site: this.getSite()
-        }
-        API.getRequests(filter).then((data => {
-            this.setState({requests: data})
-        }));
-    }
-
-    getSite(): string {
-        if (this.site.current == null) {
-            return "";
-        } else {
-            return this.site.current.value;
-        }
     };
+
+    applyFilter = (filter: Filter) => {
+        API.getRequests(filter).then(data => {
+            this.setState({requests: data})
+        });
+    }
+
+    updateStatus = (name: string, id: string) => {
+        // TO-DO connecter à l'api
+    };
+
 
     render() {
         return (
             <div>
 
-                <TextField
-                    label="Site:"
-                    inputRef={this.site}
-                    id="outlined-margin-normal"
-                    margin="normal"
-                    variant="outlined"
-                    onChange={() => this.refresh()}
-                />
+                <BusinessTableFilter applyFilter={this.applyFilter}/>
                 <TableContainer component={Paper}>
                     <Table aria-label="collapsible table">
                         <TableHead>
@@ -211,7 +198,7 @@ class BusinessTable extends Component<IProps, IState> {
                         </TableHead>
                         <TableBody>
                             {this.state.requests.map((row: Request) => (
-                                <Row key={row.id} row={row}/>
+                                <Row key={row.id} row={row} updateStatus={this.updateStatus}/>
                             ))}
                         </TableBody>
                     </Table>

@@ -3,12 +3,12 @@ package tezea.si.service;
 import org.springframework.stereotype.Component;
 
 import tezea.si.model.SmallClientDTO;
+import tezea.si.model.SmallEstimationDTO;
 import tezea.si.model.SmallRequestDTO;
-import tezea.si.model.SmallSiteDTO;
 import tezea.si.model.SmallUserDTO;
-import tezea.si.model.business.Site;
 import tezea.si.model.business.SmallClient;
 import tezea.si.model.business.UserTezea;
+import tezea.si.model.business.request.SmallEstimation;
 import tezea.si.model.business.request.SmallRequest;
 
 @Component
@@ -31,23 +31,30 @@ public class EntityToDTOService {
 		result.setSatisfactionLevel(request.getSatisfactionLevel());
 		result.setType(request.getType());
 		result.setPhotos(request.getPhotos());
+		result.setSite(request.getSite());
+		result.setInternalInfo(request.getInternalInfo());
 
 		result.setClient(convertToDTO(request.getClient()));
 		result.setResponsable(convertToDTO(request.getResponsable()));
 		result.setLastUpdatedBy(convertToDTO(request.getLastUpdatedBy()));
-		result.setSite(convertToDTO(request.getSite()));
 		result.setClosedBy(convertToDTO(request.getClosedBy()));
 		result.setLastUpdatedBy(convertToDTO(request.getLastUpdatedBy()));
+		result.setEstimation(convertToDTO(request.getEstimation()));
 
 		return result;
 	}
 
-	private SmallSiteDTO convertToDTO(Site site) {
-		if (site == null) {
+	private SmallEstimationDTO convertToDTO(SmallEstimation estimation) {
+		if (estimation == null) {
 			return null;
 		}
-		SmallSiteDTO result = new SmallSiteDTO();
-		result.setName(site.getNom());
+		SmallEstimationDTO result = new SmallEstimationDTO();
+		result.setEstimationResponsable(convertToDTO(estimation.getEstimationResponsable()));
+		result.setExpectedDuration(estimation.getExpectedDuration());
+		result.setNumberEmployeesNeeded(estimation.getNumberEmployeesNeeded());
+		result.setOtherTools(estimation.getOtherTools());
+		result.setToolsNeeded(estimation.getToolsNeeded());
+		result.setVehiclesNeeded(estimation.getVehiclesNeeded());
 		return result;
 	}
 
@@ -56,8 +63,15 @@ public class EntityToDTOService {
 			return null;
 		}
 		SmallClientDTO result = new SmallClientDTO();
-		result.setLastName(client.getLastName());
+		result.setEmail(client.getEmail());
+		result.setPhoneNumber(client.getPhoneNumber());
 		result.setAddress(client.getAddress());
+		result.setPostCode(client.getPostCode());
+		result.setCity(client.getCity());
+		result.setCompanyName(client.getCompanyName());
+		result.setLastName(client.getLastName());
+		result.setFirstName(client.getFirstName());
+		result.setHonorificTitle(client.getHonorificTitle());
 		return result;
 	}
 
