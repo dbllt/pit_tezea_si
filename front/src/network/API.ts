@@ -7,10 +7,22 @@ interface Request {
     hour: string,
     concierge: string,
     site: string,
-    serviceType: string,
     requestStatus: string,
     requestAssignment: string,
     executionDate: Date,
+    typeRequest: string,
+    requestDesc: string,
+    numberPerson: string,
+    place: string,
+    regularity: string,
+    duration: string,
+    material: string,
+    internalInfo: string,
+    images: File [],
+    client:IClient
+}
+
+interface IClient {
     clientStatus: string,
     company: string,
     gender: string,
@@ -59,15 +71,15 @@ const date2 = new Date(2021, 2, 5);
 const date3 = new Date(2021, 2, 15);
 
 let requests: Request[] = [];
-addRequest("1", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date1, "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
-addRequest("2", "2018-01-25", "10:30", "test", "Autre", "Don", "En cours", "Ouvrier 3", date2, "Entreprise", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
-addRequest("3", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date3, "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
-addRequest("4", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date1, "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
-addRequest("5", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "En cours", "Ouvrier 3", date1, "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
-addRequest("6", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date3, "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
-addRequest("7", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "En cours", "Ouvrier 3", date2, "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
-addRequest("8", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date3, "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
-addRequest("9", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date2, "Particulier", "---", "M.", "Nom", "Prénom", "353535550", "email@email", "Rue rue", "55555", "Rennes")
+addRequest("1", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date1, "Particulier", "Google", "M.", "Nom", "Prénom", "353535550", "email@email","1 rue de la Paix","35000","Rennes","Faire un truc","3","?","2 fois par jour","1 an","1 camion","coucou", [])
+addRequest("2", "2018-01-25", "10:30", "test", "Autre", "Don", "En cours", "Ouvrier 3", date2, "Entreprise", "Google", "M.", "Nom", "Prénom", "353535550", "email@email", "1 rue de la Paix","35000","Rennes","Faire un truc","2","?","2 fois par jour","1 an","1 camion","coucou",[])
+addRequest("3", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date3, "Particulier", "Amazon", "M.", "Nom", "Prénom", "353535550", "email@email","1 rue de la Paix","35000","Rennes","Faire un truc","1","?","2 fois par jour","1 an","1 camion","coucou", [])
+addRequest("4", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date1, "Particulier", "Amazon", "M.", "Nom", "Prénom", "353535550", "email@email", "1 rue de la Paix","35000","Rennes","Faire un truc","2","?","2 fois par jour","1 an","1 camion","coucou",[])
+addRequest("5", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "En cours", "Ouvrier 3", date1, "Entreprise", "Amazon", "M.", "Nom", "Prénom", "353535550", "email@email", "1 rue de la Paix","35000","Rennes","Faire un truc","3","?","2 fois par jour","1 an","1 camion","coucou",[])
+addRequest("6", "2018-01-25", "10:30", "test", "Menuiserie", "Enlevement", "En cours", "Ouvrier 3", date3, "Particulier", "Facebook", "M.", "Nom", "Prénom", "353535550", "email@email", "1 rue de la Paix","35000","Rennes","Faire un truc","1","?","2 fois par jour","1 an","1 camion","coucou",[])
+addRequest("7", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "En cours", "Ouvrier 3", date2, "Particulier", "Amazon", "M.", "Nom", "Prénom", "353535550", "email@email","1 rue de la Paix","35000","Rennes","Faire un truc","4","?","2 fois par jour","1 an","1 camion","coucou", [])
+addRequest("8", "2018-01-25", "10:30", "test", "Menuiserie", "Prestation", "En cours", "Ouvrier 3", date3, "Entreprise", "Facebook", "M.", "Nom", "Prénom", "353535550", "email@email","1 rue de la Paix","35000","Rennes","Faire un truc","1","?","2 fois par jour","1 an","1 camion","coucou", [])
+addRequest("9", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date2, "Particulier", "Facebook", "M.", "Nom", "Prénom", "353535550", "email@email", "1 rue de la Paix","35000","Rennes","Faire un truc","2","?","2 fois par jour","1 an","1 camion","coucou",[])
 
 
 let clients: Client[] = [];
@@ -77,39 +89,38 @@ users.push(pierre);
 clients.push(paul);
 
 
-function addRequest(requestNumber: string, date: string, hour: string, concierge: string, site: string, serviceType: string, requestStatus: string, requestAssignment: string, executionDate: Date,
-                    clientStatus: string, company
-                        :
-                        string, gender
-                        :
-                        string, lName
-                        :
-                        string, fName
-                        :
-                        string, phone
-                        :
-                        string, email
-                        :
-                        string, address
-                        :
-                        string, cp
-                        :
-                        string, city
-                        :
-                        string
+function addRequest(
+    id: string,
+    date: string,
+    hour: string,
+    concierge: string,
+    site: string,
+    typeRequest: string,
+    requestStatus: string,
+    requestAssignment: string,
+    executionDate: Date,
+    clientStatus: string,
+    company: string,
+    gender: string,
+    lName: string,
+    fName: string,
+    phone: string,
+    email: string,
+    address: string,
+    cp: string,
+    city: string,
+    requestDesc: string,
+    numberPerson: string,
+    place: string,
+    regularity: string,
+    duration: string,
+    material: string,
+    internalInfo: string,
+    images: File [],
 ) {
-    const request = {
-        id: requestNumber,
-        date: date,
-        hour: hour,
-        concierge: concierge,
-        site: site,
-        serviceType: serviceType,
-        requestStatus: requestStatus,
-        requestAssignment: requestAssignment,
-        executionDate: executionDate,
+
+    const temp:IClient={
         clientStatus: clientStatus,
-        company: company,
         gender: gender,
         lName: lName,
         fName: fName,
@@ -117,10 +128,63 @@ function addRequest(requestNumber: string, date: string, hour: string, concierge
         email: email,
         address: address,
         cp: cp,
-        city: city
+        city: city,
+        company: company,
+
+    }
+    const request: Request = {
+        concierge: concierge,
+        date: date,
+        duration: duration,
+        executionDate: executionDate,
+        hour: hour,
+        id: id,
+        images: images,
+        internalInfo: internalInfo,
+        material: material,
+        numberPerson: numberPerson,
+        place: place,
+        regularity: regularity,
+        requestAssignment: requestAssignment,
+        requestDesc: requestDesc,
+        requestStatus: requestStatus,
+        site: site,
+        typeRequest: typeRequest,
+        client:temp
     }
 
     requests.push(request);
+
+
+
+
+    // let temp = localStorage.getItem('token');
+    // if (temp === null) {
+    //     temp = "";
+    // }
+    // let token: string = temp;
+    //
+    //
+    // const requestOptions = {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //         'Authorization': "Bearer " + token
+    //     },
+    //     body: JSON.stringify({})
+    // };
+    //
+    // await fetch('/requests', requestOptions)
+    //     .then(async response => {
+    //         if (response.status !== 201) {
+    //             return Promise.reject(response);
+    //         } else {
+    //         }
+    //     }).catch(error => {
+    //         console.error('There was an error!', error);
+    //     })
+
+
 }
 
 
@@ -160,7 +224,6 @@ const API = {
             })
         return found;
     },
-
 
 
     disconnect: async function (): Promise<any> {
@@ -240,64 +303,11 @@ const API = {
         return requests.filter((request => request.site.toLocaleLowerCase().includes(filter.site.toLocaleLowerCase())))
     },
 
-    addRequest: async function (requestNumber: string, date: string, hour: string, concierge: string, site: string, serviceType: string, requestStatus: string, requestAssignment: string, executionDate: Date,
-                                clientStatus: string, company: string, gender: string, lName: string, fName: string, phone: string, email: string, address: string, cp: string, city: string): Promise<any> {
-
-        // let temp = localStorage.getItem('token');
-        // if (temp === null) {
-        //     temp = "";
-        // }
-        // let token: string = temp;
-        //
-        //
-        // const requestOptions = {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'Authorization': "Bearer " + token
-        //     },
-        //     body: JSON.stringify({})
-        // };
-        //
-        // await fetch('/requests', requestOptions)
-        //     .then(async response => {
-        //         if (response.status !== 201) {
-        //             return Promise.reject(response);
-        //         } else {
-        //         }
-        //     }).catch(error => {
-        //         console.error('There was an error!', error);
-        //     })
 
 
-        const request = {
-            id: requestNumber,
-            date: date,
-            hour: hour,
-            concierge: concierge,
-            site: site,
-            serviceType: serviceType,
-            requestStatus: requestStatus,
-            requestAssignment: requestAssignment,
-            executionDate: executionDate,
-            clientStatus: clientStatus,
-            company: company,
-            gender: gender,
-            lName: lName,
-            fName: fName,
-            phone: phone,
-            email: email,
-            address: address,
-            cp: cp,
-            city: city
-        }
+    uploadFile(file: File) {
 
-        requests.push(request);
-    },
-
-    uploadFile (file: File) {
-
-        const formData  = new FormData();
+        const formData = new FormData();
 
         formData.append('image', file);
 
@@ -339,7 +349,6 @@ const API = {
         //     }).catch(error => {
         //         console.error('There was an error!', error);
         //     })
-
 
 
         let ret = null

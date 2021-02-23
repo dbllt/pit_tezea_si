@@ -1,6 +1,6 @@
 
 import React, {Component, createRef} from 'react';
-import {Box, Button, Collapse, IconButton, TextField, Typography} from "@material-ui/core";
+import {TextField} from "@material-ui/core";
 
 export interface Filter {
     clientName: string,

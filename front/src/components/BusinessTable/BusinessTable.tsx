@@ -1,4 +1,4 @@
-import React, {Component, createRef} from 'react';
+import React, {Component} from 'react';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -6,7 +6,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import {Box, Button, Collapse, IconButton, TextField, Typography} from "@material-ui/core";
+import {Box, Button, Collapse, IconButton, Typography} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
@@ -26,7 +26,7 @@ const useRowStyles = makeStyles({
 });
 
 const tableHeadNames = ["N° Demande", "Date de réalisation", "Type Client", "Nom Client", 'Site', "Concierge", 'Statut Demande', "Description"];
-const tableClientHeadNames = ["Type Client", "Entreprise", "Civilité", "Nom", "Prénom", "Téléphone", "Email", "Code postal", "Ville", "Détails"];
+const tableClientHeadNames = ["Type Client", "Entreprise", "Civilité", "Nom", "Prénom", "Téléphone", "Email", "Adresse", "Code Postal", "Ville"];
 
 
 interface Request {
@@ -35,10 +35,22 @@ interface Request {
     hour: string,
     concierge: string,
     site: string,
-    serviceType: string,
     requestStatus: string,
     requestAssignment: string,
     executionDate: Date,
+    typeRequest: string,
+    requestDesc: string,
+    numberPerson: string,
+    place: string,
+    regularity: string,
+    duration: string,
+    material: string,
+    internalInfo: string,
+    images: File [],
+    client:IClient
+}
+
+interface IClient {
     clientStatus: string,
     company: string,
     gender: string,
@@ -83,13 +95,13 @@ function Row(props: { row: Request, updateStatus: (name: string, id: string) => 
                 </TableCell>
                 <TableCell align="left">{row.id}</TableCell>
                 <TableCell align="left">{executionDate}</TableCell>
-                <TableCell align="left">{row.clientStatus}</TableCell>
-                <TableCell align="left">{row.fName}</TableCell>
+                <TableCell align="left">{row.client.clientStatus}</TableCell>
+                <TableCell align="left">{row.client.fName}</TableCell>
                 <TableCell align="left">{row.site}</TableCell>
                 <TableCell align="left">{row.concierge}</TableCell>
                 <SelectRequestStatusTableCell key={row.id} status={row.requestStatus} id={row.id}
                                               updateStatus={props.updateStatus}/>
-                <TableCell align="left">{row.requestAssignment}</TableCell>
+                <TableCell align="left">{row.requestDesc}</TableCell>
             </TableRow>
             <TableRow className={classes.root}>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={10}>
@@ -122,16 +134,16 @@ function Row(props: { row: Request, updateStatus: (name: string, id: string) => 
                                 </TableHead>
                                 <TableBody>
                                     <TableRow hover>
-                                        <TableCell>{row.clientStatus}</TableCell>
-                                        <TableCell align="left">{row.company}</TableCell>
-                                        <TableCell align="left">{row.gender}</TableCell>
-                                        <TableCell align="left">{row.lName}</TableCell>
-                                        <TableCell align="left">{row.fName}</TableCell>
-                                        <TableCell align="left">{row.phone}</TableCell>
-                                        <TableCell align="left">{row.email}</TableCell>
-                                        <TableCell align="left">{row.address}</TableCell>
-                                        <TableCell align="left">{row.cp}</TableCell>
-                                        <TableCell align="left">{row.city}</TableCell>
+                                        <TableCell>{row.client.clientStatus}</TableCell>
+                                        <TableCell align="left">{row.client.company}</TableCell>
+                                        <TableCell align="left">{row.client.gender}</TableCell>
+                                        <TableCell align="left">{row.client.lName}</TableCell>
+                                        <TableCell align="left">{row.client.fName}</TableCell>
+                                        <TableCell align="left">{row.client.phone}</TableCell>
+                                        <TableCell align="left">{row.client.email}</TableCell>
+                                        <TableCell align="left">{row.client.address}</TableCell>
+                                        <TableCell align="left">{row.client.cp}</TableCell>
+                                        <TableCell align="left">{row.client.city}</TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>

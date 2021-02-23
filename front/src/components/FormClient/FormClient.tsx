@@ -6,6 +6,7 @@ import Select from '@material-ui/core/Select';
 import styles from './FormClient.module.css';
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
+import FormControl from "@material-ui/core/FormControl";
 
 interface Props {
 
@@ -68,6 +69,7 @@ class FormClient extends Component<Props, State> {
                                 Statut client :
                             </Grid>
                             <Grid item>
+                                <FormControl>
                                 <Select placeholder="Statut" name="statut"
                                         value={this.state.statut} onChange={this.handleChange} required>
                                     <MenuItem value="Particulier">Particulier</MenuItem>
@@ -75,8 +77,10 @@ class FormClient extends Component<Props, State> {
                                     <MenuItem value="Collectivité">Collectivité</MenuItem>
                                     <MenuItem value="Association">Association</MenuItem>
                                 </Select>
+                                </FormControl>
                             </Grid>
                         </Grid>
+
 
                         {this.state.statut === 'Particulier'
                             ? <Grid container className={styles.Gridlabelfield}>
@@ -84,11 +88,15 @@ class FormClient extends Component<Props, State> {
                                     Civilité :
                                 </Grid>
                                 <Grid item>
-                                    <Select name="gender" value={this.state.gender}
-                                            onChange={this.handleChange} required>
-                                        <MenuItem value="Monsieur">Monsieur</MenuItem>
-                                        <MenuItem value="Madame">Madame</MenuItem>
-                                    </Select>
+                                    <FormControl>
+                                        <Select
+                                            name="gender"
+                                            value={this.state.gender} onChange={this.handleChange} required
+                                        >
+                                            <MenuItem value="Monsieur">Monsieur</MenuItem>
+                                            <MenuItem value="Madame">Madame</MenuItem>
+                                        </Select>
+                                    </FormControl>
                                 </Grid>
                             </Grid>
                             : <Grid container className={styles.Gridlabelfield}>
@@ -181,6 +189,7 @@ class FormClient extends Component<Props, State> {
                                 </Grid>
                             </Grid>
                         </Grid>
+
                     </Grid>
                 </form>
             </Container>

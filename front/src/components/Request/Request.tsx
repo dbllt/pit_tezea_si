@@ -7,7 +7,6 @@ import {Link, Redirect, RouteComponentProps} from "react-router-dom";
 import "./Request.css";
 import FormClient from "../FormClient/FormClient";
 import API from "../../network/API";
-import { KeyboardDatePicker } from "@material-ui/pickers";
 
 interface IRequest {
     id: string;
@@ -15,14 +14,19 @@ interface IRequest {
     hour: string,
     concierge: string,
     site: string,
-    numberPerson: string,
-    place: string,
-    requestDesc : string,
-    typeRequest: string,
     requestStatus: string,
     requestAssignment: string,
     executionDate: Date,
-    client : IClient
+    typeRequest: string,
+    requestDesc: string,
+    numberPerson: string,
+    place: string,
+    regularity: string,
+    duration: string,
+    material: string,
+    internalInfo: string,
+    images: File [],
+    client:IClient
 }
 
 interface IClient {
@@ -63,31 +67,13 @@ interface IState {
     executionDate: Date,
     requestStatus: string,
     requestAssignment: string,
-    images: File [];
+    images: File [],
+   // request: IRequest
 
 }
 
 type IndexProps = RouteComponentProps<{}, {}, StateType>;
 
-
-const regularity = [
-    {
-        value: 'day',
-        label: 'jour',
-    },
-    {
-        value: 'week',
-        label: 'semaine',
-    },
-    {
-        value: 'month',
-        label: 'mois',
-    },
-    {
-        value: 'year',
-        label: 'année',
-    },
-];
 
 
 function RedirectionIfNotConnected() {
@@ -130,10 +116,6 @@ class Request extends Component<IndexProps, IState> {
             requestAssignment: "",
             images: []
         }
-        let requestId = localStorage.getItem('requestId') || "";
-        if (requestId !== "") {
-           // this.loadRequest(requestId);
-        }
         this.task = createRef();
         this.getTask = this.getTask.bind(this);
         this.addImage = this.addImage.bind(this); //upload images
@@ -150,68 +132,53 @@ class Request extends Component<IndexProps, IState> {
         }
     };
 
-    // loadRequest(id: string) {
-    //     API.getRequest(id).then(r => {
-    //         console.log(r)
-    //         if (r !== null) {
-    //             var rr: IRequest = r;
-    //             const request: IRequest = {
-    //                 address: rr.address,
-    //                 city: rr.city,
-    //                 clientStatus: rr.clientStatus,
-    //                 company: rr.company,
-    //                 concierge: rr.concierge,
-    //                 cp: rr.cp,
-    //                 date: rr.date,
-    //                 email: rr.email,
-    //                 executionDate: rr.executionDate,
-    //                 fName: rr.fName,
-    //                 gender: rr.gender,
-    //                 hour: rr.hour,
-    //                 id: rr.id,
-    //                 lName: rr.lName,
-    //                 phone: rr.phone,
-    //                 requestAssignment: rr.requestAssignment,
-    //                 requestStatus: rr.requestStatus,
-    //                 serviceType: rr.serviceType,
-    //                 site: rr.site,
-    //                 requestDesc : rr.requestDesc
+    loadRequest(id: string) {
+        API.getRequest(id).then(r => {
+            if (r !== null) {
+                var rr: IRequest = r;
 
-    //             }
-
-    //             this.setState({
-    //                 request: request
-    //             });
-    //         } else {
-    //             const request: IRequest = {
-    //                 address: "",
-    //                 city: "",
-    //                 clientStatus: "",
-    //                 company: "",
-    //                 concierge: "",
-    //                 cp: "",
-    //                 date: "",
-    //                 email: "",
-    //                 executionDate: new Date(1, 1, 1),
-    //                 fName: "",
-    //                 gender: "",
-    //                 hour: "",
-    //                 id: "",
-    //                 lName: "",
-    //                 phone: "",
-    //                 requestAssignment: "",
-    //                 requestStatus: "",
-    //                 serviceType: "",
-    //                 site: "",
-    //                 requestDesc : ""
-    //             }
-
-    //             this.setState({
-    //                 request: request
-    //             });
-    //         }
-    //     })
-    // }
+                this.setState({
+                    id: rr.id,
+                    date: rr.date,
+                    hour: rr.hour,
+                    concierge: rr.concierge,
+                    site: rr.site,
+                    typeRequest: rr.typeRequest,
+                    requestDesc : rr.requestDesc,
+                    numberPerson: rr.numberPerson,
+                    place: rr.place,
+                    regularity: rr.regularity,
+                    duration: rr.duration,
+                    material: rr.material,
+                    internalInfo: rr.internalInfo,
+                    executionDate: rr.executionDate,
+                    requestStatus: rr.requestStatus,
+                    requestAssignment: rr.requestAssignment,
+                    images: rr.images
+                });
+            } else {
+                this.setState({
+                    id: "",
+                    date: "",
+                    hour: "",
+                    concierge: "",
+                    site: "",
+                    typeRequest: "",
+                    requestDesc : "",
+                    numberPerson: "",
+                    place: "",
+                    regularity: "",
+                    duration: "",
+                    material: "",
+                    internalInfo:"",
+                    executionDate: new Date(),
+                    requestStatus: "",
+                    requestAssignment: "",
+                    images: []
+                });
+            }
+        })
+    }
 
     componentDidMount() {
         const res = this.props.location.state;
@@ -219,12 +186,12 @@ class Request extends Component<IndexProps, IState> {
             this.setState({service: res.service});
             localStorage.setItem('service', res.service);
             localStorage.setItem('requestId', res.requestId);
-            //this.loadRequest(res.requestId);
+            this.loadRequest(res.requestId);
         }
         let requestId = localStorage.getItem('requestId') || "";
 
         if (!res && requestId !== "") {
-            //this.loadRequest(res.requestId);
+            this.loadRequest(requestId);
         }
     }
 
