@@ -17,6 +17,7 @@ import tezea.si.model.business.SmallClient;
 import tezea.si.model.business.UserTezea;
 import tezea.si.utils.StringListConverter;
 
+// TODO add vehicle and tools
 @Entity
 public class SmallRequest {
 	private long id;
