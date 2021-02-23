@@ -95,7 +95,9 @@ public class GetRequestsControllerTests {
 	public void returnsRequestsWithoutSearch() throws Exception {
 		// Arrange
 		SmallRequest request = new SmallRequest();
+		request.setPhotos(List.of());
 		SmallRequest request2 = new SmallRequest();
+		request2.setPhotos(List.of());
 		List<SmallRequest> expectedList = List.of(requestDao.save(request),
 				requestDao.save(request2));
 		String input = "{}";
@@ -129,7 +131,9 @@ public class GetRequestsControllerTests {
 	@Test
 	public void searchByIdReturnsRequest() throws Exception {
 		// Arrange
-		SmallRequest request = requestDao.save(new SmallRequest());
+		SmallRequest request = new SmallRequest();
+		request.setPhotos(List.of());
+		request = requestDao.save(request);
 		String url = REQUESTS_URL + "/" + request.getId();
 
 		// Act
@@ -151,9 +155,11 @@ public class GetRequestsControllerTests {
 
 		SmallRequest request = new SmallRequest();
 		request.setDescription("as if");
+		request.setPhotos(List.of());
 		requestDao.save(request);
 
 		SmallRequest request2 = new SmallRequest();
+		request2.setPhotos(List.of());
 		request2.setDescription("won't be done");
 		SmallRequest matching = requestDao.save(request2);
 
@@ -208,10 +214,12 @@ public class GetRequestsControllerTests {
 		String input = TestUtils.createJsonString("description", "i");
 
 		SmallRequest request = new SmallRequest();
+		request.setPhotos(List.of());
 		request.setDescription("as if");
 		SmallRequest matching = requestDao.save(request);
 
 		SmallRequest request2 = new SmallRequest();
+		request2.setPhotos(List.of());
 		request2.setDescription("will not be done");
 		SmallRequest matching2 = requestDao.save(request2);
 
@@ -245,6 +253,8 @@ public class GetRequestsControllerTests {
 
 		SmallRequest request = new SmallRequest();
 		SmallRequest request2 = new SmallRequest();
+		request.setPhotos(List.of());
+		request2.setPhotos(List.of());
 		request.setClient(client);
 		request2.setClient(client2);
 
