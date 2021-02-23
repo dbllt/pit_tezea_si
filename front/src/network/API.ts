@@ -1,3 +1,6 @@
+import {Filter} from '../components/BusinessTableFilter/BusinessTableFilter';
+
+
 interface Request {
     id: string;
     date: string,
@@ -49,11 +52,6 @@ const paul: Client = {
     id: "0",
     name: "paul",
     mail: "paul@mail.fr"
-}
-
-interface filter {
-    site: string,
-
 }
 
 const date1 = new Date(2021, 1, 28);
@@ -210,7 +208,7 @@ const API = {
         return ret;
     },
 
-    getRequests: async function (filter: filter): Promise<Request[]> {
+    getRequests: async function (filter: Filter): Promise<Request[]> {
 
         // let temp = localStorage.getItem('token');
         // if (temp === null) {

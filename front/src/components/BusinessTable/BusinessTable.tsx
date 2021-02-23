@@ -14,6 +14,8 @@ import API from "../../network/API";
 import {Link} from "react-router-dom";
 import "./BusinessTable.css"
 import SelectRequestStatusTableCell from '../SelectRequestStatusTableCell/SelectRequestStatusTableCell';
+import BusinessTableFilter, {Filter} from '../BusinessTableFilter/BusinessTableFilter';
+
 
 const useRowStyles = makeStyles({
     root: {
@@ -47,11 +49,6 @@ interface Request {
     address: string,
     cp: string,
     city: string
-}
-
-interface filter {
-    site: string,
-
 }
 
 function Row(props: { row: Request, updateStatus: (name: string, id: string) => void }) {
@@ -155,45 +152,15 @@ interface IState {
 
 
 class BusinessTable extends Component<IProps, IState> {
-    state = {
+    state: IState = {
         requests: []
-    }
-    private readonly site: React.RefObject<any>;
-
-    constructor(props: IProps) {
-        super(props);
-        this.site = createRef();
-
-        this.getSite = this.getSite.bind(this);
-        this.refresh = this.refresh.bind(this);
-    }
-
-
-    componentDidMount() {
-        let filter: filter = {
-            site: ""
-        }
-        API.getRequests(filter).then((data => {
-            this.setState({requests: data})
-        }));
-    }
-
-    refresh() {
-        let filter: filter = {
-            site: this.getSite()
-        }
-        API.getRequests(filter).then((data => {
-            this.setState({requests: data})
-        }));
-    }
-
-    getSite(): string {
-        if (this.site.current == null) {
-            return "";
-        } else {
-            return this.site.current.value;
-        }
     };
+
+    applyFilter = (filter: Filter) => {
+        API.getRequests(filter).then(data => {
+            this.setState({requests: data})
+        });
+    }
 
     updateStatus = (name: string, id: string) => {
         // TO-DO connecter à l'api
@@ -204,14 +171,7 @@ class BusinessTable extends Component<IProps, IState> {
         return (
             <div>
 
-                <TextField
-                    label="Site:"
-                    inputRef={this.site}
-                    id="outlined-margin-normal"
-                    margin="normal"
-                    variant="outlined"
-                    onChange={() => this.refresh()}
-                />
+                <BusinessTableFilter applyFilter={this.applyFilter}></BusinessTableFilter>
                 <TableContainer component={Paper}>
                     <Table aria-label="collapsible table">
                         <TableHead>
