@@ -9,3 +9,20 @@ form {
 .MyButton {
     margin-top: 50px !important;
 }
+
+.Gridlabelfield {
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.Label {
+    width: 180px;
+}
+
+.text {
+    width: 600px;
+}
+
+.number {
+    width : 100px;
+}
