@@ -22,39 +22,22 @@ public class EntityCreationFromDTOService {
 
 	@Autowired
 	SmallClientDAO clientDao;
-	
+
 	@Autowired
 	UserTezeaDAO userDao;
-	
+
 	@Autowired
 	SmallEstimationDAO estimationDao;
-	
 
 	public SmallRequest convertToEntity(SmallRequest request) {
-		SmallRequest result = new SmallRequest();
-		result.setDate(request.getDate());
-		result.setLastUpdated(LocalDate.now());
-		result.setAccessDetails(request.getAccessDetails());
-		result.setDescription(request.getDescription());
-		result.setPriority(request.getPriority());
-		result.setRepetitionTime(request.getRepetitionTime());
-		result.setRepetitionUnit(request.getRepetitionUnit());
-		result.setStatus(request.getStatus());
-		result.setAmountDonated(request.getAmountDonated());
-		result.setAmountWood(request.getAmountWood());
-		result.setAppointmentPlasmaDate(request.getAppointmentPlasmaDate());
-		result.setSatisfactionLevel(request.getSatisfactionLevel());
-		result.setType(request.getType());
-		result.setSite(request.getSite());
-		result.setInternalInfo(request.getInternalInfo());
+		request.setLastUpdated(LocalDate.now());
+		request.setClient(convertToEntity(request.getClient()));
+		request.setResponsable(convertToEntity(request.getResponsable()));
+		request.setClosedBy(convertToEntity(request.getClosedBy()));
+		request.setLastUpdatedBy(convertToEntity(request.getLastUpdatedBy()));
+		request.setEstimation(convertToEntity(request.getEstimation()));
 
-		result.setClient(convertToEntity(request.getClient()));
-		result.setResponsable(convertToEntity(request.getResponsable()));
-		result.setClosedBy(convertToEntity(request.getClosedBy()));
-		result.setLastUpdatedBy(convertToEntity(request.getLastUpdatedBy()));
-		result.setEstimation(convertToEntity(request.getEstimation()));
-
-		requestDao.save(result);
+		SmallRequest result = requestDao.save(request);
 		return result;
 	}
 
@@ -62,14 +45,9 @@ public class EntityCreationFromDTOService {
 		if (estimation == null) {
 			return null;
 		}
-		SmallEstimation result = new SmallEstimation();
-		result.setEstimationResponsable(convertToEntity(estimation.getEstimationResponsable()));
-		result.setExpectedDuration(estimation.getExpectedDuration());
-		result.setNumberEmployeesNeeded(estimation.getNumberEmployeesNeeded());
-		result.setOtherTools(estimation.getOtherTools());
-		result.setToolsNeeded(estimation.getToolsNeeded());
-		result.setVehiclesNeeded(estimation.getVehiclesNeeded());
-		estimationDao.save(result);
+		estimation.setEstimationResponsable(
+				convertToEntity(estimation.getEstimationResponsable()));
+		SmallEstimation result = estimationDao.save(estimation);
 		return result;
 	}
 
@@ -78,7 +56,7 @@ public class EntityCreationFromDTOService {
 			return null;
 		}
 		String username = responsable.getUsername();
-		if(userDao.checkForExistanceUsername(username)) {
+		if (userDao.checkForExistanceUsername(username)) {
 			return userDao.getUserByName(username);
 		}
 		throw new RuntimeException("Could not find user " + username);
@@ -88,19 +66,8 @@ public class EntityCreationFromDTOService {
 		if (client == null) {
 			return null;
 		}
-		SmallClient result = new SmallClient();
-		result.setEmail(client.getEmail());
-		result.setPhoneNumber(client.getPhoneNumber());
-		result.setAddress(client.getAddress());
-		result.setPostCode(client.getPostCode());
-		result.setCity(client.getCity());
-		result.setCompanyName(client.getCompanyName());
-		result.setLastName(client.getLastName());
-		result.setFirstName(client.getFirstName());
-		result.setHonorificTitle(client.getHonorificTitle());
-		clientDao.save(result);
+		SmallClient result = clientDao.save(client);
 		return result;
 	}
-
 
 }
