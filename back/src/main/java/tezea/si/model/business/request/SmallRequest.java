@@ -17,7 +17,6 @@ import tezea.si.model.business.SmallClient;
 import tezea.si.model.business.UserTezea;
 import tezea.si.utils.StringListConverter;
 
-// TODO add vehicle and tools
 @Entity
 public class SmallRequest {
 	private long id;
@@ -45,12 +44,10 @@ public class SmallRequest {
 	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate lastUpdated;
 	private UserTezea lastUpdatedBy;
-	
-	private int numberEmployeesNeeded;
+
 	private String internalInfo;
 
-	
-    private List<String> photos;
+	private List<String> photos;
 
 	@Id
 	@GeneratedValue
@@ -61,16 +58,16 @@ public class SmallRequest {
 	public void setId(long id) {
 		this.id = id;
 	}
-	
-    @Column(name = "photos")
-    @Convert(converter = StringListConverter.class)
-    public List<String> getPhotos() {
-        return photos;
-    }
 
-    public void setPhotos(List<String> photos) {
-        this.photos = photos;
-    }
+	@Column(name = "photos")
+	@Convert(converter = StringListConverter.class)
+	public List<String> getPhotos() {
+		return photos;
+	}
+
+	public void setPhotos(List<String> photos) {
+		this.photos = photos;
+	}
 
 	public LocalDate getDate() {
 		return date;
@@ -227,14 +224,6 @@ public class SmallRequest {
 
 	public void setType(Service type) {
 		this.type = type;
-	}
-
-	public int getNumberEmployeesNeeded() {
-		return numberEmployeesNeeded;
-	}
-
-	public void setNumberEmployeesNeeded(int numberEmployeesNeeded) {
-		this.numberEmployeesNeeded = numberEmployeesNeeded;
 	}
 
 	public String getInternalInfo() {

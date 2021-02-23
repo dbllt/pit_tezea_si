@@ -1,19 +1,24 @@
 package tezea.si.model.business.request;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Entity
-public class Tool {
-	private String name;
+public enum Tool {
 
-	@Id
-	public String getName() {
-		return name;
-	}
+	@JsonProperty("Port de charge")
+	FOR_CARRYING("Spécifique"),
+	@JsonProperty("Lié à la prestation")
+	FOR_SERVICE("Spécifique"),
+	@JsonProperty("Spécifique")
+	SPECIFIC("Spécifique");
 
-	public void setName(String name) {
-		this.name = name;
-	}
 
+    private String message;
+
+    private Tool(String s){
+        this.message=s;
+    }
+
+    public String getMessage() {
+        return message;
+    }
 }

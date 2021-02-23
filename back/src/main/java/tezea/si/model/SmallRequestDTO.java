@@ -38,10 +38,9 @@ public class SmallRequestDTO {
 	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate lastUpdated;
 	private SmallUserDTO lastUpdatedBy;
-	
-	private int numberEmployeesNeeded;
+
 	private String internalInfo;
-	
+
 	private List<String> photos;
 
 	public long getId() {
@@ -51,14 +50,14 @@ public class SmallRequestDTO {
 	public void setId(long id) {
 		this.id = id;
 	}
-	
-    public List<String> getPhotos() {
-        return photos;
-    }
-    
-    public void setPhotos(List<String> photos) {
-        this.photos = photos;
-    }
+
+	public List<String> getPhotos() {
+		return photos;
+	}
+
+	public void setPhotos(List<String> photos) {
+		this.photos = photos;
+	}
 
 	public LocalDate getDate() {
 		return date;
@@ -210,14 +209,6 @@ public class SmallRequestDTO {
 
 	public void setType(Service type) {
 		this.type = type;
-	}
-
-	public int getNumberEmployeesNeeded() {
-		return numberEmployeesNeeded;
-	}
-
-	public void setNumberEmployeesNeeded(int numberEmployeesNeeded) {
-		this.numberEmployeesNeeded = numberEmployeesNeeded;
 	}
 
 	public String getInternalInfo() {

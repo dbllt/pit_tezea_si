@@ -3,10 +3,12 @@ package tezea.si.service;
 import org.springframework.stereotype.Component;
 
 import tezea.si.model.SmallClientDTO;
+import tezea.si.model.SmallEstimationDTO;
 import tezea.si.model.SmallRequestDTO;
 import tezea.si.model.SmallUserDTO;
 import tezea.si.model.business.SmallClient;
 import tezea.si.model.business.UserTezea;
+import tezea.si.model.business.request.SmallEstimation;
 import tezea.si.model.business.request.SmallRequest;
 
 @Component
@@ -30,7 +32,6 @@ public class EntityToDTOService {
 		result.setType(request.getType());
 		result.setPhotos(request.getPhotos());
 		result.setSite(request.getSite());
-		result.setNumberEmployeesNeeded(request.getNumberEmployeesNeeded());
 		result.setInternalInfo(request.getInternalInfo());
 
 		result.setClient(convertToDTO(request.getClient()));
@@ -38,7 +39,23 @@ public class EntityToDTOService {
 		result.setLastUpdatedBy(convertToDTO(request.getLastUpdatedBy()));
 		result.setClosedBy(convertToDTO(request.getClosedBy()));
 		result.setLastUpdatedBy(convertToDTO(request.getLastUpdatedBy()));
+		result.setEstimation(convertToDTO(request.getEstimation()));
 
+		return result;
+	}
+
+	private SmallEstimationDTO convertToDTO(SmallEstimation estimation) {
+		if (estimation == null) {
+			return null;
+		}
+		SmallEstimationDTO result = new SmallEstimationDTO();
+		result.setEstimationResponsable(convertToDTO(estimation.getEstimationResponsable()));
+		result.setExpectedDuration(estimation.getExpectedDuration());
+		result.setExpectedDurationUnit(estimation.getExpectedDurationUnit());
+		result.setNumberEmployeesNeeded(estimation.getNumberEmployeesNeeded());
+		result.setOtherTools(estimation.getOtherTools());
+		result.setToolsNeeded(estimation.getToolsNeeded());
+		result.setVehiclesNeeded(estimation.getVehiclesNeeded());
 		return result;
 	}
 

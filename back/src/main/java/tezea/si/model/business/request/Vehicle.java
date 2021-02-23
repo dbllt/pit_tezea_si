@@ -1,19 +1,23 @@
 package tezea.si.model.business.request;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Entity
-public class Vehicle {
-	private String name;
+public enum Vehicle {
+	@JsonProperty("Renault Master")
+	MASTER("Renault Master"),
+	@JsonProperty("Camion benne")
+	BENNE("Camion benne"),
+	@JsonProperty("Camion 20 mètres cubes")
+	TWENTY_M3("Camion 20 mètres cubes");
 
-	@Id
-	public String getName() {
-		return name;
-	}
+    private String message;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    private Vehicle(String s){
+        this.message=s;
+    }
+
+    public String getMessage() {
+        return message;
+    }
 	
 }

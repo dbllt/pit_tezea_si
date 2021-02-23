@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import tezea.si.dao.SmallClientDAO;
+import tezea.si.dao.SmallEstimationDAO;
 import tezea.si.dao.SmallRequestDAO;
 import tezea.si.dao.UserTezeaDAO;
 import tezea.si.model.business.SmallClient;
 import tezea.si.model.business.UserTezea;
+import tezea.si.model.business.request.SmallEstimation;
 import tezea.si.model.business.request.SmallRequest;
 
 @Component
@@ -23,6 +25,9 @@ public class EntityCreationFromDTOService {
 	
 	@Autowired
 	UserTezeaDAO userDao;
+	
+	@Autowired
+	SmallEstimationDAO estimationDao;
 	
 
 	public SmallRequest convertToEntity(SmallRequest request) {
@@ -41,15 +46,31 @@ public class EntityCreationFromDTOService {
 		result.setSatisfactionLevel(request.getSatisfactionLevel());
 		result.setType(request.getType());
 		result.setSite(request.getSite());
-		result.setNumberEmployeesNeeded(request.getNumberEmployeesNeeded());
 		result.setInternalInfo(request.getInternalInfo());
 
 		result.setClient(convertToEntity(request.getClient()));
 		result.setResponsable(convertToEntity(request.getResponsable()));
 		result.setClosedBy(convertToEntity(request.getClosedBy()));
 		result.setLastUpdatedBy(convertToEntity(request.getLastUpdatedBy()));
+		result.setEstimation(convertToEntity(request.getEstimation()));
 
 		requestDao.save(result);
+		return result;
+	}
+
+	private SmallEstimation convertToEntity(SmallEstimation estimation) {
+		if (estimation == null) {
+			return null;
+		}
+		SmallEstimation result = new SmallEstimation();
+		result.setEstimationResponsable(convertToEntity(estimation.getEstimationResponsable()));
+		result.setExpectedDuration(estimation.getExpectedDuration());
+		result.setExpectedDurationUnit(estimation.getExpectedDurationUnit());
+		result.setNumberEmployeesNeeded(estimation.getNumberEmployeesNeeded());
+		result.setOtherTools(estimation.getOtherTools());
+		result.setToolsNeeded(estimation.getToolsNeeded());
+		result.setVehiclesNeeded(estimation.getVehiclesNeeded());
+		estimationDao.save(result);
 		return result;
 	}
 
