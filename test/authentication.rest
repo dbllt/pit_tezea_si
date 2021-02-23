@@ -6,20 +6,27 @@ POST http://localhost:8080/clients
 
 ### Adding an account
 POST http://localhost:8080/register
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzZXJnZSIsInRva2VuX3R5cGUiOiJBQ0NFU1NfVE9LRU4iLCJleHAiOjE2MTM3NDc5NDMsImlhdCI6MTYxMzc0NzA0M30.6b-yQRNk_OOf6dNkUQ4krZVXgJF8-n3MBkcMLTTEPXSAP2CIN6IMD205fWSt_EXvc6pWvbbjvyKLHbajMqxHdQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzZXJnZSIsInRva2VuX3R5cGUiOiJBQ0NFU1NfVE9LRU4iLCJleHAiOjE2MTQwMDA0NzYsImlhdCI6MTYxMzk5OTU3Nn0.ZnFNKkYhZfnpTGn7KeFEA6bursXknWbNfOj3p9YXjxczfQPY77jTKDAtf2ujUBVkdRXYpUWRkuszeEQBvNOWnw
 Content-Type: application/json
 
 {
-    "username":"tes2t",
+    "username":"fan",
     "password":"password"
 }
+### Remove user
+PUT http://localhost:8080/removeUser
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzZXJnZSIsInRva2VuX3R5cGUiOiJBQ0NFU1NfVE9LRU4iLCJleHAiOjE2MTQwMDA0NzYsImlhdCI6MTYxMzk5OTU3Nn0.ZnFNKkYhZfnpTGn7KeFEA6bursXknWbNfOj3p9YXjxczfQPY77jTKDAtf2ujUBVkdRXYpUWRkuszeEQBvNOWnw
+Content-Type: application/json
 
+{
+    "username": "fan"
+}
 ### Authentication
 POST http://localhost:8080/auth/authenticate
 Content-Type: application/json
 
 {
-    "username":"serge",
+    "username":"fan",
     "password":"password"
 }
 
