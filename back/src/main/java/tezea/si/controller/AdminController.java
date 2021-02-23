@@ -24,8 +24,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import tezea.si.dao.UserTezeaDAO;
+import tezea.si.model.business.UserTezea;
 import tezea.si.model.dto.UserTezeaDTO;
 import tezea.si.model.dto.admin.JwtRegisterRequest;
+import tezea.si.model.dto.admin.RemoveUserRequest;
 import tezea.si.service.JwtUserDetailsService;
 import tezea.si.utils.auth.GrantedAutorities;
 import tezea.si.utils.errors.UserAlreadyExistsException;
@@ -65,7 +67,6 @@ public class AdminController {
         if (newUser == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("BAD_REQUEST");
         checkIfAdmin();
-
         try {
             userDetailsService.save(newUser.getUsername(), newUser.getPassword(), newUser.getAuthorities());
         } catch (UserAlreadyExistsException e) {
@@ -84,7 +85,7 @@ public class AdminController {
      * @throws Exception
      */
     @Operation(summary = "Get users")
-    @ApiResponses(value = { @ApiResponse(responseCode = "201", description = "List of users", content = @Content(array = @ArraySchema(schema = @Schema(implementation = UserTezeaDTO.class)))),
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "List of users", content = @Content(array = @ArraySchema(schema = @Schema(implementation = UserTezeaDTO.class)))),
             @ApiResponse(responseCode = "401", description = "If not admin") })
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public ResponseEntity<?> getUsers() throws Exception {
@@ -93,6 +94,24 @@ public class AdminController {
        List<UserTezeaDTO> list = userDao.findAll().stream().map(user -> new UserTezeaDTO(user)).collect(Collectors.toList());
        
         return ResponseEntity.ok(list);
+    }
+
+    /**
+     * Removes a user by name
+     * 
+     * @return
+     * @throws Exception
+     */
+    @Operation(summary = "Get users")
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "User was removed"),  @ApiResponse(responseCode = "204", description = "User was not found"),
+            @ApiResponse(responseCode = "401", description = "If not admin") })
+    @RequestMapping(value = "/removeUser", method = RequestMethod.PUT)
+    public ResponseEntity<?> removeUserByUsername(@RequestBody RemoveUserRequest request) throws Exception {
+        checkIfAdmin();
+        UserTezea user = userDao.getUserByName(request.getUsername());
+        if(user==null) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        userDao.delete(user);
+        return ResponseEntity.ok().build();
     }
 
     private void checkIfAdmin() throws AccessDeniedException {

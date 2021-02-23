@@ -11,32 +11,50 @@ interface IProps {
 
 interface IState {
     redirect: boolean
+    triedToCreate:boolean
+}
+
+function RedirectionIfNotConnected() {
+    let temp = localStorage.getItem('token');
+    if (temp === null) {
+        temp = "";
+    }
+    let token: string = temp;
+    if (token==="") {
+        return <Redirect to="/login"/>
+    }else{
+        return <div/>
+    }
 }
 
 class NewUserScreen extends Component<IProps, IState> {
-    private identifiant: React.RefObject<any>;
+    private username: React.RefObject<any>;
+    private password: React.RefObject<any>;
     private role: React.RefObject<any>;
 
     state = {
         redirect: false,
+        triedToCreate:false,
     }
 
     constructor(props: IProps) {
         super(props);
-        this.identifiant = createRef();
+        this.username = createRef();
         this.role = createRef();
+        this.password = createRef();
 
 
-        this.getIdentifiant = this.getIdentifiant.bind(this);
+        this.getUsername = this.getUsername.bind(this);
         this.getRole = this.getRole.bind(this);
+        this.getPassword = this.getPassword.bind(this);
         this.addUser = this.addUser.bind(this);
     }
 
-    getIdentifiant(): string {
-        if (this.identifiant.current == null) {
+    getUsername(): string {
+        if (this.username.current == null) {
             return "";
         } else {
-            return this.identifiant.current.value;
+            return this.username.current.value;
         }
     };
 
@@ -48,34 +66,48 @@ class NewUserScreen extends Component<IProps, IState> {
         }
     };
 
+    getPassword(): string {
+        if (this.password.current.value == null) {
+            return "";
+        } else {
+            return this.password.current.value;
+        }
+    };
+
     addUser() {
-        if (this.getIdentifiant() !== "" && this.getRole() !== "") {
-            API.addUtilisateur(this.getIdentifiant(), this.getRole()).then(() => this.setState({redirect: true}));
+        this.setState({triedToCreate:true})
+        if (this.getUsername() !== "" && this.getRole() !== ""&& this.getPassword() !== "") {
+            API.addUser(this.getUsername(),this.getPassword(), this.getRole()).then(() => this.setState({redirect: true}));
         }
     }
 
     render() {
         return (
             <div>
-
+                <RedirectionIfNotConnected/>
+                <h1>Nouvel utilisateur</h1>
                 <Grid container direction="column" justify="center" alignItems="center" spacing={5}>
-                    <h1>Nouvel utilisateur</h1>
                     <Grid item>
                         <TextField
-                            inputRef={this.identifiant}
+                            inputRef={this.username}
                             label="Identifiant:"
                             id="outlined-margin-normal"
                             margin="normal"
                             variant="outlined"
+                            error={(this.state.triedToCreate&&this.getUsername()==="")}
+                            helperText={(this.state.triedToCreate&&this.getUsername()==="") ? 'Manquant' : ' '}
                         />
                     </Grid>
                     <Grid item>
                         <TextField
+                            inputRef={this.password}
                             label="Mot de passe"
                             type="password"
                             id="outlined-margin-normal"
                             margin="normal"
                             variant="outlined"
+                            error={(this.state.triedToCreate&&this.getPassword()==="")}
+                            helperText={(this.state.triedToCreate&&this.getPassword()==="") ? 'Manquant' : ' '}
                         />
                     </Grid>
                     <Grid item>
@@ -85,6 +117,8 @@ class NewUserScreen extends Component<IProps, IState> {
                             id="outlined-margin-normal"
                             margin="normal"
                             variant="outlined"
+                            error={(this.state.triedToCreate&&this.getRole()==="")}
+                            helperText={(this.state.triedToCreate&&this.getRole()==="") ? 'Manquant' : ' '}
                         />
                     </Grid>
                     <Grid>

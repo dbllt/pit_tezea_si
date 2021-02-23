@@ -30,6 +30,7 @@ public class EntityToDTOService {
 		result.setAppointmentPlasmaDate(request.getAppointmentPlasmaDate());
 		result.setSatisfactionLevel(request.getSatisfactionLevel());
 		result.setType(request.getType());
+		result.setPhotos(request.getPhotos());
 
 		result.setClient(convertToDTO(request.getClient()));
 		result.setResponsable(convertToDTO(request.getResponsable()));

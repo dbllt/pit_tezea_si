@@ -7,15 +7,16 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import {Button} from "@material-ui/core";
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import "./UsersScreen.css";
 import API from "../../network/API";
 
 
 const tableHeadNames = ["Identifiant", "Rôle"];
-function createRequestData(identifiant: string, role: string) {
+
+function createRequestData(username: string, role: string) {
     return {
-        identifiant, role,
+        username, role,
     };
 }
 
@@ -25,7 +26,7 @@ function Row(props: { row: ReturnType<typeof createRequestData> }) {
     return (
         <React.Fragment>
             <TableRow hover>
-                <TableCell align="center">{row.identifiant}</TableCell>
+                <TableCell align="center">{row.username}</TableCell>
                 <TableCell align="center">{row.role}</TableCell>
             </TableRow>
         </React.Fragment>
@@ -33,9 +34,9 @@ function Row(props: { row: ReturnType<typeof createRequestData> }) {
 }
 
 
-interface Utilisateur {
+interface User {
     id: string;
-    identifiant: string;
+    username: string;
     role: string;
 }
 
@@ -44,24 +45,38 @@ interface IProps {
 }
 
 interface IState {
-    utilisateurs: Utilisateur[];
+    users: User[];
 }
 
+function RedirectionIfNotConnected() {
+    let temp = localStorage.getItem('token');
+    if (temp === null) {
+        temp = "";
+    }
+    let token: string = temp;
+    if (token==="") {
+        return <Redirect to="/login"/>
+    }else{
+        return <div/>
+    }
+}
 
 class UsersScreen extends Component<IProps, IState> {
     state = {
-        utilisateurs: []
+        users: []
     }
 
     componentDidMount() {
-        API.getUtilisateurs().then((data => {
-            this.setState({utilisateurs: data})
+        API.getUsers().then((data => {
+            this.setState({users: data})
         }));
     }
+
 
     render() {
         return (
             <div className={"users"}>
+                <RedirectionIfNotConnected/>
                 <TableContainer component={Paper}>
                     <Table aria-label="collapsible table">
                         <TableHead>
@@ -74,8 +89,8 @@ class UsersScreen extends Component<IProps, IState> {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {this.state.utilisateurs.map((utilisateur:Utilisateur) => (
-                                <Row key={utilisateur.id} row={utilisateur} />
+                            {this.state.users.map((user: User) => (
+                                <Row key={user.id} row={user}/>
                             ))}
                         </TableBody>
                     </Table>
@@ -85,7 +100,7 @@ class UsersScreen extends Component<IProps, IState> {
                         Ajouter utilisateur
                     </Button>
                 </Link>
-                <Link to="/menu">
+                <Link to="/">
                     <Button color="primary">
                         Retour
                     </Button>
