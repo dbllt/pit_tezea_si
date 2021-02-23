@@ -183,7 +183,7 @@ class BusinessTable extends Component<IProps, IState> {
         return (
             <div>
 
-                <BusinessTableFilter applyFilter={this.applyFilter}></BusinessTableFilter>
+                <BusinessTableFilter applyFilter={this.applyFilter}/>
                 <TableContainer component={Paper}>
                     <Table aria-label="collapsible table">
                         <TableHead>

@@ -1,4 +1,3 @@
-
 import React, {Component, createRef} from 'react';
 import {TextField} from "@material-ui/core";
 
@@ -25,7 +24,7 @@ interface State {
 class BusinessTableFilter extends Component<Props, State> {
 
     state: State = {
-        filter : {
+        filter: {
             clientName: "",
             phoneNumber: "",
             localization: "",
@@ -60,31 +59,23 @@ class BusinessTableFilter extends Component<Props, State> {
 
     componentDidMount() {
         this.props.applyFilter(this.state.filter);
-        // API.getRequests(filter).then((data => {
-        //     this.setState({requests: data})
-        // }));
     }
 
     refreshSite() {
-        this.setState ({
-            filter : {
-                clientName: "",
-                phoneNumber: "",
-                localization: "",
-                requestStatus: "",
-                site: this.getSite(),
-                urgency: "",
-                startDate: "",
-                endDate: "",
-                requestObject: ""
-            }
-        });
-        
-        this.props.applyFilter(this.state.filter);
+        const filter: Filter = {
+            clientName: "",
+            phoneNumber: "",
+            localization: "",
+            requestStatus: "",
+            site: this.getSite(),
+            urgency: "",
+            startDate: "",
+            endDate: "",
+            requestObject: ""
+        }
+        this.setState({filter:filter});
+        this.props.applyFilter(filter);
 
-        // API.getRequests(filter).then((data => {
-        //     this.setState({requests: data})
-        // }));
     }
 
     getClientName(): string {
