@@ -1,19 +1,19 @@
 
-.MyDiv{
+.MyDiv {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 400px  ;
+    height: 400px;
 }
 
-.MyButton{
-    margin: 40px!important;
-    padding: 28px 38px!important;;
-    font-size: 20px!important;
-    background-color: #0092e2!important;
-    color:white!important;
+.MyButton {
+    margin: 40px !important;
+    padding: 28px 38px !important;;
+    font-size: 20px !important;
+    background-color: #0092e2 !important;
+    color: white !important;
 }
 
-.MyButton:hover{
-    background-color: #015a7f!important;
+.MyButton:hover {
+    background-color: #015a7f !important;
 }

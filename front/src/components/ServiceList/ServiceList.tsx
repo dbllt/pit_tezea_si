@@ -9,9 +9,9 @@ function RedirectionIfNotConnected() {
         temp = "";
     }
     let token: string = temp;
-    if (token==="") {
+    if (token === "") {
         return <Redirect to="/login"/>
-    }else{
+    } else {
         return <div/>
     }
 }
@@ -22,23 +22,65 @@ class ServiceList extends Component {
             <div style={{margin: 50}}>
                 <RedirectionIfNotConnected/>
                 <Link to={{
-                    pathname: '/newRequest',
+                    pathname: '/request',
                     state: {
-                        service: "Menuiserie",
+                        service: "Bois",
+                        requestId: -1,
                     }
                 }} style={{margin: 20}}>
                     <Button variant="contained">
-                        Service Menuiserie
+                        Service Bois
                     </Button>
                 </Link>
                 <Link to={{
-                    pathname: '/newRequest',
+                    pathname: '/request',
                     state: {
-                        service: "Nettoyage",
+                        service: "Couture",
+                        requestId: -1,
                     }
                 }} style={{margin: 20}}>
                     <Button variant="contained">
-                        Service Nettoyage
+                        Service Couture
+                    </Button>
+                </Link>
+                <Link to={{
+                    pathname: '/request',
+                    state: {
+                        service: "Tri", requestId: -1,
+                    }
+                }} style={{margin: 20}}>
+                    <Button variant="contained">
+                        Service Tri
+                    </Button>
+                </Link>
+                <Link to={{
+                    pathname: '/request',
+                    state: {
+                        service: "Recyclerie", requestId: -1,
+                    }
+                }} style={{margin: 20}}>
+                    <Button variant="contained">
+                        Service Recyclerie
+                    </Button>
+                </Link>
+                <Link to={{
+                    pathname: '/request',
+                    state: {
+                        service: "Enlèvements", requestId: -1,
+                    }
+                }} style={{margin: 20}}>
+                    <Button variant="contained">
+                        Service Enlèvements
+                    </Button>
+                </Link>
+                <Link to={{
+                    pathname: '/request',
+                    state: {
+                        service: "Estimateur", requestId: -1,
+                    }
+                }} style={{margin: 20}}>
+                    <Button variant="contained">
+                        Estimateur
                     </Button>
                 </Link>
             </div>

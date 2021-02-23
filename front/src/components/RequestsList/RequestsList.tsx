@@ -10,9 +10,9 @@ function RedirectionIfNotConnected() {
         temp = "";
     }
     let token: string = temp;
-    if (token==="") {
+    if (token === "") {
         return <Redirect to="/login"/>
-    }else{
+    } else {
         return <div/>
     }
 }
