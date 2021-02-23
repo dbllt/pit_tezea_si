@@ -26,7 +26,6 @@ import tezea.si.dao.EstimationDAO;
 import tezea.si.dao.PrestationDAO;
 import tezea.si.dao.RequestDAO;
 import tezea.si.dao.RequestEmployeeDAO;
-import tezea.si.dao.SiteDAO;
 import tezea.si.dao.UserTezeaDAO;
 import tezea.si.model.business.Enterprise;
 import tezea.si.model.business.HonorificTitle;
@@ -52,8 +51,6 @@ public class BusinessRequestTests {
 	@Autowired
 	ClientDAO clientDao;
 	@Autowired
-	SiteDAO siteDao;
-	@Autowired
 	UserTezeaDAO userDao;
 	@Autowired
 	PrestationDAO prestationDao;
@@ -67,12 +64,10 @@ public class BusinessRequestTests {
 	Estimation e;
 	RequestEmployee re;
 	Prestation p;
-	Site s;
 	
 	private void clean() {
 		requestDao.deleteAll();
 		clientDao.deleteAll();
-		siteDao.deleteAll();
 		userDao.deleteAll();
 		prestationDao.deleteAll();
 		estimationDao.deleteAll();
@@ -120,13 +115,6 @@ public class BusinessRequestTests {
 		p.setSatisfactionLevel(SatisfactionLevel.NOT_VERY_SATISFIED);
 		p = prestationDao.save(p);
 
-		s = new Site();
-		s.setDescription("CONCIERGERIE DESCRIPTION");
-		s.setResponsable(u);
-		s.setNom("CONCIERGERIE");
-		s.setTelephone("0707070707");
-		s = siteDao.save(s);
-
 		PrestationRequest r = new PrestationRequest();
 		r.setClient(c);
 		r.setClosedBy(u);
@@ -136,7 +124,7 @@ public class BusinessRequestTests {
 		//r.setPrestation(p);
 		r.setPriority(Priority.VERY_HIGH);
 		r.setResponsable(u);
-		r.setSite(s);
+		r.setSite(Site.BOIS_PALETTES);
 		r = requestDao.save(r);
 		
 		p.setRequest(r);
@@ -148,7 +136,6 @@ public class BusinessRequestTests {
 		c = (Enterprise) clientDao.findById(c.getId()).get();
 		re = requestEmployeeDao.findById(re.getId()).get();
 		u = userDao.findById(u.getId()).get();
-		s = siteDao.findById(s.getId()).get();
 	}
 
 	@Test
@@ -161,6 +148,7 @@ public class BusinessRequestTests {
 		PrestationRequest test = (PrestationRequest) list.get(0);
 		assertNotNull(test.getPriority(), "test priority");
 		assertNotNull(test.getDate(), "test date");
+		assertNotNull(test.getSite(), "test site");
 		assertNotNull(test.getDescription(), "test desc");
 		assertNotNull(test.getClient(), "test client");
 		assertNotNull(test.getClient().getRequests(), "test client requests");
@@ -169,10 +157,8 @@ public class BusinessRequestTests {
 		assertNotNull(test.getClosedBy(), "test closedby");
 		assertNotNull(test.getResponsable(), "test responsable");
 		assertEquals(test.getResponsable().getUsername(), u.getUsername(), "test responsable username");
-		assertFalse(u.getSites().get(0).getRequests().isEmpty(), "site has updated request");
 
 		assertNotNull(p.getRequest(), "p request");
-		assertEquals(p.getRequest().getSite().getResponsable().getUsername(), u.getUsername(), "p req site resp user");
 		assertNotNull(p.getDate(), "p date");
 		assertNotNull(p.getDetails(), "p details");
 		assertNotNull(p.getSatisfactionLevel(), "p satisf");
@@ -201,40 +187,17 @@ public class BusinessRequestTests {
 		assertNotNull(e.getDate(), "e no date");
 		assertNotNull(e.getEstimationResponsable(), "e no resps");
 
-		assertNotNull(s.getDescription(), "s no desc");
-		assertNotNull(s.getNom(), "s no name");
-		assertNotNull(s.getRequests(), "s no requests");
-		assertNotNull(s.getResponsable(), "s no resp");
-		assertNotNull(s.getTelephone(), "s no tel");
-
 		logger.info(test.getPriority().getMessage());
 		logger.info(test.getDate().toGMTString());
 		logger.info(test.getDescription());
 		logger.info(test.getClient().getEmail());
 		logger.info(p.getRequest().getDescription());
-		logger.info(test.getSite().getNom());
 		logger.info(test.getClosedBy().getUsername());
 		logger.info(test.getResponsable().getUsername());
 		
 		assertEquals(test.getDescription(), "NO DESCRIPTION");
 	}
-	
-	//TODO faire en sorte que ce ne soit plus le cas si on souhaite conserver meme si le site n'existe plus
-	@Test
-	public void testSiteDeletionCascadeOnRequest() throws Exception {
-		this.start1();
 
-		List<Request> list = requestDao.findAll();
-		assertEquals(list.size(), 1, "size:" + list.size());
-		PrestationRequest test = (PrestationRequest) list.get(0);
-		
-		siteDao.delete(test.getSite());
-		
-		assertThrows(NoSuchElementException.class, () -> requestDao.findById(test.getId()).get());
-		
-		assertEquals(siteDao.count(), 0, "not removed s from dao");
-	}
-	
 	@Test
 	public void testEstimationAndPrestationDeletionCascade() throws Exception {
 		this.start1();
@@ -276,15 +239,13 @@ public class BusinessRequestTests {
 		long id = test.getId();
 		
 		test.setResponsable(null);
-		test.getSite().setResponsable(null);
 		requestDao.save(test);
-		siteDao.save(test.getSite());
 		
 		PrestationRequest up = (PrestationRequest) requestDao.findById(id).get();
 		
 		assertNotEquals(userDao.count(), 0, "removed u in dao");
 		assertNull(up.getResponsable(), "not null responsable");
-		assertNull(up.getSite().getResponsable(), "not null site resp");
+		assertNotNull(up.getSite(), "not null site");
 		assertNotNull(up.getClosedBy(), "null closed by");
 	}
 	
@@ -304,7 +265,7 @@ public class BusinessRequestTests {
 		assertEquals(userDao.count(), 0, "not removed u in dao");
 		assertNull(up.getResponsable(), "not null responsable");
 		assertNull(up.getClosedBy(), "not null closedBy");
-		assertNull(up.getSite().getResponsable(), "not null site resp");
+		assertNotNull(up.getSite(), "not null site");
 	}
 	
 	@Test
@@ -322,7 +283,6 @@ public class BusinessRequestTests {
 		assertTrue(u.getResponsabilities().isEmpty(), "user has responsabilities");
 		assertTrue(u.getClosedBy().isEmpty(), "user has responsabilities");
 		assertTrue(u.getEstimations().isEmpty(), "user has estimations");
-		assertTrue(u.getSites().get(0).getRequests().isEmpty(), "site has not updated request");
 		assertThrows(NoSuchElementException.class, () -> prestationDao.findById(p.getId()).get());
 		assertNotNull(requestEmployeeDao.findById(re.getId()).get(), "request employee deleted");
 	}
