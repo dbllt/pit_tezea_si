@@ -45,8 +45,15 @@ public class EntityToDTOService {
 			return null;
 		}
 		SmallClientDTO result = new SmallClientDTO();
-		result.setLastName(client.getLastName());
+		result.setEmail(client.getEmail());
+		result.setPhoneNumber(client.getPhoneNumber());
 		result.setAddress(client.getAddress());
+		result.setPostCode(client.getPostCode());
+		result.setCity(client.getCity());
+		result.setCompanyName(client.getCompanyName());
+		result.setLastName(client.getLastName());
+		result.setFirstName(client.getFirstName());
+		result.setHonorificTitle(client.getHonorificTitle());
 		return result;
 	}
 

@@ -30,6 +30,7 @@ import tezea.si.dao.UserTezeaDAO;
 import tezea.si.model.SmallClientDTO;
 import tezea.si.model.SmallRequestDTO;
 import tezea.si.model.SmallUserDTO;
+import tezea.si.model.business.HonorificTitle;
 import tezea.si.model.business.Site;
 import tezea.si.model.business.SmallClient;
 import tezea.si.model.business.UserTezea;
@@ -188,6 +189,14 @@ public class CreateRequestsControllerTests {
         String access = "difficult";
         String description = "some service";
         String address = "45 rue";
+        String email = "zet@ok.com";
+        String phone = "+330756874512";
+        String postCode = "35000";
+        String city = "Rennes";
+        String companyName = "Gateaux";
+        String lastName = "Brindacier";
+        String firstName = "Fifi";
+        HonorificTitle title = HonorificTitle.MME;
         int reps = 5;
         int wood = 12;
         int donated = 50;
@@ -197,7 +206,15 @@ public class CreateRequestsControllerTests {
         user.setUsername(username);
 
         SmallClient client = new SmallClient();
+        client.setEmail(email);
+        client.setPhoneNumber(phone);
         client.setAddress(address);
+        client.setPostCode(postCode);
+        client.setCity(city);
+        client.setCompanyName(companyName);
+        client.setLastName(lastName);
+        client.setFirstName(firstName);
+        client.setHonorificTitle(title);
 
         SmallRequest request = new SmallRequest();
         request.setAccessDetails(access);
@@ -226,7 +243,15 @@ public class CreateRequestsControllerTests {
         expectedUser.setUsername(username);
 
         SmallClientDTO expectedClient = new SmallClientDTO();
+        expectedClient.setEmail(email);
+        expectedClient.setPhoneNumber(phone);
         expectedClient.setAddress(address);
+        expectedClient.setPostCode(postCode);
+        expectedClient.setCity(city);
+        expectedClient.setCompanyName(companyName);
+        expectedClient.setLastName(lastName);
+        expectedClient.setFirstName(firstName);
+        expectedClient.setHonorificTitle(title);
 
         SmallRequestDTO expected = new SmallRequestDTO();
         expected.setAccessDetails(access);

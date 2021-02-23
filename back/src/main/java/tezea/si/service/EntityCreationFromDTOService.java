@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import tezea.si.dao.SmallClientDAO;
 import tezea.si.dao.SmallRequestDAO;
 import tezea.si.dao.UserTezeaDAO;
-import tezea.si.model.business.Site;
 import tezea.si.model.business.SmallClient;
 import tezea.si.model.business.UserTezea;
 import tezea.si.model.business.request.SmallRequest;
@@ -68,8 +67,15 @@ public class EntityCreationFromDTOService {
 			return null;
 		}
 		SmallClient result = new SmallClient();
-		result.setLastName(client.getLastName());
+		result.setEmail(client.getEmail());
+		result.setPhoneNumber(client.getPhoneNumber());
 		result.setAddress(client.getAddress());
+		result.setPostCode(client.getPostCode());
+		result.setCity(client.getCity());
+		result.setCompanyName(client.getCompanyName());
+		result.setLastName(client.getLastName());
+		result.setFirstName(client.getFirstName());
+		result.setHonorificTitle(client.getHonorificTitle());
 		clientDao.save(result);
 		return result;
 	}
