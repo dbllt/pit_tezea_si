@@ -30,7 +30,7 @@ class FormClient extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            statut: "P",
+            statut: "Particulier",
             gender: "",
             nom: "",
             lastName: "",
@@ -70,15 +70,15 @@ class FormClient extends Component<Props, State> {
                             <Grid item>
                                 <Select placeholder="Statut" name="statut"
                                         value={this.state.statut} onChange={this.handleChange} required>
-                                    <MenuItem value="P">Particulier</MenuItem>
-                                    <MenuItem value="E">Entreprise</MenuItem>
-                                    <MenuItem value="C">Collectivité</MenuItem>
-                                    <MenuItem value="A">Association</MenuItem>
+                                    <MenuItem value="Particulier">Particulier</MenuItem>
+                                    <MenuItem value="Entreprise">Entreprise</MenuItem>
+                                    <MenuItem value="Collectivité">Collectivité</MenuItem>
+                                    <MenuItem value="Association">Association</MenuItem>
                                 </Select>
                             </Grid>
                         </Grid>
 
-                        {this.state.statut === 'P'
+                        {this.state.statut === 'Particulier'
                             ? <Grid container className={styles.Gridlabelfield}>
                                 <Grid item className={styles.Label}>
                                     Civilité :
@@ -104,7 +104,7 @@ class FormClient extends Component<Props, State> {
 
                         <Grid container> {/* grill row */}
                             <Grid item xs={6}> {/* 1ère Grille gauche */}
-                                {this.state.statut === 'P' &&
+                                {this.state.statut === 'Particulier' &&
                                 <Grid container className={styles.Gridlabelfield}>
                                     <Grid item className={styles.Label}>
                                         Nom :
@@ -148,7 +148,7 @@ class FormClient extends Component<Props, State> {
                             </Grid>
 
                             <Grid item xs={6}> {/* 2éme Grille droite */}
-                                {this.state.statut === 'P' &&
+                                {this.state.statut === 'Particulier' &&
                                 <Grid container className={styles.Gridlabelfield}>
 
                                     <Grid item className={styles.Label}>
