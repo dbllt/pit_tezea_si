@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Link, Redirect} from "react-router-dom";
 import {Button} from '@material-ui/core'
 import BusinessTable from "../BusinessTable/BusinessTable";
+import "./RequestsList.css"
 
 
 function RedirectionIfNotConnected() {
@@ -26,8 +27,8 @@ class RequestsList extends Component {
 
                 <BusinessTable/>
                 <Link to="/">
-                    <Button color="primary">
-                        Retour au menu
+                    <Button color="primary" className={"backButton"}>
+                        Retour
                     </Button>
                 </Link>
 

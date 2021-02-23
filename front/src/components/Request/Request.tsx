@@ -214,12 +214,43 @@ class Request extends Component<IndexProps, IState> {
         this.setState(newState);
     }
 
-    addRequest(event:any) {
-        // if (this.getTask() !== "" || true) {//TODO remove true
-        //     API.addRequest(this.getTask(), "").then(() => this.setState({redirect: true}));
-        // }
+    addRequest() {
+        var client:IClient={
+            clientStatus: "",
+            company: "",
+            gender: "",
+            lName: "",
+            fName: "",
+            phone: "",
+            email: "",
+            address: "",
+            cp: "",
+            city: ""
+        }
+        var request:IRequest={
+            id: "1",
+            date: "",
+            hour: "",
+            concierge: "",
+            site: "",
+            typeRequest: "",
+            requestDesc : "",
+            numberPerson: "",
+            place: "",
+            regularity: "",
+            duration: "",
+            material: "",
+            internalInfo:"",
+            executionDate: new Date(),
+            requestStatus: "",
+            requestAssignment: "",
+            images: [],
+            client:client
+        }
+        if (true) {
+            API.addRequest(request).then(() => this.setState({redirect: true}));
+        }
 
-        this.setState({redirect: true})
     }
 
     render() {
@@ -450,7 +481,7 @@ class Request extends Component<IndexProps, IState> {
                 </Button>
 
                 <Link to="/">
-                    <Button className={"MyButton"} type="button">
+                    <Button className={"MyButton"} type="button" color="primary">
                         Retour
                     </Button>
                 </Link>

@@ -11,6 +11,7 @@ import {Link, Redirect} from "react-router-dom";
 import "./UsersScreen.css";
 import API from "../../network/API";
 import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
+import Grid from "@material-ui/core/Grid";
 
 
 const tableHeadNames = ["Identifiant", "Rôle", ""];
@@ -74,7 +75,7 @@ class UsersScreen extends Component<IProps, IState> {
             )
         }
 
-        function DisplayRemove(username:string) {
+        function DisplayRemove(username: string) {
             if (username !== API.getUsername()) {
                 return <IconButton
                     aria-label="expand row"
@@ -84,7 +85,7 @@ class UsersScreen extends Component<IProps, IState> {
                     <CancelOutlinedIcon style={{color: "red"}}/>
                 </IconButton>
             } else {
-            return <div/>
+                return <p></p>
             }
         }
 
@@ -126,10 +127,10 @@ class UsersScreen extends Component<IProps, IState> {
                 <TableContainer component={Paper}>
                     <Table aria-label="collapsible table">
                         <TableHead>
-                            <TableRow style={{backgroundColor: 'gray'}}>
+                            <TableRow style={{backgroundColor: '#01a1e4'}}>
                                 {
                                     tableHeadNames.map((value, index) => (
-                                        <TableCell key={index} align="center">{value}</TableCell>
+                                        <TableCell key={index} style={{fontWeight:"bold"}}align="center">{value}</TableCell>
                                     ))
                                 }
                             </TableRow>
@@ -141,16 +142,22 @@ class UsersScreen extends Component<IProps, IState> {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <Link to="/addUser">
-                    <Button type="button">
-                        Ajouter utilisateur
-                    </Button>
-                </Link>
-                <Link to="/">
-                    <Button color="primary">
-                        Retour
-                    </Button>
-                </Link>
+                <Grid container direction="column" justify="center" alignItems="center" spacing={4}>
+                    <Grid item>
+                        <Link to="/addUser">
+                            <Button type="button" style={{marginTop: 50, backgroundColor: "#8fbe40",color: 'white',padding:15}}>
+                                Ajouter utilisateur
+                            </Button>
+                        </Link>
+                    </Grid>
+                    <Grid item>
+                        <Link to="/">
+                            <Button color="primary">
+                                Retour
+                            </Button>
+                        </Link>
+                    </Grid>
+                </Grid>
             </div>
 
         );

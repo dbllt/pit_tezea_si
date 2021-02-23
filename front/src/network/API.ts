@@ -19,7 +19,7 @@ interface Request {
     material: string,
     internalInfo: string,
     images: File [],
-    client:IClient
+    client: IClient
 }
 
 interface IClient {
@@ -34,6 +34,58 @@ interface IClient {
     cp: string,
     city: string
 }
+
+export interface BackendRequest {
+    id:                    number;
+    date:                  Date;
+    site:                  backendSite;
+    responsable:           backendClosedBy;
+    client:                backendClient;
+    priority:              string;
+    description:           string;
+    status:                string;
+    closedBy:              backendClosedBy;
+    accessDetails:         string;
+    repetitionTime:        number;
+    repetitionUnit:        string;
+    type:                  string;
+    amountWood:            number;
+    amountDonated:         number;
+    appointmentPlasmaDate: Date;
+    estimation:            backendEstimation;
+    satisfactionLevel:     string;
+    lastUpdated:           Date;
+    lastUpdatedBy:         backendClosedBy;
+    photos:                string[];
+}
+
+export interface backendClient {
+    id:             number;
+    email:          string;
+    phoneNumber:    string;
+    address:        string;
+    postCode:       string;
+    city:           string;
+    companyName:    string;
+    lastName:       string;
+    firstName:      string;
+    honorificTitle: string;
+}
+
+export interface backendClosedBy {
+    id:       number;
+    username: string;
+}
+
+export interface backendEstimation {
+}
+
+export interface backendSite {
+    name: string;
+}
+
+
+
 
 interface Client {
     id: string;
@@ -71,15 +123,15 @@ const date2 = new Date(2021, 2, 5);
 const date3 = new Date(2021, 2, 15);
 
 let requests: Request[] = [];
-addRequest("1", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date1, "Particulier", "Google", "M.", "Nom", "Prénom", "353535550", "email@email","1 rue de la Paix","35000","Rennes","Faire un truc","3","?","2 fois par jour","1 an","1 camion","coucou", [])
-addRequest("2", "2018-01-25", "10:30", "test", "Autre", "Don", "En cours", "Ouvrier 3", date2, "Entreprise", "Google", "M.", "Nom", "Prénom", "353535550", "email@email", "1 rue de la Paix","35000","Rennes","Faire un truc","2","?","2 fois par jour","1 an","1 camion","coucou",[])
-addRequest("3", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date3, "Particulier", "Amazon", "M.", "Nom", "Prénom", "353535550", "email@email","1 rue de la Paix","35000","Rennes","Faire un truc","1","?","2 fois par jour","1 an","1 camion","coucou", [])
-addRequest("4", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date1, "Particulier", "Amazon", "M.", "Nom", "Prénom", "353535550", "email@email", "1 rue de la Paix","35000","Rennes","Faire un truc","2","?","2 fois par jour","1 an","1 camion","coucou",[])
-addRequest("5", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "En cours", "Ouvrier 3", date1, "Entreprise", "Amazon", "M.", "Nom", "Prénom", "353535550", "email@email", "1 rue de la Paix","35000","Rennes","Faire un truc","3","?","2 fois par jour","1 an","1 camion","coucou",[])
-addRequest("6", "2018-01-25", "10:30", "test", "Menuiserie", "Enlevement", "En cours", "Ouvrier 3", date3, "Particulier", "Facebook", "M.", "Nom", "Prénom", "353535550", "email@email", "1 rue de la Paix","35000","Rennes","Faire un truc","1","?","2 fois par jour","1 an","1 camion","coucou",[])
-addRequest("7", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "En cours", "Ouvrier 3", date2, "Particulier", "Amazon", "M.", "Nom", "Prénom", "353535550", "email@email","1 rue de la Paix","35000","Rennes","Faire un truc","4","?","2 fois par jour","1 an","1 camion","coucou", [])
-addRequest("8", "2018-01-25", "10:30", "test", "Menuiserie", "Prestation", "En cours", "Ouvrier 3", date3, "Entreprise", "Facebook", "M.", "Nom", "Prénom", "353535550", "email@email","1 rue de la Paix","35000","Rennes","Faire un truc","1","?","2 fois par jour","1 an","1 camion","coucou", [])
-addRequest("9", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date2, "Particulier", "Facebook", "M.", "Nom", "Prénom", "353535550", "email@email", "1 rue de la Paix","35000","Rennes","Faire un truc","2","?","2 fois par jour","1 an","1 camion","coucou",[])
+addRequest("1", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date1, "Particulier", "Google", "M.", "Nom", "Pierre", "353535550", "email@email", "1 rue de la Paix", "35000", "Rennes", "Faire un truc", "3", "?", "2 fois par jour", "1 an", "1 camion", "coucou", [])
+addRequest("2", "2018-01-25", "10:30", "test", "Autre", "Don", "En cours", "Ouvrier 3", date2, "Entreprise", "Google", "M.", "Nom", "Paul", "353535550", "email@email", "1 rue de la Paix", "35000", "Rennes", "Faire un truc", "2", "?", "2 fois par jour", "1 an", "1 camion", "coucou", [])
+addRequest("3", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date3, "Particulier", "Amazon", "M.", "Nom", "Jaques", "353535550", "email@email", "1 rue de la Paix", "35000", "Rennes", "Faire un truc", "1", "?", "2 fois par jour", "1 an", "1 camion", "coucou", [])
+addRequest("4", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date1, "Particulier", "Amazon", "M.", "Nom", "Jean-Abdourrahmane", "353535550", "email@email", "1 rue de la Paix", "35000", "Rennes", "Faire un trucCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCcc", "2", "?", "2 fois par jour", "1 an", "1 camion", "coucou", [])
+addRequest("5", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "En cours", "Ouvrier 3", date1, "Entreprise", "Amazon", "M.", "Nom", "Prénom", "353535550", "email@email", "1 rue de la Paix", "35000", "Rennes", "Faire un truc", "3", "?", "2 fois par jour", "1 an", "1 camion", "coucou", [])
+addRequest("6", "2018-01-25", "10:30", "test", "Menuiserie", "Enlevement", "En cours", "Ouvrier 3", date3, "Particulier", "Facebook", "M.", "Nom", "Prénom", "353535550", "email@email", "1 rue de la Paix", "35000", "Rennes", "Faire un truc", "1", "?", "2 fois par jour", "1 an", "1 camion", "coucou", [])
+addRequest("7", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "En cours", "Ouvrier 3", date2, "Particulier", "Amazon", "M.", "Nom", "Prénom", "353535550", "email@email", "1 rue de la Paix", "35000", "Rennes", "Faire un truc", "4", "?", "2 fois par jour", "1 an", "1 camion", "coucou", [])
+addRequest("8", "2018-01-25", "10:30", "test", "Menuiserie", "Prestation", "En cours", "Ouvrier 3", date3, "Entreprise", "Facebook", "M.", "Nom", "Prénom", "353535550", "email@email", "1 rue de la Paix", "35000", "Rennes", "Faire un truc", "1", "?", "2 fois par jour", "1 an", "1 camion", "coucou", [])
+addRequest("9", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date2, "Particulier", "Facebook", "M.", "Nom", "Prénom", "353535550", "email@email", "1 rue de la Paix", "35000", "Rennes", "Faire un truc", "2", "?", "2 fois par jour", "1 an", "1 camion", "coucou", [])
 
 
 let clients: Client[] = [];
@@ -87,7 +139,6 @@ let users: User[] = [];
 users.push(serge);
 users.push(pierre);
 clients.push(paul);
-
 
 function addRequest(
     id: string,
@@ -119,7 +170,7 @@ function addRequest(
     images: File [],
 ) {
 
-    const temp:IClient={
+    const temp: IClient = {
         clientStatus: clientStatus,
         gender: gender,
         lName: lName,
@@ -150,43 +201,12 @@ function addRequest(
         requestStatus: requestStatus,
         site: site,
         typeRequest: typeRequest,
-        client:temp
+        client: temp
     }
 
     requests.push(request);
 
-
-
-
-    // let temp = localStorage.getItem('token');
-    // if (temp === null) {
-    //     temp = "";
-    // }
-    // let token: string = temp;
-    //
-    //
-    // const requestOptions = {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //         'Authorization': "Bearer " + token
-    //     },
-    //     body: JSON.stringify({})
-    // };
-    //
-    // await fetch('/requests', requestOptions)
-    //     .then(async response => {
-    //         if (response.status !== 201) {
-    //             return Promise.reject(response);
-    //         } else {
-    //         }
-    //     }).catch(error => {
-    //         console.error('There was an error!', error);
-    //     })
-
-
 }
-
 
 const API = {
     login: async function (username: string, password: string): Promise<boolean> {
@@ -271,38 +291,75 @@ const API = {
         return ret;
     },
 
+
+    addRequest: async function (request: Request): Promise<any> {
+
+
+        let temp = localStorage.getItem('token');
+        if (temp === null) {
+            temp = "";
+        }
+        let token: string = temp;
+
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + token
+            },
+            body: JSON.stringify({})
+        };
+
+        await fetch('/requests/create', requestOptions)
+            .then(async response => {
+                if (response.status !== 201) {
+                    return Promise.reject(response);
+                } else {
+                    const data:BackendRequest= await response.json();
+
+                    console.log(data.date)
+                }
+            }).catch(error => {
+                console.error('There was an error!', error);
+            })
+
+
+    },
     getRequests: async function (filter: Filter): Promise<Request[]> {
 
-        // let temp = localStorage.getItem('token');
-        // if (temp === null) {
-        //     temp = "";
-        // }
-        // let token: string = temp;
-        //
-        //
-        // const requestOptions = {
-        //     method: 'GET',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'Authorization': "Bearer " + token
-        //     },
-        // };
+        let temp = localStorage.getItem('token');
+        if (temp === null) {
+            temp = "";
+        }
+        let token: string = temp;
 
-        // await fetch('/requests', requestOptions)
-        //     .then(async response => {
-        //         if (response.status !== 200) {
-        //             return Promise.reject(response);
-        //         } else {
-        //             const data = await response.json();
-        //         }
-        //     }).catch(error => {
-        //         console.error('There was an error!', error);
-        //     })
-        //
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + token
+            },
+            body: JSON.stringify({
+            })
+        };
+
+        await fetch('/requests', requestOptions)
+            .then(async response => {
+                if (response.status !== 200) {
+                    return Promise.reject(response);
+                } else {
+                    const data = await response.json();
+                    console.log(data)
+                }
+            }).catch(error => {
+                console.error('There was an error!', error);
+            })
+
 
         return requests.filter((request => request.site.toLocaleLowerCase().includes(filter.site.toLocaleLowerCase())))
     },
-
 
 
     uploadFile(file: File) {
@@ -324,31 +381,35 @@ const API = {
     },
 
     getRequest: async function (id: string): Promise<any> {
-        // let temp = localStorage.getItem('token');
-        // if (temp === null) {
-        //     temp = "";
-        // }
-        // let token: string = temp;
-        //
-        //
-        // const requestOptions = {
-        //     method: 'GET',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'Authorization': "Bearer " + token
-        //     },
-        // };
-        //
-        // await fetch('/request/'+id, requestOptions)
-        //     .then(async response => {
-        //         if (response.status !== 200) {
-        //             //return Promise.reject(response);
-        //         } else {
-        //             //const data = await response.json();
-        //         }
-        //     }).catch(error => {
-        //         console.error('There was an error!', error);
-        //     })
+        // eslint-disable-next-line
+        if(id =="-1")
+            return null;
+
+        let temp = localStorage.getItem('token');
+        if (temp === null) {
+            temp = "";
+        }
+        let token: string = temp;
+
+
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + token
+            },
+        };
+
+        await fetch('/request/' + id, requestOptions)
+            .then(async response => {
+                if (response.status !== 200) {
+                    //return Promise.reject(response);
+                } else {
+                    //const data = await response.json();
+                }
+            }).catch(error => {
+                console.error('There was an error!', error);
+            })
 
 
         let ret = null
@@ -458,7 +519,7 @@ const API = {
                 'Content-Type': 'application/json',
                 'Authorization': "Bearer " + token
             },
-            body: JSON.stringify({username: username, password: password})
+            body: JSON.stringify({username: username, password: password, authorities: [role]})
         };
 
         await fetch('/register', requestOptions)
@@ -506,13 +567,13 @@ const API = {
             },
             body: JSON.stringify({username: username})
         };
-        let ret =false;
+        let ret = false;
         await fetch('/removeUser', requestOptions)
             .then(async response => {
                 if (response.status !== 200) {
                     return Promise.reject(response);
                 } else {
-                    ret=true;
+                    ret = true;
                 }
             }).catch(error => {
                 console.error('There was an error!', error);
@@ -520,10 +581,9 @@ const API = {
         return ret;
     },
 
-    getUsername(){
+    getUsername() {
         return localStorage.getItem('username');
     }
-
 
 
 }

@@ -34,7 +34,7 @@ class SelectRequestStatusTableCell extends Component<Props, State> {
     render() {
         const choices = ["Nouvelle", "En cours", "Devis signé", "Doublon", "Facturée", "Refusée", "Clôturée"];
         return (
-            <TableCell>
+            <TableCell  className={"noUglyBorder"} align={"center"}>
                 <FormControl>
                     <Select
                         value={this.state.status}

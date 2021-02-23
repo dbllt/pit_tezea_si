@@ -78,7 +78,7 @@ class LoginScreen extends Component<IProps, IState> {
     };
 
     keyPress(e: React.KeyboardEvent<HTMLInputElement>) {
-        if(e.key==="Enter"){
+        if (e.key === "Enter") {
             this.login();
         }
     }
@@ -114,7 +114,8 @@ class LoginScreen extends Component<IProps, IState> {
                         />
                     </Grid>
                     <Grid>
-                        <Button type="button" onClick={this.login}>
+                        <Button type="button" onClick={this.login}
+                                style={{backgroundColor: "#8fbe40", color: 'white', padding: 15}}>
                             Se connecter
                         </Button>
                     </Grid>

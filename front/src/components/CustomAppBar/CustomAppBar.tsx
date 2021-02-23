@@ -37,7 +37,7 @@ class CustomAppBar extends React.Component<RouteComponentProps & IProps, IState>
 
     DisplayName() {
         if (this.props.location.pathname !== "/login") {
-            return <div>Bonjour {localStorage.getItem("username")} </div>
+            return <div style={{fontSize:17.5}}>Bonjour {localStorage.getItem("username")} </div>
         }
     }
 

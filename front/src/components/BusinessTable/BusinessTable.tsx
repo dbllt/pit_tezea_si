@@ -77,14 +77,14 @@ function Row(props: { row: Request, updateStatus: (name: string, id: string) => 
         const execDate = row.executionDate.getTime();
 
         return ((execDate - dateNow) <= sevenDays) ? "high_emergency_style_class" :
-            ((execDate - dateNow) <= fourteenDays) ? "medium_emergency_style_class" : '';
+            ((execDate - dateNow) <= fourteenDays) ? "medium_emergency_style_class" : "low_emergency_style_class";
     }
 
 
     return (
         <React.Fragment>
             <TableRow className={chooseRowEmergencyStyle()}>
-                <TableCell>
+                <TableCell  className={"noUglyBorder"} align={"center"}>
                     <IconButton
                         aria-label="expand row"
                         size="small"
@@ -93,15 +93,15 @@ function Row(props: { row: Request, updateStatus: (name: string, id: string) => 
                         {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
                     </IconButton>
                 </TableCell>
-                <TableCell align="left">{row.id}</TableCell>
-                <TableCell align="left">{executionDate}</TableCell>
-                <TableCell align="left">{row.client.clientStatus}</TableCell>
-                <TableCell align="left">{row.client.fName}</TableCell>
-                <TableCell align="left">{row.site}</TableCell>
-                <TableCell align="left">{row.concierge}</TableCell>
+                <TableCell className={"test"} align="center">{row.id}</TableCell>
+                <TableCell className={"noUglyBorder"}  align="center">{executionDate}</TableCell>
+                <TableCell  className={"noUglyBorder"} align="center">{row.client.clientStatus}</TableCell>
+                <TableCell  className={"noUglyBorder"} align="center">{row.client.fName}</TableCell>
+                <TableCell  className={"noUglyBorder"} align="center">{row.site}</TableCell>
+                <TableCell className={"noUglyBorder"}  align="center">{row.concierge}</TableCell>
                 <SelectRequestStatusTableCell key={row.id} status={row.requestStatus} id={row.id}
                                               updateStatus={props.updateStatus}/>
-                <TableCell align="left">{row.requestDesc}</TableCell>
+                <TableCell className={"noUglyBorder"}  align="center"><p style={{textAlign:"center",maxWidth:100,overflow:"hidden",maxHeight:13}}>{row.requestDesc}</p></TableCell>
             </TableRow>
             <TableRow className={classes.root}>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={10}>
@@ -118,16 +118,16 @@ function Row(props: { row: Request, updateStatus: (name: string, id: string) => 
                                     }
                                 }} style={{margin: 20}}>
                                     <Button variant="contained">
-                                        Editer
+                                        Éditer
                                     </Button>
                                 </Link>
                             </Typography>
                             <Table size="small" aria-label="purchases">
                                 <TableHead>
-                                    <TableRow style={{backgroundColor: 'lightgray'}}>
+                                    <TableRow >
                                         {
                                             tableClientHeadNames.map((value, index) => (
-                                                <TableCell key={index} align="left">{value}</TableCell>
+                                                <TableCell key={index} align="left" style={{fontWeight:"bold"}}>{value}</TableCell>
                                             ))
                                         }
                                     </TableRow>
@@ -185,13 +185,13 @@ class BusinessTable extends Component<IProps, IState> {
 
                 <BusinessTableFilter applyFilter={this.applyFilter}/>
                 <TableContainer component={Paper}>
-                    <Table aria-label="collapsible table">
-                        <TableHead>
-                            <TableRow style={{backgroundColor: 'gray'}}>
-                                <TableCell/>
+                    <Table size="small" aria-label="collapsible table">
+                        <TableHead >
+                            <TableRow style={{backgroundColor: '#01a1e4',height:"60px"}}>
+                                <TableCell  className={"noUglyBorder"} />
                                 {
                                     tableHeadNames.map((value, index) => (
-                                        <TableCell key={index} align="left">{value}</TableCell>
+                                        <TableCell  className={"noUglyBorder"}  key={index} align="center" style={{fontWeight:"bold",fontSize:15,color:"#fffaf0"}}>{value}</TableCell>
                                     ))
                                 }
                             </TableRow>
