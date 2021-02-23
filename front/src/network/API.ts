@@ -19,7 +19,8 @@ interface Request {
     material: string,
     internalInfo: string,
     images: File [],
-    client: IClient
+    client: IClient,
+    photos: string[]
 }
 
 interface IClient {
@@ -36,44 +37,44 @@ interface IClient {
 }
 
 export interface BackendRequest {
-    id:                    number;
-    date:                  Date;
-    site:                  backendSite;
-    responsable:           backendClosedBy;
-    client:                backendClient;
-    priority:              string;
-    description:           string;
-    status:                string;
-    closedBy:              backendClosedBy;
-    accessDetails:         string;
-    repetitionTime:        number;
-    repetitionUnit:        string;
-    type:                  string;
-    amountWood:            number;
-    amountDonated:         number;
+    id: number;
+    date: Date;
+    site: backendSite;
+    responsable: backendClosedBy;
+    client: backendClient;
+    priority: string;
+    description: string;
+    status: string;
+    closedBy: backendClosedBy;
+    accessDetails: string;
+    repetitionTime: number;
+    repetitionUnit: string;
+    type: string;
+    amountWood: number;
+    amountDonated: number;
     appointmentPlasmaDate: Date;
-    estimation:            backendEstimation;
-    satisfactionLevel:     string;
-    lastUpdated:           Date;
-    lastUpdatedBy:         backendClosedBy;
-    photos:                string[];
+    estimation: backendEstimation;
+    satisfactionLevel: string;
+    lastUpdated: Date;
+    lastUpdatedBy: backendClosedBy;
+    photos: string[];
 }
 
 export interface backendClient {
-    id:             number;
-    email:          string;
-    phoneNumber:    string;
-    address:        string;
-    postCode:       string;
-    city:           string;
-    companyName:    string;
-    lastName:       string;
-    firstName:      string;
+    id: number;
+    email: string;
+    phoneNumber: string;
+    address: string;
+    postCode: string;
+    city: string;
+    companyName: string;
+    lastName: string;
+    firstName: string;
     honorificTitle: string;
 }
 
 export interface backendClosedBy {
-    id:       number;
+    id: number;
     username: string;
 }
 
@@ -83,8 +84,6 @@ export interface backendEstimation {
 export interface backendSite {
     name: string;
 }
-
-
 
 
 interface Client {
@@ -201,7 +200,8 @@ function addRequest(
         requestStatus: requestStatus,
         site: site,
         typeRequest: typeRequest,
-        client: temp
+        client: temp,
+        photos: []
     }
 
     requests.push(request);
@@ -292,9 +292,9 @@ const API = {
     },
 
 
-    addRequest: async function (request: Request): Promise<any> {
+    addRequest: async function (request: Request): Promise<boolean> {
 
-
+        let ret = false;
         let temp = localStorage.getItem('token');
         if (temp === null) {
             temp = "";
@@ -308,7 +308,29 @@ const API = {
                 'Content-Type': 'application/json',
                 'Authorization': "Bearer " + token
             },
-            body: JSON.stringify({})
+            body: JSON.stringify({
+                // "site": {
+                //     name: request.site
+                // },
+                "client": {
+                    email: request.client.email,
+                    phoneNumber: request.client.phone,
+                    address: request.client.address,
+                    postCode: request.client.cp,
+                    city: request.client.city,
+                    companyName: request.client.company,
+                    lastName: request.client.lName,
+                    firstName: request.client.fName,
+                },
+                "priority": "LOW",
+                "description": request.requestDesc,
+                "repetitionTime": +request.regularity,
+                "date": "01-01-2001",
+                //"type": request.typeRequest,
+                "responsable": {"username": localStorage.getItem('username')},
+                "status": request.requestStatus,
+                "accessDetails": request.place
+            })
         };
 
         await fetch('/requests/create', requestOptions)
@@ -316,14 +338,16 @@ const API = {
                 if (response.status !== 201) {
                     return Promise.reject(response);
                 } else {
-                    const data:BackendRequest= await response.json();
-
-                    console.log(data.date)
+                    const data: BackendRequest = await response.json();
+                    ret = true;
+                    if (request.images.length > 0)
+                        this.uploadFile(request.images, data.id.toString())
+                    console.log(data)
                 }
             }).catch(error => {
                 console.error('There was an error!', error);
             })
-
+        return ret;
 
     },
     getRequests: async function (filter: Filter): Promise<Request[]> {
@@ -341,35 +365,142 @@ const API = {
                 'Content-Type': 'application/json',
                 'Authorization': "Bearer " + token
             },
-            body: JSON.stringify({
-            })
+            body: JSON.stringify({})
         };
-
+        var res: Request[] = []
         await fetch('/requests', requestOptions)
             .then(async response => {
                 if (response.status !== 200) {
                     return Promise.reject(response);
                 } else {
                     const data = await response.json();
-                    console.log(data)
+                    res = data.map((request: BackendRequest) => (this.backendRequestToFrontendRequest(request)));
                 }
             }).catch(error => {
                 console.error('There was an error!', error);
             })
 
+        return res;
+        //return requests.filter((request => request.site.toLocaleLowerCase().includes(filter.site.toLocaleLowerCase())))
+    },
 
-        return requests.filter((request => request.site.toLocaleLowerCase().includes(filter.site.toLocaleLowerCase())))
+    photosAddressesToFiles: async function (addresses: string[]): Promise<File[]> {
+        const ret: File[] = []
+        let temp = localStorage.getItem('token');
+        if (temp === null) {
+            temp = "";
+        }
+        let token: string = temp;
+
+
+        for (let i = 0; i < addresses.length; i++) {
+            await fetch(addresses[i], { // Your POST endpoint
+                method: 'GET',
+                headers: {
+                    'Authorization': "Bearer " + token
+                }
+            }).then(r => r.blob())
+                .then(blobFile => {
+                    var temp: File = new File([blobFile], "img"+i, {type: "image/jpeg"});
+                    ret.push(temp);
+                });
+        }
+
+
+        return ret;
+    },
+
+    backendRequestToFrontendRequest: function (request: BackendRequest): Request {
+        console.log(request)
+        const date1 = new Date(2021, 1, 27);
+        var client: IClient;
+
+        if (request.client !== null) {
+            client = {
+                clientStatus: "",
+                company: request.client.companyName,
+                gender: request.client.honorificTitle,
+                lName: request.client.lastName,
+                fName: request.client.firstName,
+                phone: request.client.phoneNumber,
+                email: request.client.email,
+                address: request.client.address,
+                cp: request.client.postCode,
+                city: request.client.city
+            }
+        } else {
+            client = {
+                clientStatus: "",
+                company: "",
+                gender: "",
+                lName: "",
+                fName: "",
+                phone: "",
+                email: "",
+                address: "",
+                cp: "",
+                city: "",
+
+            }
+        }
+
+        var tempDate: Date = date1
+        if (request.date !== null) {
+            tempDate = request.date
+        }
+        var tempResponsable: string
+        if (request.responsable !== null) {
+            tempResponsable = request.responsable.username
+        } else {
+            tempResponsable = ""
+        }
+        var retRequest: Request = {
+            id: request.id.toString(),
+            date: tempDate.toString(),
+            hour: "",
+            concierge: tempResponsable,
+            site: "",
+            requestStatus: request.status,
+            requestAssignment: "",
+            executionDate: date1,
+            typeRequest: request.type,
+            requestDesc: request.description,
+            numberPerson: "",
+            place: request.accessDetails,
+            regularity: request.repetitionTime.toString(),
+            duration: "",
+            material: "a",
+            internalInfo: "",
+            images: [],
+            client: client,
+            photos: request.photos
+
+        }
+
+        return retRequest;
+
     },
 
 
-    uploadFile(file: File) {
+    uploadFile(files: File[], id: string) {
+        let temp = localStorage.getItem('token');
+        if (temp === null) {
+            temp = "";
+        }
+        let token: string = temp;
+
 
         const formData = new FormData();
 
-        formData.append('image', file);
+        files.forEach((file) => {
+            formData.append('images', file)
+        });
 
-        fetch('/upload', { // Your POST endpoint
+        fetch('/requests/' + id, { // Your POST endpoint
             method: 'POST',
+            headers: {
+                'Authorization': "Bearer " + token
+            },
             body: formData // This is your file object
         }).then(
             response => console.log(response) // if the response is a JSON object
@@ -381,8 +512,10 @@ const API = {
     },
 
     getRequest: async function (id: string): Promise<any> {
+
+        var ret = null
         // eslint-disable-next-line
-        if(id =="-1")
+        if (id == "-1")
             return null;
 
         let temp = localStorage.getItem('token');
@@ -400,25 +533,23 @@ const API = {
             },
         };
 
-        await fetch('/request/' + id, requestOptions)
+        await fetch('/requests/' + id, requestOptions)
             .then(async response => {
                 if (response.status !== 200) {
-                    //return Promise.reject(response);
+                    return Promise.reject(response);
                 } else {
-                    //const data = await response.json();
+                    const data: BackendRequest = await response.json();
+                    var temp: Request = await this.backendRequestToFrontendRequest(data)
+                    console.log(temp)
+                    ret = temp;
                 }
             }).catch(error => {
                 console.error('There was an error!', error);
             })
 
-
-        let ret = null
-        requests.forEach(function (request) {
-            if (request.id === id) {
-                ret = request;
-            }
-        });
         return ret;
+
+
     },
 
 

@@ -68,6 +68,7 @@ function Row(props: { row: Request, updateStatus: (name: string, id: string) => 
     const [open, setOpen] = React.useState(false);
     const classes = useRowStyles();
     const options = {year: 'numeric', month: 'numeric', day: 'numeric'}
+
     const executionDate = row.executionDate.toLocaleDateString('FR', options);
 
     const chooseRowEmergencyStyle = () => {
