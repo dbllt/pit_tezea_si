@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -75,7 +76,6 @@ public class SmallRequest {
 		this.date = date;
 	}
 
-	@OneToOne
 	public Site getSite() {
 		return site;
 	}

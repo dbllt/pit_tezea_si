@@ -1,8 +1,8 @@
 package tezea.si;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.File;
@@ -24,13 +24,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import tezea.si.dao.SiteDAO;
 import tezea.si.dao.SmallClientDAO;
 import tezea.si.dao.SmallRequestDAO;
 import tezea.si.dao.UserTezeaDAO;
 import tezea.si.model.SmallClientDTO;
 import tezea.si.model.SmallRequestDTO;
-import tezea.si.model.SmallSiteDTO;
 import tezea.si.model.SmallUserDTO;
 import tezea.si.model.business.Site;
 import tezea.si.model.business.SmallClient;
@@ -59,9 +57,6 @@ public class CreateRequestsControllerTests {
     SmallClientDAO clientDao;
 
     @Autowired
-    SiteDAO siteDao;
-
-    @Autowired
     ObjectMapper mapper;
 
     @Autowired
@@ -74,15 +69,11 @@ public class CreateRequestsControllerTests {
         user.setPassword("$2a$10$sDP3s/p0M1TCOW6FizwLWulsnwT2BryFkLHqKusRRljaYKYOWVE7u");
         userDao.save(user);
 
-        Site site = new Site();
-        site.setNom("conciergerie");
-        siteDao.save(site);
     }
 
     @AfterEach
     public void destroy() {
         requestDao.deleteAll();
-        siteDao.deleteAll();
         userDao.deleteAll();
     }
 
@@ -193,7 +184,6 @@ public class CreateRequestsControllerTests {
     @Test
     public void createFullRequest() throws Exception {
         // Arrange
-        String siteName = "conciergerie";
         String username = "jean";
         String access = "difficult";
         String description = "some service";
@@ -202,9 +192,6 @@ public class CreateRequestsControllerTests {
         int wood = 12;
         int donated = 50;
         LocalDate date = LocalDate.now();
-
-        Site site = new Site();
-        site.setNom(siteName);
 
         UserTezea user = new UserTezea();
         user.setUsername(username);
@@ -228,15 +215,12 @@ public class CreateRequestsControllerTests {
         request.setType(Service.DONATION);
 
         request.setClient(client);
-        request.setSite(site);
+        request.setSite(Site.COUTURE);
         request.setResponsable(user);
         request.setClosedBy(user);
         request.setLastUpdatedBy(user);
 
 //		private SmallEstimation estimation;
-
-        SmallSiteDTO expectedSite = new SmallSiteDTO();
-        expectedSite.setName(siteName);
 
         SmallUserDTO expectedUser = new SmallUserDTO();
         expectedUser.setUsername(username);
@@ -259,7 +243,7 @@ public class CreateRequestsControllerTests {
         expected.setType(Service.DONATION);
 
         expected.setClient(expectedClient);
-        expected.setSite(expectedSite);
+        expected.setSite(Site.COUTURE);
         expected.setResponsable(expectedUser);
         expected.setClosedBy(expectedUser);
         expected.setLastUpdatedBy(expectedUser);

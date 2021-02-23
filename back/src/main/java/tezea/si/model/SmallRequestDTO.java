@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import tezea.si.model.business.Site;
 import tezea.si.model.business.request.Priority;
 import tezea.si.model.business.request.RequestStatus;
 import tezea.si.model.business.request.SatisfactionLevel;
@@ -15,7 +16,7 @@ public class SmallRequestDTO {
 	private long id;
 	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate date;
-	private SmallSiteDTO site;
+	private Site site;
 	private SmallUserDTO responsable;
 	private SmallClientDTO client;
 	private Priority priority;
@@ -64,11 +65,11 @@ public class SmallRequestDTO {
 		this.date = date;
 	}
 
-	public SmallSiteDTO getSite() {
+	public Site getSite() {
 		return site;
 	}
 
-	public void setSite(SmallSiteDTO site) {
+	public void setSite(Site site) {
 		this.site = site;
 	}
 
