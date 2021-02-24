@@ -35,6 +35,7 @@ import tezea.si.model.SmallClientDTO;
 import tezea.si.model.SmallEstimationDTO;
 import tezea.si.model.SmallRequestDTO;
 import tezea.si.model.SmallUserDTO;
+import tezea.si.model.business.ClientType;
 import tezea.si.model.business.HonorificTitle;
 import tezea.si.model.business.Site;
 import tezea.si.model.business.SmallClient;
@@ -48,7 +49,6 @@ import tezea.si.model.business.request.SmallRequest;
 import tezea.si.model.business.request.TimeUnit;
 import tezea.si.model.business.request.Tool;
 import tezea.si.model.business.request.Vehicle;
-import tezea.si.model.dto.UserTezeaDTO;
 import tezea.si.utils.TestUtils;
 
 @SpringBootTest
@@ -204,6 +204,7 @@ public class CreateRequestsControllerTests {
         String address = "45 rue";
         String email = "zet@ok.com";
         String phone = "+330756874512";
+        String phone2 = "+330765458452";
         String postCode = "35000";
         String city = "Rennes";
         String companyName = "Gateaux";
@@ -211,6 +212,7 @@ public class CreateRequestsControllerTests {
         String firstName = "Fifi";
         String internal = "check phone number";
         String otherTools = "chair";
+        String siret = "10201445";
         HonorificTitle title = HonorificTitle.MME;
         int reps = 5;
         int wood = 12;
@@ -233,13 +235,16 @@ public class CreateRequestsControllerTests {
         SmallClient client = new SmallClient();
         client.setEmail(email);
         client.setPhoneNumber(phone);
+        client.setPhoneNumber2(phone2);
         client.setAddress(address);
         client.setPostCode(postCode);
         client.setCity(city);
         client.setCompanyName(companyName);
+        client.setSiret(siret);
         client.setLastName(lastName);
         client.setFirstName(firstName);
         client.setHonorificTitle(title);
+        client.setType(ClientType.COMPANY);
 
         SmallRequest request = new SmallRequest();
         request.setAccessDetails(access);
@@ -277,13 +282,16 @@ public class CreateRequestsControllerTests {
         SmallClientDTO expectedClient = new SmallClientDTO();
         expectedClient.setEmail(email);
         expectedClient.setPhoneNumber(phone);
+        expectedClient.setPhoneNumber2(phone2);
         expectedClient.setAddress(address);
         expectedClient.setPostCode(postCode);
         expectedClient.setCity(city);
         expectedClient.setCompanyName(companyName);
+        expectedClient.setSiret(siret);
         expectedClient.setLastName(lastName);
         expectedClient.setFirstName(firstName);
         expectedClient.setHonorificTitle(title);
+        expectedClient.setType(ClientType.COMPANY);
 
         SmallRequestDTO expected = new SmallRequestDTO();
         expected.setAccessDetails(access);
@@ -316,7 +324,10 @@ public class CreateRequestsControllerTests {
 
         // Assert
         SmallRequestDTO result = mapper.readValue(response, SmallRequestDTO.class);
-        assertThat(result).usingRecursiveComparison().ignoringFields("id", "lastUpdated").isEqualTo(expected);
+        assertThat(result)
+                .usingRecursiveComparison().ignoringFields("id", "lastUpdated", "client.id", "closedBy.id",
+                        "estimation.estimationResponsable.id", "estimation.id", "lastUpdatedBy.id", "responsable.id")
+                .isEqualTo(expected);
         assertThat(result.getId()).isNotZero();
         assertThat(result.getLastUpdated()).isNotNull();
     }
@@ -379,13 +390,13 @@ public class CreateRequestsControllerTests {
     public void updateRequest() throws Exception {
         SmallRequestDTO request = createSimpleRequest();
         request.setPhotos(List.of());
-        
+
         // Assert
         SmallRequestDTO result = getSimpleRequest(request.getId());
-        
+
         assertThat(result).usingRecursiveComparison().isEqualTo(request);
-        assertThat(result.getId()).isNotZero();      
-        
+        assertThat(result.getId()).isNotZero();
+
         // Modification of request for update
         updateRequestWithValues(request);
 
@@ -401,34 +412,11 @@ public class CreateRequestsControllerTests {
 
         // Assert
         result = getSimpleRequest(request.getId());
-        
+
         assertThat(result).usingRecursiveComparison().isEqualTo(request);
         assertThat(result.getId()).isNotZero();
     }
 
-    private SmallRequestDTO createSimpleRequest() throws Exception {
-        SmallRequest request = new SmallRequest();
-        String response = this.mockMvc
-                .perform(post(REQUESTS_URL).contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(request))
-                        .headers(TestUtils.userAuthorizationHeader(mockMvc)))
-                .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
-
-        return mapper.readValue(response, SmallRequestDTO.class);
-    }
-
-    private SmallRequestDTO getSimpleRequest(Long id) throws Exception {
-        SmallRequest request = new SmallRequest();
-        String url = REQUESTS_URL + "/" + id;
-
-        String response = this.mockMvc
-                .perform(get(url).content(mapper.writeValueAsString(request))
-                        .headers(TestUtils.userAuthorizationHeader(mockMvc)))
-                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
-
-        return mapper.readValue(response, SmallRequestDTO.class);
-    }
-    
     private void updateRequestWithValues(SmallRequestDTO request) {
         // Arrange
         String username = "jean";
@@ -451,7 +439,7 @@ public class CreateRequestsControllerTests {
         int nbPeople = 3;
         int duration = 4;
         LocalDate date = LocalDate.now();
-        
+
         SmallUserDTO user = new SmallUserDTO();
         user.setUsername(username);
 
@@ -473,7 +461,7 @@ public class CreateRequestsControllerTests {
         client.setLastName(lastName);
         client.setFirstName(firstName);
         client.setHonorificTitle(title);
-        
+
         request.setAccessDetails(access);
         request.setDescription(description);
         request.setDate(date);
@@ -494,6 +482,29 @@ public class CreateRequestsControllerTests {
         request.setClosedBy(user);
         request.setLastUpdatedBy(user);
         request.setEstimation(estimation);
+    }
+
+    private SmallRequestDTO createSimpleRequest() throws Exception {
+        SmallRequest request = new SmallRequest();
+        String response = this.mockMvc
+                .perform(post(REQUESTS_URL).contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(request))
+                        .headers(TestUtils.userAuthorizationHeader(mockMvc)))
+                .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString();
+
+        return mapper.readValue(response, SmallRequestDTO.class);
+    }
+
+    private SmallRequestDTO getSimpleRequest(Long id) throws Exception {
+        SmallRequest request = new SmallRequest();
+        String url = REQUESTS_URL + "/" + id;
+
+        String response = this.mockMvc
+                .perform(get(url).content(mapper.writeValueAsString(request))
+                        .headers(TestUtils.userAuthorizationHeader(mockMvc)))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+
+        return mapper.readValue(response, SmallRequestDTO.class);
     }
 
     // todo: test cannot add request with unknown user, or with unknown site

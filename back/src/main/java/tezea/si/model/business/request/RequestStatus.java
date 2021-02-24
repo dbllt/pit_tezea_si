@@ -4,33 +4,24 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public enum RequestStatus {
 	@JsonProperty("En cours")
-    IN_PROGRESS("En cours"),
+    IN_PROGRESS,
     @JsonProperty("Nouveau")
-	NEW("Nouveau"),
+	NEW,
 	@JsonProperty("Devis signé")
-	ESTIMATION_SIGNED("Devis signé"),
+	ESTIMATION_SIGNED,
 	@JsonProperty("Doublon")
-	DOUBLE("Doublon"),
+	DOUBLE,
 	@JsonProperty("Facturé")
-	BILLED("Facturé"),
+	BILLED,
 	@JsonProperty("Refusé")
-	REFUSED("Refusé"),
+	REFUSED,
 	@JsonProperty("Clôturé")
-	CLOSED("Clôturé"),
+	CLOSED,
 	@JsonProperty("Client a appelé")
-    CLIENT_CALLED("Client a appelé"),
+    CLIENT_CALLED,
 	@JsonProperty("Devis en cours")
-    ESTIMATION_IN_PROGESS("Devis en cours"),
+    ESTIMATION_IN_PROGESS,
 	@JsonProperty("Autre")
-    OTHER("Autre");
+    OTHER
     
-    private String message;
-
-    private RequestStatus(String s){
-        this.message=s;
-    }
-
-    public String getMessage() {
-        return message;
-    }
 }

@@ -21,8 +21,13 @@ public class SmallRequestSearchService {
 			builder.with(SmallRequest_.description, SearchOperations.CONTAINS,
 					smallRequest.getDescription());
 		}
-		if(smallRequest.getClient() != null) {
-			builder.with(SmallRequest_.client, SmallClient_.lastName, SearchOperations.CONTAINS, smallRequest.getClient().getLastName());
+		if (smallRequest.getClient() != null) {
+			builder.with(SmallRequest_.client, SmallClient_.lastName,
+					SearchOperations.CONTAINS, smallRequest.getClient().getLastName());
+		}
+		if (smallRequest.getSite() != null) {
+			builder.with(SmallRequest_.site, SearchOperations.EQUALS,
+					smallRequest.getSite());
 		}
 		return builder.build();
 	}

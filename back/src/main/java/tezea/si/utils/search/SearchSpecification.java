@@ -8,6 +8,7 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.data.jpa.domain.Specification;
 
+import tezea.si.model.business.Site;
 import tezea.si.utils.errors.InvalidSearchTypeException;
 
 public class SearchSpecification<T> implements Specification<T> {
@@ -35,6 +36,15 @@ public class SearchSpecification<T> implements Specification<T> {
 			default:
 				throw new InvalidSearchTypeException(
 						"String search cannot use operation " + criteria.getOperation());
+			}
+		}
+		if (criteria.getJavaClass() == Site.class) {
+			switch (criteria.getOperation()) {
+			case EQUALS:
+				return builder.equal(constructKey(root, criteria), criteria.getValue());
+			default:
+				throw new InvalidSearchTypeException(
+						"Site search cannot use operation " + criteria.getOperation());
 			}
 		}
 		throw new InvalidSearchTypeException(
