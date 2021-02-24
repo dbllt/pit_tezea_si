@@ -30,7 +30,6 @@ public class EntityCreationFromDTOService {
 	SmallEstimationDAO estimationDao;
 
 	public SmallRequest convertToEntity(SmallRequest request) {
-		request.setId(0);
 		request.setLastUpdated(LocalDate.now());
 		request.setClient(convertToEntity(request.getClient()));
 		request.setResponsable(convertToEntity(request.getResponsable()));
