@@ -4,8 +4,6 @@ import { Button } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import API from "../../network/API";
 
-
-
 function RedirectionIfNotConnected() {
     let temp = localStorage.getItem('token');
     if (temp === null) {
@@ -27,7 +25,6 @@ class ServiceList extends Component {
             <div style={{ margin: 50 }}>
                 <RedirectionIfNotConnected />
                 <Grid container direction="column" justify="center" alignItems="center" spacing={5}>
-                    {/* {sites.map((value, index) => (<MenuItem key={index} value={value}>{value}</MenuItem>))} */}
                     {services.map(function (value, index) {
                         if (value !== "Conciergerie") {
                             return (

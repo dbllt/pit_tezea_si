@@ -15,6 +15,7 @@ import {Link} from "react-router-dom";
 import "./BusinessTable.css"
 import SelectRequestStatusTableCell from '../SelectRequestStatusTableCell/SelectRequestStatusTableCell';
 import BusinessTableFilter, {Filter} from '../BusinessTableFilter/BusinessTableFilter';
+import BusinessTableSort, {Sort} from '../BusinessTableSort/BusinessTableSort';
 
 
 const useRowStyles = makeStyles({
@@ -190,6 +191,10 @@ class BusinessTable extends Component<IProps, IState> {
         });
     }
 
+    applySort = (sort: Sort) => {
+
+    }
+
     updateStatus = (name: string, id: string) => {
         // TO-DO connecter à l'api
     };
@@ -200,6 +205,8 @@ class BusinessTable extends Component<IProps, IState> {
             <div>
 
                 <BusinessTableFilter applyFilter={this.applyFilter}/>
+                <BusinessTableSort applySort={this.applySort}/>
+                <br/>
                 <TableContainer component={Paper}>
                     <Table size="small" aria-label="collapsible table">
                         <TableHead>
