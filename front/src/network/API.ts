@@ -253,7 +253,9 @@ const API = {
             temp = "";
         }
         let token: string = temp;
-
+        if(request.typeRequest==="Prestation"){
+            this.sendEmail()
+        }
 
         const requestOptions = {
             method: 'POST',
@@ -306,7 +308,7 @@ const API = {
     },
 
     editRequest: async function (request:PatchRequest): Promise<boolean> {
-
+console.log(":)")
         let ret = false;
         let temp = localStorage.getItem('token');
         if (temp === null) {

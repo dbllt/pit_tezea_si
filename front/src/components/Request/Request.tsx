@@ -6,7 +6,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import {Link, Redirect, RouteComponentProps} from "react-router-dom";
 import "./Request.css";
 import FormClient from "../FormClient/FormClient";
-import API from "../../network/API";
+import API, {PatchRequest} from "../../network/API";
 
 interface IRequest {
     id: string,
@@ -364,7 +364,7 @@ class Request extends Component<IndexProps, IState> {
         var client = this.state.client;
 
         var request:IRequest={
-            id: "1",
+            id: "-1",
             site: this.state.service,
             concierge: this.state.concierge,            
             typeRequest:this.state.typeRequest,
@@ -384,14 +384,47 @@ class Request extends Component<IndexProps, IState> {
             client:client,
             photos:[]
         }
-        API.addRequest(request).then((b) => {
-                if (b) {
-                    this.setState({redirect: true})
-                }else{
-                    this.setState({displayError:true})
+
+
+
+        if(this.state.id==="") {
+            API.addRequest(request).then((b) => {
+                    if (b) {
+                        this.setState({redirect: true})
+                    } else {
+                        this.setState({displayError: true})
+                    }
                 }
+            );
+        }else{
+
+            var t = this.state.executionDate.split("-");
+            var c= t[1] + "/" + t[0] + "/" + t[2]
+            const date = new Date(c);
+
+            var patchRequest:PatchRequest={
+                id: +this.state.id,
+                date: date,
+                site: this.state.service,
+                responsable: {username:this.state.concierge},
+                client:client,
+                description : this.state.requestDesc,
+                status: this.state.requestStatus,
+                accessDetails:this.state.place,
+                repetitionTime: +this.state.regularity,
+                //repetitionUnit: "HOUR",
+                type:this.state.typeRequest,
+                amountWood: +this.state.quantityWood,
             }
-        );
+            API.editRequest(patchRequest).then((b) => {
+                    if (b) {
+                        this.setState({redirect: true})
+                    } else {
+                        this.setState({displayError: true})
+                    }
+                }
+            );
+        }
 
     }
     render() {
@@ -425,7 +458,7 @@ class Request extends Component<IndexProps, IState> {
                                     onChange={this.handleChange} />
                             </Grid>
                         </Grid>
-                        { this.state.service == "Estimateur" &&
+                        { this.state.service === "Estimateur" &&
                         <Grid container className="Gridlabelfield">
                             <Grid item className="Label">
                                 Nom de l'estimateur :
@@ -551,7 +584,7 @@ class Request extends Component<IndexProps, IState> {
                                 </FormGroup>
                             </Grid>
                         </Grid>
-                        { this.state.service == "Bois" && 
+                        { this.state.service === "Bois" &&
                         <Grid container className="Gridlabelfield">
                             <Grid item className="Label">
                                 Type de camion :
@@ -573,7 +606,7 @@ class Request extends Component<IndexProps, IState> {
                                 </FormGroup>
                             </Grid>
                         </Grid>}
-                        { this.state.service == "Bois" && 
+                        { this.state.service === "Bois" &&
                         <Grid container className="Gridlabelfield">
                             <Grid item className="Label">
                                 Quantité du bois (stère):
