@@ -1,6 +1,7 @@
 package tezea.si.model;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -16,6 +17,8 @@ public class SmallRequestDTO {
 	private long id;
 	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate date;
+	@JsonFormat(pattern = "HH:mm")
+	private LocalTime time;
 	private Site site;
 	private SmallUserDTO responsable;
 	private SmallClientDTO client;
@@ -217,6 +220,14 @@ public class SmallRequestDTO {
 
 	public void setInternalInfo(String internalInfo) {
 		this.internalInfo = internalInfo;
+	}
+
+	public LocalTime getTime() {
+		return time;
+	}
+
+	public void setTime(LocalTime time) {
+		this.time = time;
 	}
 
 }
