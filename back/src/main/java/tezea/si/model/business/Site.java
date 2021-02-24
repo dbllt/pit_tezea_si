@@ -4,27 +4,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public enum Site {
 	@JsonProperty("Bois")
-	BOIS_PALETTES("Bois"),
+	BOIS_PALETTES,
 	@JsonProperty("Couture")
-	COUTURE("Couture"),
+	COUTURE,
 	@JsonProperty("Tri démantèlement")
-	TRI_DEMANTELEMENT("Tri démantèlement"),
+	TRI_DEMANTELEMENT,
 	@JsonProperty("Recyclerie")
-	RECYCLERIE("Recyclerie"),
+	RECYCLERIE,
 	@JsonProperty("Dons enlèvements")
-	DONS_ENLEVEMENT("Dons enlèvements"),
+	DONS_ENLEVEMENT,
 	@JsonProperty("Estimateur")
-	ESTIMATEUR("Estimateur"),
+	ESTIMATEUR,
 	@JsonProperty("Conciergerie")
-	CONCIERGERIE("Conciergerie");
+	CONCIERGERIE;
 
-	private String message;
-
-	private Site(String s) {
-		this.message = s;
-	}
-
-	public String getMessage() {
-		return message;
-	}
 }
