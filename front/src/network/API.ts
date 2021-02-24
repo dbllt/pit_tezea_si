@@ -39,7 +39,7 @@ interface IClient {
 export interface BackendRequest {
     id: number;
     date: Date;
-    site: backendSite;
+    site: string;
     responsable: backendClosedBy;
     client: backendClient;
     priority: string;
@@ -79,10 +79,6 @@ export interface backendClosedBy {
 }
 
 export interface backendEstimation {
-}
-
-export interface backendSite {
-    name: string;
 }
 
 
@@ -309,9 +305,8 @@ const API = {
                 'Authorization': "Bearer " + token
             },
             body: JSON.stringify({
-                // "site": {
-                //     name: request.site
-                // },
+                "site":request.site,
+
                 "client": {
                     email: request.client.email,
                     phoneNumber: request.client.phone,
@@ -321,14 +316,15 @@ const API = {
                     companyName: request.client.company,
                     lastName: request.client.lName,
                     firstName: request.client.fName,
+                    honorificTitle:"Mr"
                 },
-                "priority": "LOW",
+                "priority": "Basse",
                 "description": request.requestDesc,
                 "repetitionTime": +request.regularity,
-                "date": "01-01-2001",
-                //"type": request.typeRequest,
+                 "date": "01-01-2001",
+                 "type": request.typeRequest,
                 "responsable": {"username": localStorage.getItem('username')},
-                "status": request.requestStatus,
+                 "status": request.requestStatus,
                 "accessDetails": request.place
             })
         };
@@ -459,7 +455,7 @@ const API = {
             date: tempDate.toString(),
             hour: "",
             concierge: tempResponsable,
-            site: "",
+            site: request.site,
             requestStatus: request.status,
             requestAssignment: "",
             executionDate: date1,

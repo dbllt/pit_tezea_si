@@ -250,7 +250,7 @@ class Request extends Component<IndexProps, IState> {
             material: "2 camions",
             internalInfo: "coucou",
             executionDate: date1,
-            requestStatus: "NEW",
+            requestStatus: "En cours",
             requestAssignment: "Pierre",
             images: this.state.images,
             client: client,

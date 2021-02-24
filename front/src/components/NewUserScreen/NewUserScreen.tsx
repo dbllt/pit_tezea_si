@@ -12,6 +12,7 @@ interface IProps {
 interface IState {
     redirect: boolean
     triedToCreate: boolean
+    displaySite: boolean
 }
 
 function RedirectionIfNotConnected() {
@@ -31,15 +32,18 @@ class NewUserScreen extends Component<IProps, IState> {
     state = {
         redirect: false,
         triedToCreate: false,
+        displaySite: false,
     }
     private readonly username: React.RefObject<any>;
     private readonly password: React.RefObject<any>;
     private readonly role: React.RefObject<any>;
+    private readonly site: React.RefObject<any>;
 
     constructor(props: IProps) {
         super(props);
         this.username = createRef();
         this.role = createRef();
+        this.site = createRef();
         this.password = createRef();
 
 
@@ -58,15 +62,22 @@ class NewUserScreen extends Component<IProps, IState> {
     };
 
     getRole(): string {
-        if (this.role.current.value == null) {
+        if (this.role.current == null) {
             return "";
         } else {
             return this.role.current.value;
         }
     };
+    getSite(): string {
+        if (this.site.current == null) {
+            return "";
+        } else {
+            return this.site.current.value;
+        }
+    };
 
     getPassword(): string {
-        if (this.password.current.value == null) {
+        if (this.password.current == null) {
             return "";
         } else {
             return this.password.current.value;
@@ -79,6 +90,43 @@ class NewUserScreen extends Component<IProps, IState> {
             API.addUser(this.getUsername(), this.getPassword(), this.getRole()).then(() => this.setState({redirect: true}));
         }
     }
+
+    testDisplaySite(value: string) {
+        if (value === "Concierge") {
+            this.setState({displaySite: true});
+            this.forceUpdate()
+        }else{
+            this.setState({displaySite: false});
+            this.forceUpdate()
+        }
+    }
+
+    test() {
+        if (this.state.displaySite) {
+
+            return <Grid item>
+                <FormControl style={{
+                    minWidth: 250,
+                    marginTop: 20
+
+                }}>
+                    <InputLabel id="demo-simple-select-label" style={{marginLeft: 15}}>Site</InputLabel>
+                    <Select name="typeRequest"
+                            inputRef={this.site}
+                            id="outlined-margin-normal"
+                            variant="outlined"
+                            error={(this.state.triedToCreate && this.getSite() === "")}
+                    >
+                        <MenuItem value="Bois">Bois</MenuItem>
+                    </Select>
+                </FormControl>
+            </Grid>
+        } else {
+
+            return <div/>
+        }
+    }
+
 
     render() {
         return (
@@ -112,7 +160,7 @@ class NewUserScreen extends Component<IProps, IState> {
                     <Grid item>
                         <FormControl style={{
                             minWidth: 250,
-                            marginTop:20
+                            marginTop: 20
 
                         }}>
                             <InputLabel id="demo-simple-select-label" style={{marginLeft: 15}}>Rôle</InputLabel>
@@ -121,6 +169,9 @@ class NewUserScreen extends Component<IProps, IState> {
                                     id="outlined-margin-normal"
                                     variant="outlined"
                                     error={(this.state.triedToCreate && this.getRole() === "")}
+                                    onChange={(e) => {
+                                        this.testDisplaySite(String(e.target.value))
+                                    }}
                             >
                                 <MenuItem value="Responsable Site">Reponsable Site</MenuItem>
                                 <MenuItem value="Concierge">Concierge</MenuItem>
@@ -129,21 +180,24 @@ class NewUserScreen extends Component<IProps, IState> {
                             </Select>
                         </FormControl>
                     </Grid>
+                    {this.test()}
                 </Grid>
-                    <Grid container direction="column" justify="center" alignItems="center" spacing={2} style={{marginTop:100}}>
-                        <Grid item>
-                            <Button type="button" onClick={this.addUser} style={{backgroundColor: "#8fbe40",color: 'white',padding:15}}>
-                                Ajouter utilisateur
-                            </Button>
-                        </Grid>
-                        <Grid item>
-                            <Link to="/users">
-                                <Button color="primary">
-                                    Retour
-                                </Button>
-                            </Link>
-                        </Grid>
+                <Grid container direction="column" justify="center" alignItems="center" spacing={2}
+                      style={{marginTop: 100}}>
+                    <Grid item>
+                        <Button type="button" onClick={this.addUser}
+                                style={{backgroundColor: "#8fbe40", color: 'white', padding: 15}}>
+                            Ajouter utilisateur
+                        </Button>
                     </Grid>
+                    <Grid item>
+                        <Link to="/users">
+                            <Button color="primary">
+                                Retour
+                            </Button>
+                        </Link>
+                    </Grid>
+                </Grid>
                 {this.state.redirect ? (<Redirect push to="/users"/>) : null}
             </div>
         );
