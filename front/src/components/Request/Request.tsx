@@ -9,30 +9,31 @@ import FormClient from "../FormClient/FormClient";
 import API from "../../network/API";
 
 interface IRequest {
-    id: string;
-    date: string,
-    hour: string,
-    concierge: string,
+    id: string,
     site: string,
-    requestStatus: string,
-    requestAssignment: string,
-    executionDate: Date,
+    concierge: string,
     typeRequest: string,
     requestDesc: string,
     numberPerson: string,
     place: string,
     regularity: string,
     duration: string,
-    material: string,
+    material: boolean[],
+    materialother: string,
     internalInfo: string,
+    executionDate: string,
+    executionTime: string,
     images: File [],
-    client: IClient,
     photos:string[]
+    requestStatus: string,
+    requestAssignment: string,
+    client:IClient
 }
 
 interface IClient {
     clientStatus: string,
     company: string,
+    siret: string,
     gender: string,
     lName: string,
     fName: string,
@@ -52,9 +53,7 @@ type StateType = {
 interface IState {
     service: string,
     redirect: boolean,
-    id: string;
-    date: string,
-    hour: string,
+    id: string,
     concierge: string,
     site: string,
     typeRequest: string,
@@ -63,9 +62,11 @@ interface IState {
     place: string,
     regularity: string,
     duration: string,
-    material: string,
+    material: boolean [],
+    materialother: string,
     internalInfo: string,
-    executionDate: Date,
+    executionDate: string,
+    executionTime: string,
     requestStatus: string,
     requestAssignment: string,
     images: File [],
@@ -100,8 +101,6 @@ class Request extends Component<IndexProps, IState> {
             service: localStorage.getItem('service') || "",
             redirect: false,
             id: "",
-            date: "",
-            hour: "",
             concierge: "",
             site: "",
             typeRequest: "",
@@ -110,9 +109,11 @@ class Request extends Component<IndexProps, IState> {
             place: "",
             regularity: "",
             duration: "",
-            material: "",
-            internalInfo: "",
-            executionDate: new Date(),
+            material:[false,false,false],
+            materialother: "",
+            internalInfo:"", 
+            executionDate: this.dateNow(), 
+            executionTime: "",      
             requestStatus: "",
             requestAssignment: "",
             images: [],
@@ -121,9 +122,22 @@ class Request extends Component<IndexProps, IState> {
         this.task = createRef();
         this.getTask = this.getTask.bind(this);
         this.addImage = this.addImage.bind(this); //upload images
+        this.materialChecked = this.materialChecked.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.addRequest = this.addRequest.bind(this);
+    }
 
+    dateNow(){
+        let d = new Date();
+        let m:any;
+        let day:any;
+        if(d.getMonth() < 9) m="0"+(d.getMonth()+1);
+        else m=d.getMonth();
+
+        if(d.getDate() < 9) day="0"+d.getDate();
+        else day=d.getDate();
+
+        return d.getFullYear()+"-"+m+"-"+day;
     }
 
     getTask(): string {
@@ -141,8 +155,6 @@ class Request extends Component<IndexProps, IState> {
 
                 this.setState({
                     id: rr.id,
-                    date: rr.date,
-                    hour: rr.hour,
                     concierge: rr.concierge,
                     site: rr.site,
                     typeRequest: rr.typeRequest,
@@ -164,8 +176,6 @@ class Request extends Component<IndexProps, IState> {
             } else {
                 this.setState({
                     id: "",
-                    date: "",
-                    hour: "",
                     concierge: "",
                     site: "",
                     typeRequest: "",
@@ -174,9 +184,11 @@ class Request extends Component<IndexProps, IState> {
                     place: "",
                     regularity: "",
                     duration: "",
-                    material: "",
-                    internalInfo: "",
-                    executionDate: new Date(),
+                    material: [false,false,false],
+                    materialother: "",
+                    internalInfo:"",
+                    executionDate: this.dateNow(),
+                    executionTime: "",
                     requestStatus: "",
                     requestAssignment: "",
                     images: []
@@ -208,300 +220,357 @@ class Request extends Component<IndexProps, IState> {
         }
     }; // upload images
 
-    materialChecked(event: any) {
+    materialChecked(event:any){
+        let data: boolean[] = this.state.material;
+        let indice: number;
+        if(event.target.name === "m1")
+            indice=0;
+        else if(event.target.name === "m2")
+            indice=1;
+        else
+            indice=2;
+
+        if(event.target.checked){
+            data[indice] = true;
+            this.setState({material : data })            
+        }else {
+            data[indice] = false;
+            this.setState({material : data })      
+        } 
+        console.log(data);
     }
 
-    handleChange(event: any) {
-        // const {target: {name, value}} = event;
-        // const newState = {request : {[name]: value}} as Pick<IState, keyof IState>;
-        // this.setState(newState);
+    handleChange(event:any){
         const {target: {name, value}} = event;
         const newState = {[name]: value} as Pick<IState, keyof IState>;
         this.setState(newState);
     }
 
     addRequest() {
-        var client: IClient = {
-            clientStatus: "Particulier",
-            company: "Google",
-            gender: "M",
-            lName: "Pouet",
-            fName: "Grogu",
-            phone: "06",
-            email: "grogu@sw.mdr",
-            address: "2 rue de la paix",
-            cp: "35000",
-            city: "Rennes"
-        }
+        // var client: IClient = {
+        //     clientStatus: "Particulier",
+        //     company: "Google",
+        //     gender: "M",
+        //     lName: "Pouet",
+        //     fName: "Grogu",
+        //     phone: "06",
+        //     email: "grogu@sw.mdr",
+        //     address: "2 rue de la paix",
+        //     cp: "35000",
+        //     city: "Rennes"
+        // }
 
-        const date1 = new Date(2021, 1, 28);
-        var request: IRequest = {
-            id: "-1",
-            date: "",
-            hour: "",
-            concierge: "Jonzé",
-            site: "Bois",
-            typeRequest: "Don",
-            requestDesc: "faire un truc",
-            numberPerson: "3",
-            place: "boueux",
-            regularity: "2",
-            duration: "1 an",
-            material: "2 camions",
-            internalInfo: "coucou",
-            executionDate: date1,
-            requestStatus: "En cours",
-            requestAssignment: "Pierre",
+        // const date1 = new Date(2021, 1, 28);
+        // var request: IRequest = {
+        //     id: "-1",
+        //     date: "",
+        //     hour: "",
+        //     concierge: "Jonzé",
+        //     site: "Bois",
+        //     typeRequest: "Don",
+        //     requestDesc: "faire un truc",
+        //     numberPerson: "3",
+        //     place: "boueux",
+        //     regularity: "2",
+        //     duration: "1 an",
+        //     material: "2 camions",
+        //     internalInfo: "coucou",
+        //     executionDate: date1,
+        //     requestStatus: "En cours",
+        //     requestAssignment: "Pierre",
+        //     images: this.state.images,
+        //     client: client,
+        //     photos:[]
+        // }    
+        var client:IClient={
+            clientStatus: "",
+            company: "",
+            siret:"",
+            gender: "",
+            lName: "",
+            fName: "",
+            phone: "",
+            email: "",
+            address: "",
+            cp: "",
+            city: ""
+        }
+        var request:IRequest={
+            id: "1",
+            site: this.state.service,
+            concierge: this.state.concierge,            
+            typeRequest:this.state.typeRequest,
+            requestDesc : this.state.requestDesc,
+            numberPerson: this.state.numberPerson,
+            place: this.state.place,
+            regularity: this.state.regularity,
+            duration: this.state.duration,
+            material: this.state.material,
+            materialother: this.state.materialother,
+            internalInfo:this.state.internalInfo,
+            executionDate: this.state.executionDate,
+            executionTime:this.state.executionTime,
             images: this.state.images,
-            client: client,
+            requestStatus: "",
+            requestAssignment: "",            
+            client:client,
             photos:[]
         }
-        API.addRequest(request).then((b) => {
-            if (b) {
-                this.setState({redirect: true})
-            }
-        });
+        if (true) {
+          //  API.addRequest(request).then(() => this.setState({redirect: true}));
+        }
 
+        console.log(request);
 
     }
 
     render() {
         return (
-            <Container>
+            <Container fixed>
                 <RedirectionIfNotConnected/>
                 <h1>Service {this.state.service}</h1>
                 <h1>Enregistrer une demande client</h1>
 
-                <Form className="form">
-                    <Grid container direction="column" alignItems="flex-start" justify="flex-start">
-                        <Grid item>
-                            <FormClient/>
+                <Form className="form">  
+                <Grid container direction="column" alignItems="flex-start" justify="center" >
+                    <Grid item>
+                     <FormClient/>
+                    </Grid>  
+                    <Grid item>
+                        <h3>Demande client : </h3>
+                    </Grid>
+                    <Grid item>
+                    <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Concierge :
+                            </Grid>
+                            <Grid item>
+                                <TextField 
+                                    variant="outlined"
+                                    size="small"
+                                    name="concierge"
+                                    value={this.state.concierge}
+                                    onChange={this.handleChange} />
+                            </Grid>
                         </Grid>
-
-                        <Grid item>
-                            <h3>Demande client : </h3>
+                        <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Type de demande :
+                            </Grid>
+                            <Grid item>
+                                <Select name="typeRequest"
+                                        value={this.state.typeRequest} onChange={this.handleChange} required>
+                                    <MenuItem value="Prestation">Prestation</MenuItem>
+                                    <MenuItem value="Don">Don</MenuItem>
+                                    <MenuItem value="Enlèvement et don">Enlèvement et don</MenuItem>
+                                    <MenuItem value="Renseignement">Renseignement</MenuItem>
+                                </Select>
+                            </Grid>
                         </Grid>
-                        <Grid item>
-                            <Grid container className="Gridlabelfield">
-                                <Grid item className="Label">
-                                    Type de demande :
-                                </Grid>
-                                <Grid item>
-                                    <Select name="typeRequest"
-                                            value={this.state.typeRequest} onChange={this.handleChange} required>
-                                        <MenuItem value="Prestation">Prestation</MenuItem>
-                                        <MenuItem value="Don">Don</MenuItem>
-                                        <MenuItem value="Enlèvement et don">Enlèvement et don</MenuItem>
-                                        <MenuItem value="Renseignement">Renseignement</MenuItem>
-                                    </Select>
-                                </Grid>
+                        <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Demande client :
                             </Grid>
-                            <Grid container className="Gridlabelfield">
-                                <Grid item className="Label">
-                                    Demande client :
-                                </Grid>
-                                <Grid item>
-                                    <TextField
-                                        className="text"
-                                        variant="outlined"
-                                        size="small"
-                                        name="requestDesc"
-                                        value={this.state.requestDesc}
-                                        onChange={this.handleChange}
+                            <Grid item>
+                                <TextField
+                                    className="text"                                   
+                                    variant="outlined"
+                                    size="small"
+                                    name="requestDesc"
+                                    value={this.state.requestDesc}
+                                    onChange={this.handleChange}
+                                />
+                            </Grid>
+                        </Grid>                        
+                        <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Nombre de personnes :
+                            </Grid>
+                            <Grid item>
+                                <TextField type="number"
+                                    variant="outlined"
+                                    className="number"
+                                    size="small"
+                                    name="numberPerson"
+                                    value={this.state.numberPerson}
+                                    onChange={this.handleChange} />
+                            </Grid>
+                        </Grid>
+                        <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Accès au lieu :
+                            </Grid>
+                            <Grid item>
+                                <TextField
+                                    className="text"                                   
+                                    variant="outlined"
+                                    size="small"
+                                    name="place"
+                                    value={this.state.place}
+                                    onChange={this.handleChange}
+                                />
+                            </Grid>
+                        </Grid>
+                        <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Regularité :
+                            </Grid>
+                            <Grid item>
+                                <TextField type="number"
+                                    variant="outlined"
+                                    className="number"
+                                    size="small"
+                                    name="regularity"
+                                    value={this.state.regularity}
+                                    onChange={this.handleChange} />
+                            </Grid>
+                        </Grid>
+                        <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Estimation du temps (heure) :
+                            </Grid>
+                            <Grid item>
+                                <TextField
+                                    type="number"
+                                    inputProps={{ step: "0.5" }} 
+                                    className="number"                                   
+                                    variant="outlined"
+                                    size="small"
+                                    name="duration"
+                                    value={this.state.duration}
+                                    onChange={this.handleChange}
+                                /> 
+                            </Grid>
+                        </Grid>
+                        <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Matériel attendu :
+                            </Grid>
+                            <Grid item>
+                                <FormGroup>
+                                    <FormControlLabel
+                                        control={<Checkbox name="m1" value={this.state.material[0]} onChange={this.materialChecked}/>}
+                                        label="Matériel lié au port de charge"
                                     />
-                                </Grid>
-                            </Grid>
-                            <Grid container className="Gridlabelfield">
-                                <Grid item className="Label">
-                                    Nombre de personnes :
-                                </Grid>
-                                <Grid item>
-                                    <TextField type="number"
-                                               variant="outlined"
-                                               className="number"
-                                               size="small"
-                                               name="numberPerson"
-                                               value={this.state.numberPerson}
-                                               onChange={this.handleChange}/>
-                                </Grid>
-                            </Grid>
-                            <Grid container className="Gridlabelfield">
-                                <Grid item className="Label">
-                                    Accès au lieu :
-                                </Grid>
-                                <Grid item>
-                                    <TextField
-                                        className="text"
-                                        variant="outlined"
-                                        size="small"
-                                        name="place"
-                                        value={this.state.place}
-                                        onChange={this.handleChange}
+                                    <FormControlLabel
+                                        control={<Checkbox name="m2" value={this.state.material[1]} onChange={this.materialChecked}/>}
+                                        label="Matériel lié à la prestation"
                                     />
-                                </Grid>
-                            </Grid>
-                            <Grid container className="Gridlabelfield">
-                                <Grid item className="Label">
-                                    Regularité :
-                                </Grid>
-                                <Grid item>
-                                    <TextField type="number"
-                                               variant="outlined"
-                                               className="number"
-                                               size="small"
-                                               name="regularity"
-                                               value={this.state.regularity}
-                                               onChange={this.handleChange}/>
-                                </Grid>
-                            </Grid>
-                            <Grid container className="Gridlabelfield">
-                                <Grid item className="Label">
-                                    Estimation du temps (heure) :
-                                </Grid>
-                                <Grid item>
-                                    <TextField
-                                        type="number"
-                                        inputProps={{step: "0.5"}}
-                                        className="number"
-                                        variant="outlined"
-                                        size="small"
-                                        name="duration"
-                                        value={this.state.duration}
-                                        onChange={this.handleChange}
+                                    <FormControlLabel
+                                        control={<Checkbox name="m3" value={this.state.material[2]} onChange={this.materialChecked} />}
+                                        label="Autre"
                                     />
-                                </Grid>
+                                   { this.state.material[2] && <TextField name="materialother" value={this.state.materialother} 
+                                                                    onChange={this.handleChange}/> }                                     
+                                </FormGroup>
                             </Grid>
-                            <Grid container className="Gridlabelfield">
-                                <Grid item className="Label">
-                                    Matériel attendu :
-                                </Grid>
-                                <Grid item>
-                                    <FormGroup>
-                                        <FormControlLabel
-                                            control={<Checkbox value="Matériel lié au port de charge"
-                                                               onChange={this.materialChecked}/>}
-                                            label="Matériel lié au port de charge"
+                        </Grid>
+                        <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Particularité :
+                            </Grid>
+                            <Grid item>
+                                <FormGroup>
+                                    <FormControlLabel
+                                        control={<Checkbox value="??" onChange={this.materialChecked}/>}
+                                        label="??"
+                                    />                               
+                                </FormGroup>
+                            </Grid>
+                        </Grid>
+                        <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Informations internes :
+                            </Grid>
+                            <Grid item>
+                                <TextField
+                                    className="text"                                   
+                                    variant="outlined"
+                                    size="small"
+                                    name="internalInfo"
+                                    value={this.state.internalInfo}
+                                    onChange={this.handleChange}
+                                />
+                            </Grid>
+                        </Grid>
+                        <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Date d’exécution :
+                            </Grid>
+                            <Grid item>
+                                <input
+                                    id="date"
+                                    type="date"
+                                    name="executionDate"
+                                    value={this.state.executionDate}                                                                      
+                                    onChange={this.handleChange}
+                                />
+                            </Grid>
+                        </Grid> 
+                        <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Horaire d’exécution :
+                            </Grid>
+                            <Grid item>
+                                <TextField
+                                    type="time"
+                                    name="executionTime"
+                                    value={this.state.executionTime}
+                                    onChange={this.handleChange}
+                               />                             
+                            </Grid> 
+                        </Grid> 
+                        <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Joindre des images
+                            </Grid>
+                            <Grid item>
+                                <Grid container justify={"space-evenly"} spacing={2}>
+                                    <Grid item>
+                                        <input type="file" accept="image/*" id="contained-button-file"
+                                            onChange={this.addImage} multiple style={{display: 'none'}}
                                         />
-                                        <FormControlLabel
-                                            control={<Checkbox value="Matériel lié à la prestation"
-                                                               onChange={this.materialChecked}/>}
-                                            label="Matériel lié à la prestation"
-                                        />
-                                        <FormControlLabel
-                                            control={<Checkbox value="Autre" onChange={this.materialChecked}/>}
-                                            label="Autre"
-                                        />
-                                        {<TextField value={this.state.material}></TextField>}
-                                    </FormGroup>
-                                </Grid>
-                            </Grid>
-                            <Grid container className="Gridlabelfield">
-                                <Grid item className="Label">
-                                    Particularité :
-                                </Grid>
-                                <Grid item>
-                                    <FormGroup>
-                                        <FormControlLabel
-                                            control={<Checkbox value="??" onChange={this.materialChecked}/>}
-                                            label="??"
-                                        />
-                                    </FormGroup>
-                                </Grid>
-                            </Grid>
-                            <Grid container className="Gridlabelfield">
-                                <Grid item className="Label">
-                                    Informations internes :
-                                </Grid>
-                                <Grid item>
-                                    <TextField
-                                        className="text"
-                                        variant="outlined"
-                                        size="small"
-                                        name="internalInfo"
-                                        value={this.state.internalInfo}
-                                        onChange={this.handleChange}
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Grid container className="Gridlabelfield">
-                                <Grid item className="Label">
-                                    Date d’exécution :
-                                </Grid>
-                                <Grid item>
-                                    <TextField
-                                        id="date"
-                                        type="date"
-                                        value={this.state.executionDate}
-                                        onChange={this.handleChange}
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Grid container className="Gridlabelfield">
-                                <Grid item className="Label">
-                                    Horaire d’exécution :
-                                </Grid>
-                                <Grid item>
-                                    <TextField
-                                        type="time"
-                                        onChange={this.handleChange}
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Grid container className="Gridlabelfield">
-                                <Grid item className="Label">
-                                    Joindre des images
-                                </Grid>
-                                <Grid item>
-                                    <Grid container justify={"space-evenly"} spacing={2}>
-                                        <Grid item>
-                                            <input type="file" accept="image/*" id="contained-button-file"
-                                                   onChange={this.addImage} multiple style={{display: 'none'}}
-                                            />
-                                            <label htmlFor="contained-button-file">
-                                                <Button variant="outlined" color="primary" component="span">
-                                                    Ajouter une image
-                                                </Button>
-                                            </label>
-                                        </Grid>
-                                        <Grid container spacing={3} justify="center">
-                                            {this.state.images.map((image, index) => (
-                                                <Grid item key={index}>
-                                                    <Grid container direction="column">
-                                                        <Grid item>
-                                                            <img src={URL.createObjectURL(image)} alt="" width="150"
-                                                                 height="100"/>
-                                                        </Grid>
-                                                        <Grid item>
-                                                            <Button variant="outlined" onClick={() => {
-                                                                this.state.images.splice(index, 1)
-                                                                this.setState({images: this.state.images});
-                                                            }}>Supprimer</Button>
-                                                        </Grid>
+                                        <label htmlFor="contained-button-file">
+                                            <Button variant="outlined" color="primary" component="span">
+                                                Ajouter une image
+                                            </Button>
+                                        </label>
+                                    </Grid>
+                                    <Grid container spacing={3} justify="center">
+                                        {this.state.images.map((image, index) => (
+                                            <Grid item key={index}>
+                                                <Grid container direction="column">
+                                                    <Grid item>
+                                                        <img src={URL.createObjectURL(image)} alt="" width="150" height="100"/>
+                                                    </Grid>
+                                                    <Grid item>
+                                                        <Button variant="outlined" onClick={() => {
+                                                            this.state.images.splice(index, 1)
+                                                            this.setState({images: this.state.images});
+                                                        }}>Supprimer</Button>
                                                     </Grid>
                                                 </Grid>
-                                            ))}
-                                        </Grid>
+                                            </Grid>
+                                        ))}
                                     </Grid>
                                 </Grid>
                             </Grid>
-                        </Grid>
-
+                        </Grid> 
                     </Grid>
+                 
+                </Grid>
+                                                             
+                <Button className={"MyButton"} variant="contained" onClick={this.addRequest}>
+                    Enregistrer la demande
+                </Button>
 
-                    <Button className={"MyButton"} variant="contained" onClick={this.addRequest}>
-                        Enregistrer la demande
+                <Link to="/">
+                    <Button className={"MyButton"} type="button" color="primary">
+                        Retour
                     </Button>
-
-                    <Link to="/">
-                        <Button className={"MyButton"} type="button" color="primary">
-                            Retour
-                        </Button>
-                    </Link>
-                    {this.state.redirect ? (<Redirect push to="/"/>) : null}
-                </Form>
+                </Link>
+                {this.state.redirect ? (<Redirect push to="/"/>) : null}
+              </Form>
             </Container>
 
         );
