@@ -49,6 +49,7 @@ public class EntityToDTOService {
 			return null;
 		}
 		SmallEstimationDTO result = new SmallEstimationDTO();
+		result.setId(estimation.getId());
 		result.setEstimationResponsable(convertToDTO(estimation.getEstimationResponsable()));
 		result.setExpectedDuration(estimation.getExpectedDuration());
 		result.setNumberEmployeesNeeded(estimation.getNumberEmployeesNeeded());
@@ -63,6 +64,7 @@ public class EntityToDTOService {
 			return null;
 		}
 		SmallClientDTO result = new SmallClientDTO();
+		result.setId(client.getId());
 		result.setEmail(client.getEmail());
 		result.setPhoneNumber(client.getPhoneNumber());
 		result.setPhoneNumber2(client.getPhoneNumber2());
@@ -83,6 +85,7 @@ public class EntityToDTOService {
 			return null;
 		}
 		SmallUserDTO result = new SmallUserDTO();
+		result.setId(user.getId());
 		result.setUsername(user.getUsername());
 		return result;
 	}
