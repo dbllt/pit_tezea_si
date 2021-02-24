@@ -6,7 +6,7 @@ import tezea.si.model.business.request.Tool;
 import tezea.si.model.business.request.Vehicle;
 
 public class SmallEstimationDTO {
-	private long id;
+	private Long id;
 	private SmallUserDTO estimationResponsable;
 	private int numberEmployeesNeeded;
 	private List<Tool> toolsNeeded;
@@ -14,11 +14,11 @@ public class SmallEstimationDTO {
 	private List<Vehicle> vehiclesNeeded;
 	private int expectedDuration;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

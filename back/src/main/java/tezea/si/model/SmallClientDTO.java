@@ -5,7 +5,7 @@ import tezea.si.model.business.HonorificTitle;
 
 public class SmallClientDTO {
 
-	private long id;
+	private Long id;
 	private ClientType type;
 	private String email;
 	private String phoneNumber;
@@ -19,11 +19,11 @@ public class SmallClientDTO {
 	private String firstName;
 	private HonorificTitle honorificTitle;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

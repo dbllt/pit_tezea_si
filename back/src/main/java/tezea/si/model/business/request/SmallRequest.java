@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -20,7 +21,7 @@ import tezea.si.utils.StringListConverter;
 
 @Entity
 public class SmallRequest {
-	private long id;
+	private Long id;
 	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate date;
 	@JsonFormat(pattern = "HH:mm")
@@ -60,13 +61,42 @@ public class SmallRequest {
 
 	private List<String> photos;
 
+	public void updateFrom(SmallRequest other) {
+        this.id = other.id == null ? this.id : other.id;
+        this.date = other.date == null ? this.date : other.date;
+        this.time = other.time == null ? this.time : other.time;
+
+        this.site = other.site == null ? this.site : other.site;
+        this.priority = other.priority == null ? this.priority : other.priority;
+        this.description = other.description == null ? this.description : other.description;
+        this.status = other.status == null ? this.status : other.status;
+        this.accessDetails = other.accessDetails == null ? this.accessDetails : other.accessDetails;
+        this.repetitionTime = other.repetitionTime == 0 ? this.repetitionTime : other.repetitionTime;
+        this.repetitionUnit = other.repetitionUnit == null ? this.repetitionUnit : other.repetitionUnit;
+        this.type = other.type == null ? this.type : other.type;
+        
+        this.amountWood = other.amountWood == 0 ? this.amountWood : other.amountWood;
+        this.amountDonated = other.amountDonated == 0 ? this.amountDonated : other.amountDonated;
+        this.appointmentPlasmaDate = other.appointmentPlasmaDate == null ? this.appointmentPlasmaDate : other.appointmentPlasmaDate;
+        this.satisfactionLevel = other.satisfactionLevel == null ? this.satisfactionLevel : other.satisfactionLevel;
+        this.lastUpdated = other.lastUpdated == null ? this.lastUpdated : other.lastUpdated;
+        this.internalInfo = other.internalInfo == null ? this.internalInfo : other.internalInfo;
+        this.photos = other.photos == null ? this.photos : other.photos;
+
+        this.client = other.client == null ? this.client : other.client;
+        this.estimation = other.estimation == null ? this.estimation : other.estimation;
+        this.responsable = other.responsable == null ? this.responsable : other.responsable;
+        this.closedBy = other.closedBy == null ? this.closedBy : other.closedBy;
+        this.lastUpdatedBy = other.lastUpdatedBy == null ? this.lastUpdatedBy : other.lastUpdatedBy;
+    }
+	
 	@Id
 	@GeneratedValue
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -105,7 +135,7 @@ public class SmallRequest {
 		this.responsable = responsable;
 	}
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.PERSIST)
 	public SmallClient getClient() {
 		return client;
 	}
@@ -211,7 +241,7 @@ public class SmallRequest {
 		this.lastUpdated = lastUpdated;
 	}
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.PERSIST)
 	public SmallEstimation getEstimation() {
 		return estimation;
 	}

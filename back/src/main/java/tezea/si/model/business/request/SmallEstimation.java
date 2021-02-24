@@ -12,73 +12,84 @@ import tezea.si.model.business.UserTezea;
 
 @Entity
 public class SmallEstimation {
-	private long id;
-	private UserTezea estimationResponsable;
-	private int numberEmployeesNeeded;
-	private List<Tool> toolsNeeded;
-	private String otherTools;
-	private List<Vehicle> vehiclesNeeded;
-	private int expectedDuration;
+    private Long id;
+    private UserTezea estimationResponsable;
+    private int numberEmployeesNeeded;
+    private List<Tool> toolsNeeded;
+    private String otherTools;
+    private List<Vehicle> vehiclesNeeded;
+    private int expectedDuration;
 
-	@Id
-	@GeneratedValue
-	public long getId() {
-		return id;
-	}
+    public void updateFrom(SmallEstimation other) {
+        this.estimationResponsable = other.estimationResponsable == null ? this.estimationResponsable
+                : other.estimationResponsable;
+        this.numberEmployeesNeeded = other.numberEmployeesNeeded == 0 ? this.numberEmployeesNeeded
+                : other.numberEmployeesNeeded;
+        this.toolsNeeded = other.toolsNeeded == null ? this.toolsNeeded : other.toolsNeeded;
+        this.otherTools = other.otherTools == null ? this.otherTools : other.otherTools;
+        this.vehiclesNeeded = other.vehiclesNeeded == null ? this.vehiclesNeeded : other.vehiclesNeeded;
+        this.expectedDuration = other.expectedDuration == 0 ? this.expectedDuration : other.expectedDuration;
+    }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    @Id
+    @GeneratedValue
+    public Long getId() {
+        return id;
+    }
 
-	@OneToOne
-	public UserTezea getEstimationResponsable() {
-		return estimationResponsable;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setEstimationResponsable(UserTezea estimationResponsable) {
-		this.estimationResponsable = estimationResponsable;
-	}
+    @OneToOne
+    public UserTezea getEstimationResponsable() {
+        return estimationResponsable;
+    }
 
-	public int getNumberEmployeesNeeded() {
-		return numberEmployeesNeeded;
-	}
+    public void setEstimationResponsable(UserTezea estimationResponsable) {
+        this.estimationResponsable = estimationResponsable;
+    }
 
-	public void setNumberEmployeesNeeded(int numberEmployeesNeeded) {
-		this.numberEmployeesNeeded = numberEmployeesNeeded;
-	}
+    public int getNumberEmployeesNeeded() {
+        return numberEmployeesNeeded;
+    }
 
-	@ElementCollection
-	public List<Tool> getToolsNeeded() {
-		return toolsNeeded;
-	}
+    public void setNumberEmployeesNeeded(int numberEmployeesNeeded) {
+        this.numberEmployeesNeeded = numberEmployeesNeeded;
+    }
 
-	public void setToolsNeeded(List<Tool> toolsNeeded) {
-		this.toolsNeeded = toolsNeeded;
-	}
+    @ElementCollection
+    public List<Tool> getToolsNeeded() {
+        return toolsNeeded;
+    }
 
-	@ElementCollection
-	public List<Vehicle> getVehiclesNeeded() {
-		return vehiclesNeeded;
-	}
+    public void setToolsNeeded(List<Tool> toolsNeeded) {
+        this.toolsNeeded = toolsNeeded;
+    }
 
-	public void setVehiclesNeeded(List<Vehicle> vehiclesNeeded) {
-		this.vehiclesNeeded = vehiclesNeeded;
-	}
+    @ElementCollection
+    public List<Vehicle> getVehiclesNeeded() {
+        return vehiclesNeeded;
+    }
 
-	public int getExpectedDuration() {
-		return expectedDuration;
-	}
+    public void setVehiclesNeeded(List<Vehicle> vehiclesNeeded) {
+        this.vehiclesNeeded = vehiclesNeeded;
+    }
 
-	public void setExpectedDuration(int expectedDuration) {
-		this.expectedDuration = expectedDuration;
-	}
+    public int getExpectedDuration() {
+        return expectedDuration;
+    }
 
-	public String getOtherTools() {
-		return otherTools;
-	}
+    public void setExpectedDuration(int expectedDuration) {
+        this.expectedDuration = expectedDuration;
+    }
 
-	public void setOtherTools(String otherTools) {
-		this.otherTools = otherTools;
-	}
+    public String getOtherTools() {
+        return otherTools;
+    }
+
+    public void setOtherTools(String otherTools) {
+        this.otherTools = otherTools;
+    }
 
 }

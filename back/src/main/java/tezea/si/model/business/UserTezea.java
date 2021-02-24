@@ -20,7 +20,7 @@ import tezea.si.utils.StringListConverter;
 @Entity
 @Table(name = "user")
 public class UserTezea {
-    private long id;
+    private Long id;
     private String username;
     private String password;
     private List<String> authorities;
@@ -49,7 +49,7 @@ public class UserTezea {
     @Id
     @GeneratedValue
     @Column(name = "id_user")
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -87,7 +87,7 @@ public class UserTezea {
         this.authorities = authorities;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

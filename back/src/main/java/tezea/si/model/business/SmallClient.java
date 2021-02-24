@@ -6,7 +6,7 @@ import javax.persistence.Id;
 
 @Entity
 public class SmallClient {
-	private long id;
+	private Long id;
 	private ClientType type;
 	private String email;
 	private String phoneNumber;
@@ -20,13 +20,28 @@ public class SmallClient {
 	private String firstName;
 	private HonorificTitle honorificTitle;
 
+	public void updateFrom(SmallClient other) {
+		this.type = other.type == null ? this.type : other.type;
+		this.email = other.email == null ? this.email : other.email;
+		this.phoneNumber = other.phoneNumber == null ? this.phoneNumber : other.phoneNumber;
+		this.phoneNumber2 = other.phoneNumber2 == null ? this.phoneNumber2 : other.phoneNumber2;
+		this.address = other.address == null ? this.address : other.address;
+		this.postCode = other.postCode == null ? this.postCode : other.postCode;
+		this.city = other.city == null ? this.city : other.city;
+		this.companyName = other.companyName == null ? this.companyName : other.companyName;
+		this.siret = other.siret == null ? this.siret : other.siret;
+		this.lastName = other.lastName == null ? this.lastName : other.lastName;
+		this.firstName = other.firstName == null ? this.firstName : other.firstName;
+		this.honorificTitle = other.honorificTitle == null ? this.honorificTitle : other.honorificTitle;
+    }
+	
 	@Id
 	@GeneratedValue
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
