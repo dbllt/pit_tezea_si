@@ -31,6 +31,10 @@ class Menu extends React.Component<IProps, IState> {
 
     }
 
+
+
+
+
     render() {
         let usersList;
         if (API.getRole() === "ADMIN") {
@@ -43,8 +47,6 @@ class Menu extends React.Component<IProps, IState> {
         } else {
             usersList = <div/>;
         }
-
-
         return (
             <div className={styles.MyDiv}>
                 <RedirectionIfNotConnected/>
@@ -59,7 +61,7 @@ class Menu extends React.Component<IProps, IState> {
                     </Button>
                 </Link>
                 {usersList}
-
+                <Button onClick={API.sendEmail}>Test Email</Button>
             </div>
         );
     }

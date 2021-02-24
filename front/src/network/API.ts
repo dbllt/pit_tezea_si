@@ -1,4 +1,5 @@
 import {Filter} from '../components/BusinessTableFilter/BusinessTableFilter';
+import emailjs from "emailjs-com";
 
 
 interface Request {
@@ -573,8 +574,17 @@ const API = {
 
     getUrgencyStatus() {
         return ["Normale", "Alerte orange", "Alerte Rouge"]
-    }
+    },
 
+    sendEmail () {
+        emailjs.init("user_xXE8w4OznmdPxlbf8cIz6");
+        emailjs.send('tezea', 'mail',{}, 'user_xXE8w4OznmdPxlbf8cIz6')
+            .then((result) => {
+                console.log(result.text);
+            }, (error) => {
+                console.log(error.text);
+            });
+    }
 
 }
 
