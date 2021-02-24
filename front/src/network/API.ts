@@ -192,6 +192,13 @@ const API = {
         return ret;
     },
 
+    formatDate:function(date:string):string{
+            var t = date.split("-");
+            var ret= t[2] + "-" + t[1] + "-" + t[0]
+        console.log(ret)
+        return ret;
+
+    },
 
     addRequest: async function (request: Request): Promise<boolean> {
 
@@ -203,6 +210,8 @@ const API = {
         let token: string = temp;
 
 
+
+
         const requestOptions = {
             method: 'POST',
             headers: {
@@ -212,25 +221,25 @@ const API = {
             body: JSON.stringify({
                 "site": request.site,
 
-                "client": {
-                    email: request.client.email,
-                    phoneNumber: request.client.phone,
-                    address: request.client.address,
-                    postCode: request.client.cp,
-                    city: request.client.city,
-                    companyName: request.client.company,
-                    lastName: request.client.lName,
-                    firstName: request.client.fName,
-                    honorificTitle: request.client.gender,
-                    type: request.client.clientStatus
-                },
+                 "client": {
+                     email: request.client.email,
+                     phoneNumber: request.client.phone,
+                     address: request.client.address,
+                     postCode: request.client.cp,
+                     city: request.client.city,
+                     companyName: request.client.company,
+                     lastName: request.client.lName,
+                     firstName: request.client.fName,
+                     honorificTitle: request.client.gender,
+                     type: request.client.clientStatus
+                 },
                 "priority": "Basse",
                 "description": request.requestDesc,
                 "repetitionTime": +request.regularity,
-                "date": request.executionDate,
+                "date": this.formatDate(request.executionDate),
                 "type": request.typeRequest,
-                "responsable": {"username": localStorage.getItem('username')},
-                "status": request.requestStatus,
+                "responsable": {"username": localStorage.getItem('username')},//TODO parler avec Sigrid
+                "status": "Nouveau",
                 "accessDetails": request.place
             })
         };

@@ -140,6 +140,8 @@ class Request extends Component<IndexProps, IState> {
         this.callbackFunction = this.callbackFunction.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.addRequest = this.addRequest.bind(this);
+
+
     }
 
     dateNow() {
@@ -167,7 +169,6 @@ class Request extends Component<IndexProps, IState> {
         API.getRequest(id).then(r => {
             if (r !== null) {
                 var rr: IRequest = r;
-
                 this.setState({
                     id: rr.id,
                     concierge: rr.concierge,
@@ -184,7 +185,21 @@ class Request extends Component<IndexProps, IState> {
                     requestStatus: rr.requestStatus,
                     requestAssignment: rr.requestAssignment,
                     images: rr.images,
-                    photos: rr.photos
+                    photos: rr.photos,
+                    client:{
+                        clientStatus: rr.client.clientStatus,
+                        company: rr.client.company,
+                        siret:rr.client.siret,
+                        gender: rr.client.gender,
+                        lName: rr.client.lName,
+                        fName: rr.client.fName,
+                        phone: rr.client.phone,
+                        email: rr.client.email,
+                        address: rr.client.address,
+                        cp: rr.client.cp,
+                        city: rr.client.city,
+
+                    }
                 });
 
                 API.photosAddressesToFiles(rr.photos).then((files: File[]) => {
@@ -228,7 +243,10 @@ class Request extends Component<IndexProps, IState> {
         if (!res && requestId !== "") {
             this.loadRequest(requestId);
         }
+        this.forceUpdate()
     }
+
+
 
     addImage(e: any) {
         if (this.state.images.length < 3) {
@@ -267,78 +285,43 @@ class Request extends Component<IndexProps, IState> {
     }
 
     addRequest() {
-        var client: IClient = {
-            clientStatus: "Collectivité",
-            company: "Google",
-            gender: "Mr",
-            lName: "Pouet",
-            fName: "Grogu",
-            phone: "06",
-            email: "grogu@sw.mdr",
-            address: "2 rue de la paix",
-            cp: "35000",
-            city: "Rennes",
-            siret:"XXXX"
-        }
-
-        const date1 = new Date(2021, 1, 28);
-        var request: IRequest = {
-            id: "-1",
-            concierge: "Jonzé",
-            site: "Couture",
-            typeRequest: "Don",
-            requestDesc: "faireééé un truc",
-            numberPerson: "3",
-            place: "boueux",
-            regularity: "2",
-            duration: "1 an",
-            internalInfo: "coucou",
-            requestStatus: "En cours",
-            requestAssignment: "Pierre",
-            material:[true,false,true],
-            materialother:"une pelle",
-            executionDate:"05-03-2021",
-            executionTime:"???",
-            images: this.state.images,
-            client: client,
-            photos: []
-        }
-
-
         // var client: IClient = {
-        //     clientStatus: "",
-        //     company: "",
-        //     siret: "",
-        //     gender: "",
-        //     lName: "",
-        //     fName: "",
-        //     phone: "",
-        //     email: "",
-        //     address: "",
-        //     cp: "",
-        //     city: ""
+        //     clientStatus: "Collectivité",
+        //     company: "Google",
+        //     gender: "Mr",
+        //     lName: "Pouet",
+        //     fName: "Grogu",
+        //     phone: "06",
+        //     email: "grogu@sw.mdr",
+        //     address: "2 rue de la paix",
+        //     cp: "35000",
+        //     city: "Rennes",
+        //     siret:"XXXX"
         // }
+        //
+        // const date1 = new Date(2021, 1, 28);
         // var request: IRequest = {
-        //     id: "1",
-        //     site: this.state.service,
-        //     concierge: this.state.concierge,
-        //     typeRequest: this.state.typeRequest,
-        //     requestDesc: this.state.requestDesc,
-        //     numberPerson: this.state.numberPerson,
-        //     place: this.state.place,
-        //     regularity: this.state.regularity,
-        //     duration: this.state.duration,
-        //     material: this.state.material,
-        //     materialother: this.state.materialother,
-        //     internalInfo: this.state.internalInfo,
-        //     executionDate: this.state.executionDate,
-        //     executionTime: this.state.executionTime,
+        //     id: "-1",
+        //     concierge: "Jonzé",
+        //     site: "Couture",
+        //     typeRequest: "Don",
+        //     requestDesc: "faireééé un truc",
+        //     numberPerson: "3",
+        //     place: "boueux",
+        //     regularity: "2",
+        //     duration: "1 an",
+        //     internalInfo: "coucou",
+        //     requestStatus: "En cours",
+        //     requestAssignment: "Pierre",
+        //     material:[true,false,true],
+        //     materialother:"une pelle",
+        //     executionDate:"05-03-2021",
+        //     executionTime:"???",
         //     images: this.state.images,
-        //     requestStatus: "",
-        //     requestAssignment: "",
         //     client: client,
-        //     photos:[]
-        // }  
+        //     photos: []
+        // }
+
         var client = this.state.client;
 
         var request:IRequest={
@@ -362,11 +345,12 @@ class Request extends Component<IndexProps, IState> {
             client:client,
             photos:[]
         }
-        if (true) {
-          //  API.addRequest(request).then(() => this.setState({redirect: true}));
-        }
-
-        console.log(client);
+        API.addRequest(request).then((b) => {
+                if (b) {
+                    this.setState({redirect: true})
+                }
+            }
+        );
 
     }
     render() {
@@ -379,7 +363,8 @@ class Request extends Component<IndexProps, IState> {
                 <Form className="form">  
                 <Grid container direction="column" alignItems="flex-start" justify="center" >
                     <Grid item>
-                     <FormClient parentCallback={this.callbackFunction}/>
+                        {this.state.client.lName}
+                     <FormClient parentCallback={this.callbackFunction} client={this.state.client}/>
                     </Grid>  
                     <Grid item>
                         <h3>Demande client : </h3>

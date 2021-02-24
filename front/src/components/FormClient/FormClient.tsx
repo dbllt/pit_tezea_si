@@ -24,7 +24,8 @@ interface IClient {
 }
 
 interface Props {
-    parentCallback:Function
+    parentCallback:Function,
+    client:IClient
 }
 
 interface State {
@@ -46,12 +47,13 @@ class FormClient extends Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
+        console.log(this.props)
         this.state = {
-            statut: "Particulier",
-            gender: "",
+            statut:this.props.client.clientStatus,
+            gender: this.props.client.gender,
             nom: "",
             siret: "",
-            lastName: "",
+            lastName: this.props.client.lName,
             firstName: "",
             tel: "",
             email: "",
@@ -61,6 +63,24 @@ class FormClient extends Component<Props, State> {
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+
+    componentDidMount() {
+        console.log(this.props)
+        this.setState({
+            statut:this.props.client.clientStatus,
+            gender: this.props.client.gender,
+            nom: "",
+            siret: "",
+            lastName: this.props.client.lName,
+            firstName: "",
+            tel: "",
+            email: "",
+            address: "",
+            codepostal: "",
+            ville: ""
+        });
     }
 
     sendData(){
