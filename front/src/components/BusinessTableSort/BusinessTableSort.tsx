@@ -1,6 +1,6 @@
 
-import React, { Component, createRef } from 'react';
-import { TextField, MenuItem, FormControl, Select, Grid } from "@material-ui/core";
+import React, { Component } from 'react';
+import { MenuItem, FormControl, Select, Grid } from "@material-ui/core";
 
 
 export interface Sort {

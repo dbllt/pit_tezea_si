@@ -1,14 +1,14 @@
 package tezea.si.model;
 
 public class SmallUserDTO {
-	private long id;
+	private Long id;
 	private String username;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

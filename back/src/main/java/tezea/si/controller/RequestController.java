@@ -66,9 +66,10 @@ public class RequestController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<List<SmallRequestDTO>> getRequests(@RequestBody SmallRequestSearchDTO search) {
         Specification<SmallRequest> spec = searchService.convert(search);
-        
-        List<SmallRequestDTO> list = dao.findAll(spec).stream().map(req -> toDTO.convertToDTO(req)).collect(Collectors.toList());
-        
+
+        List<SmallRequestDTO> list = dao.findAll(spec).stream().map(req -> toDTO.convertToDTO(req))
+                .collect(Collectors.toList());
+
         return ResponseEntity.ok(list);
     }
 
@@ -89,27 +90,31 @@ public class RequestController {
             @ApiResponse(responseCode = "400", description = "If the input request body could not be parsed, or id was set") })
     @RequestMapping(path="/create",method = RequestMethod.POST)
     public ResponseEntity<SmallRequestDTO> createRequest(@RequestBody SmallRequest request) {
-        Optional<SmallRequest> req = dao.findById(request.getId());
-        if (req.isPresent())
+        if (request.getId() != null && !dao.findById(request.getId()).isPresent())
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        
+
         SmallRequest entity = creator.convertToEntity(request);
 
         SmallRequestDTO response = toDTO.convertToDTO(entity);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-    
+
     @Operation(summary = "Update a request")
-    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "The request updated"),@ApiResponse(responseCode = "204", description = "If there is no request with this id"),
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "The request updated"),
+            @ApiResponse(responseCode = "204", description = "If there is no request with this id"),
             @ApiResponse(responseCode = "400", description = "If the input request body could not be parsed") })
     @RequestMapping(method = RequestMethod.PATCH)
-    public ResponseEntity<SmallRequestDTO> updateRequest(@RequestBody SmallRequest request) {
-        Optional<SmallRequest> req = dao.findById(request.getId());
+    public ResponseEntity<SmallRequestDTO> updateRequest(@RequestBody SmallRequest patchRequest) {
+        if (patchRequest.getId() == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        Optional<SmallRequest> req = dao.findById(patchRequest.getId());
         if (!req.isPresent())
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        
+
+        SmallRequest request = req.get();
+        request.updateFrom(patchRequest);
         SmallRequest entity = creator.convertToEntity(request);
-        
+
         SmallRequestDTO response = toDTO.convertToDTO(entity);
         return ResponseEntity.ok(response);
     }

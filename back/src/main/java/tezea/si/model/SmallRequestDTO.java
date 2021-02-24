@@ -14,7 +14,7 @@ import tezea.si.model.business.request.Service;
 import tezea.si.model.business.request.TimeUnit;
 
 public class SmallRequestDTO {
-	private long id;
+	private Long id;
 	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate date;
 	@JsonFormat(pattern = "HH:mm")
@@ -46,11 +46,11 @@ public class SmallRequestDTO {
 
 	private List<String> photos;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

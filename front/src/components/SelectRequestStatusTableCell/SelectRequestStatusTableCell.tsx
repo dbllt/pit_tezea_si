@@ -9,7 +9,7 @@ import API from "../../network/API";
 interface Props {
     status: string;
     id: string;
-    updateStatus: (name: string, id: string) => void;
+    updateStatus: (status: string, id: string) => void;
 }
 
 interface State {
@@ -30,7 +30,7 @@ class SelectRequestStatusTableCell extends Component<Props, State> {
 
     handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         this.setState({ status: event.target.value as string });
-        this.props.updateStatus(this.state.status, this.props.id);
+        this.props.updateStatus(event.target.value as string, this.props.id);
     };
 
     render() {

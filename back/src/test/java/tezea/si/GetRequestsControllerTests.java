@@ -356,8 +356,6 @@ public class GetRequestsControllerTests {
 		SmallClient client2 = new SmallClient();
 		client.setLastName("Dula");
 		client2.setLastName("Lars");
-		clientDao.save(client);
-		clientDao.save(client2);
 
 		SmallRequest request = new SmallRequest();
 		SmallRequest request2 = new SmallRequest();
@@ -399,8 +397,6 @@ public class GetRequestsControllerTests {
 		SmallClient client2 = new SmallClient();
 		client.setLastName("Dula");
 		client2.setLastName("Lars");
-		clientDao.save(client);
-		clientDao.save(client2);
 
 		SmallRequest request = new SmallRequest();
 		SmallRequest request2 = new SmallRequest();
@@ -443,8 +439,6 @@ public class GetRequestsControllerTests {
 		client2.setLastName("Lars");
 		client.setPhoneNumber("456");
 		client2.setPhoneNumber("658");
-		clientDao.save(client);
-		clientDao.save(client2);
 
 		SmallRequest request = new SmallRequest();
 		SmallRequest request2 = new SmallRequest();
@@ -489,8 +483,6 @@ public class GetRequestsControllerTests {
 		client2.setPhoneNumber("658");
 		client.setCity("Rennes");
 		client2.setCity("Rouen");
-		clientDao.save(client);
-		clientDao.save(client2);
 
 		SmallRequest request = new SmallRequest();
 		SmallRequest request2 = new SmallRequest();
