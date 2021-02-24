@@ -26,30 +26,60 @@ class ServiceList extends Component {
                 <RedirectionIfNotConnected/>
                 <Grid container direction="column" justify="center" alignItems="center" spacing={5}>
                     {services.map(function (value, index) {
-                            return (
-                                <Grid item key={index}>
-                                    <Link to={{
-                                        pathname: '/request',
-                                        state: {
-                                            service: value,
-                                            requestId: -1,
-                                        }
-                                    }} style={{margin: 20}}>
+                            if (API.getRole() === "Responsable Site") {
+                                if (API.getSite() === value) {
+                                    return (
+                                        <Grid item key={index}>
+                                            <Link to={{
+                                                pathname: '/request',
+                                                state: {
+                                                    service: value,
+                                                    requestId: -1,
+                                                }
+                                            }} style={{margin: 20}}>
 
-                                        <Button variant="contained"
-                                                style={{
-                                                    width: 300,
-                                                    height: 50,
-                                                    margin: 0,
-                                                    padding: 0,
-                                                    backgroundColor: "#8fbe40", color: 'white',
-                                                    verticalAlign: "middle"
-                                                }}>
-                                            {value}
-                                        </Button>
-                                    </Link>
-                                </Grid>
-                            )
+                                                <Button variant="contained"
+                                                        style={{
+                                                            width: 300,
+                                                            height: 50,
+                                                            margin: 0,
+                                                            padding: 0,
+                                                            backgroundColor: "#8fbe40", color: 'white',
+                                                            verticalAlign: "middle"
+                                                        }}>
+                                                    {value}
+                                                </Button>
+                                            </Link>
+                                        </Grid>
+                                    )
+                                } else {
+                                    return <div/>
+                                }
+                            } else {
+                                return (
+                                    <Grid item key={index}>
+                                        <Link to={{
+                                            pathname: '/request',
+                                            state: {
+                                                service: value,
+                                                requestId: -1,
+                                            }
+                                        }} style={{margin: 20}}>
+
+                                            <Button variant="contained"
+                                                    style={{
+                                                        width: 300,
+                                                        height: 50,
+                                                        margin: 0,
+                                                        padding: 0,
+                                                        backgroundColor: "#8fbe40", color: 'white',
+                                                        verticalAlign: "middle"
+                                                    }}>
+                                                {value}
+                                            </Button>
+                                        </Link>
+                                    </Grid>)
+                            }
                         }
                     )}
 

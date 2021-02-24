@@ -61,7 +61,6 @@ class Menu extends React.Component<IProps, IState> {
                     </Button>
                 </Link>
                 {usersList}
-                <Button onClick={API.sendEmail}>Test Email</Button>
             </div>
         );
     }

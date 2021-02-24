@@ -68,6 +68,7 @@ class NewUserScreen extends Component<IProps, IState> {
             return this.role.current.value;
         }
     };
+
     getSite(): string {
         if (this.site.current == null) {
             return "";
@@ -87,23 +88,23 @@ class NewUserScreen extends Component<IProps, IState> {
     addUser() {
         this.setState({triedToCreate: true})
         if (this.getUsername() !== "" && this.getRole() !== "" && this.getPassword() !== "") {
-            API.addUser(this.getUsername(), this.getPassword(), this.getRole(),this.getSite()).then(() => this.setState({redirect: true}));
+            API.addUser(this.getUsername(), this.getPassword(), this.getRole(), this.getSite()).then(() => this.setState({redirect: true}));
         }
     }
 
     testDisplaySite(value: string) {
-        if (value === "Concierge" || value === "Responsable Site") {
+        if (value === "Responsable Site") {
             this.setState({displaySite: true});
             this.forceUpdate()
-        }else{
+        } else {
             this.setState({displaySite: false});
             this.forceUpdate()
         }
     }
 
-    test() {
-        if (this.state.displaySite) {
 
+    DisplaySite() {
+        if (this.state.displaySite) {
             return <Grid item>
                 <FormControl style={{
                     minWidth: 250,
@@ -118,6 +119,12 @@ class NewUserScreen extends Component<IProps, IState> {
                             error={(this.state.triedToCreate && this.getSite() === "")}
                     >
                         <MenuItem value="Bois">Bois</MenuItem>
+                        <MenuItem value="Couture">Couture</MenuItem>
+                        <MenuItem value="Tri démantèlement">Tri démantèlement</MenuItem>
+                        <MenuItem value="Recyclerie">Recyclerie</MenuItem>
+                        <MenuItem value="Dons enlèvements">Dons enlèvements</MenuItem>
+                        <MenuItem value="Estimateur">Estimateur</MenuItem>
+                        <MenuItem value="Conciergerie">Conciergerie</MenuItem>
                     </Select>
                 </FormControl>
             </Grid>
@@ -173,6 +180,7 @@ class NewUserScreen extends Component<IProps, IState> {
                                         this.testDisplaySite(String(e.target.value))
                                     }}
                             >
+
                                 <MenuItem value="Responsable Site">Reponsable Site</MenuItem>
                                 <MenuItem value="Concierge">Concierge</MenuItem>
                                 <MenuItem value="Commercial">Commercial</MenuItem>
@@ -180,7 +188,7 @@ class NewUserScreen extends Component<IProps, IState> {
                             </Select>
                         </FormControl>
                     </Grid>
-                    {this.test()}
+                    {this.DisplaySite()}
                 </Grid>
                 <Grid container direction="column" justify="center" alignItems="center" spacing={2}
                       style={{marginTop: 100}}>
