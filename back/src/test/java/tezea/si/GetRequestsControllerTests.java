@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import tezea.si.dao.SmallClientDAO;
 import tezea.si.dao.SmallRequestDAO;
 import tezea.si.dao.UserTezeaDAO;
+import tezea.si.model.business.Site;
 import tezea.si.model.business.SmallClient;
 import tezea.si.model.business.UserTezea;
 import tezea.si.model.business.request.SmallRequest;
@@ -224,6 +225,38 @@ public class GetRequestsControllerTests {
 		SmallRequest matching2 = requestDao.save(request2);
 
 		List<SmallRequest> expectedList = List.of(matching, matching2);
+
+		// Act
+		String result = this.mockMvc
+				.perform(get(REQUESTS_URL).contentType(MediaType.APPLICATION_JSON)
+						.content(input)
+						.headers(TestUtils.userAuthorizationHeader(mockMvc)))
+				.andExpect(status().isOk()).andReturn().getResponse()
+				.getContentAsString();
+
+		// Assert
+		List<SmallRequest> resultList = mapper.readValue(result,
+				new TypeReference<List<SmallRequest>>() {
+				});
+		assertThat(resultList).usingRecursiveFieldByFieldElementComparator()
+				.isEqualTo(expectedList);
+	}
+
+	@Test
+	public void returnsRequestsWithSearchBySite() throws Exception {
+		// Arrange
+		String input = TestUtils.createJsonString("site", "Couture");
+
+		SmallRequest request = new SmallRequest();
+		request.setPhotos(List.of());
+		request.setSite(Site.COUTURE);
+		SmallRequest matching = requestDao.save(request);
+
+		SmallRequest request2 = new SmallRequest();
+		request2.setPhotos(List.of());
+		request2.setSite(Site.CONCIERGERIE);
+
+		List<SmallRequest> expectedList = List.of(matching);
 
 		// Act
 		String result = this.mockMvc
