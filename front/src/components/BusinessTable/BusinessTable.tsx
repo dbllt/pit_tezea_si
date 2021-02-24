@@ -281,7 +281,7 @@ class BusinessTable extends Component<IProps, IState> {
     }
 
     updateStatus = (name: string, id: string) => {
-        // TO-DO connecter à l'api
+        //API.editRequest()
     };
 
 

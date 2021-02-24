@@ -34,7 +34,7 @@ class SelectRequestStatusTableCell extends Component<Props, State> {
     };
 
     render() {
-        const choices = API.getRequestStatus();;
+        const choices = API.getRequestStatus();
         return (
             <TableCell className={"noUglyBorder"} align={"center"}>
                 <FormControl>

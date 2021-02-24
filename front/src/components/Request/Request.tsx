@@ -251,7 +251,7 @@ class Request extends Component<IndexProps, IState> {
         var client: IClient = {
             clientStatus: "Collectivité",
             company: "Google",
-            gender: "M",
+            gender: "Mr",
             lName: "Pouet",
             fName: "Grogu",
             phone: "06",

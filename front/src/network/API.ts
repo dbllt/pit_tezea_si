@@ -221,7 +221,7 @@ const API = {
                     companyName: request.client.company,
                     lastName: request.client.lName,
                     firstName: request.client.fName,
-                    honorificTitle: "Mr",
+                    honorificTitle: request.client.gender,
                     type: request.client.clientStatus
                 },
                 "priority": "Basse",
@@ -244,6 +244,64 @@ const API = {
                     ret = true;
                     if (request.images.length > 0)
                         this.uploadFile(request.images, data.id.toString())
+                    console.log(data)
+                }
+            }).catch(error => {
+                console.error('There was an error!', error);
+            })
+        return ret;
+
+    },
+
+    editRequest: async function (request: Request): Promise<boolean> {
+
+        let ret = false;
+        let temp = localStorage.getItem('token');
+        if (temp === null) {
+            temp = "";
+        }
+        let token: string = temp;
+
+
+        const requestOptions = {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + token
+            },
+            body: JSON.stringify({
+                "site": request.site,
+                "id": request.id,
+                "client": {
+                    email: request.client.email,
+                    phoneNumber: request.client.phone,
+                    address: request.client.address,
+                    postCode: request.client.cp,
+                    city: request.client.city,
+                    companyName: request.client.company,
+                    lastName: request.client.lName,
+                    firstName: request.client.fName,
+                    honorificTitle: request.client.gender,
+                    type: request.client.clientStatus
+                },
+                "priority": "Basse",
+                "description": request.requestDesc,
+                "repetitionTime": +request.regularity,
+                "date": request.executionDate,
+                "type": request.typeRequest,
+                "responsable": {"username": localStorage.getItem('username')},
+                "status": request.requestStatus,
+                "accessDetails": request.place
+            })
+        };
+
+        await fetch('/requests/', requestOptions)
+            .then(async response => {
+                if (response.status !== 200) {
+                    return Promise.reject(response);
+                } else {
+                    const data: BackendRequest = await response.json();
+                    ret = true;
                     console.log(data)
                 }
             }).catch(error => {
