@@ -3,6 +3,7 @@ package tezea.si;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.File;
@@ -47,6 +48,7 @@ import tezea.si.model.business.request.SmallRequest;
 import tezea.si.model.business.request.TimeUnit;
 import tezea.si.model.business.request.Tool;
 import tezea.si.model.business.request.Vehicle;
+import tezea.si.model.dto.UserTezeaDTO;
 import tezea.si.utils.TestUtils;
 
 @SpringBootTest
@@ -63,7 +65,7 @@ public class CreateRequestsControllerTests {
 
     @Autowired
     SmallClientDAO clientDao;
-    
+
     @Autowired
     SmallEstimationDAO estimationDao;
 
@@ -219,7 +221,7 @@ public class CreateRequestsControllerTests {
 
         UserTezea user = new UserTezea();
         user.setUsername(username);
-        
+
         SmallEstimation estimation = new SmallEstimation();
         estimation.setEstimationResponsable(user);
         estimation.setNumberEmployeesNeeded(nbPeople);
@@ -261,17 +263,16 @@ public class CreateRequestsControllerTests {
         request.setLastUpdatedBy(user);
         request.setEstimation(estimation);
 
-        
         SmallUserDTO expectedUser = new SmallUserDTO();
         expectedUser.setUsername(username);
-        
-		SmallEstimationDTO expectedEstimation = new SmallEstimationDTO();
-		expectedEstimation.setEstimationResponsable(expectedUser);
-		expectedEstimation.setNumberEmployeesNeeded(nbPeople);
-		expectedEstimation.setToolsNeeded(List.of(Tool.FOR_SERVICE, Tool.SPECIFIC));
-		expectedEstimation.setOtherTools(otherTools);
-		expectedEstimation.setVehiclesNeeded(List.of(Vehicle.BENNE));
-		expectedEstimation.setExpectedDuration(duration);
+
+        SmallEstimationDTO expectedEstimation = new SmallEstimationDTO();
+        expectedEstimation.setEstimationResponsable(expectedUser);
+        expectedEstimation.setNumberEmployeesNeeded(nbPeople);
+        expectedEstimation.setToolsNeeded(List.of(Tool.FOR_SERVICE, Tool.SPECIFIC));
+        expectedEstimation.setOtherTools(otherTools);
+        expectedEstimation.setVehiclesNeeded(List.of(Vehicle.BENNE));
+        expectedEstimation.setExpectedDuration(duration);
 
         SmallClientDTO expectedClient = new SmallClientDTO();
         expectedClient.setEmail(email);
@@ -374,13 +375,44 @@ public class CreateRequestsControllerTests {
 
     }
 
+    @Test
+    public void updateRequest() throws Exception {
+        SmallRequestDTO request = createSimpleRequest();
+        request.setPhotos(List.of());
+        
+        // Assert
+        SmallRequestDTO result = getSimpleRequest(request.getId());
+        
+        assertThat(result).usingRecursiveComparison().isEqualTo(request);
+        assertThat(result.getId()).isNotZero();      
+        
+        // Modification of request for update
+        updateRequestWithValues(request);
+
+        String response = this.mockMvc
+                .perform(patch(REQUESTS_URL).contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(request))
+                        .headers(TestUtils.userAuthorizationHeader(mockMvc)))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
+        result = mapper.readValue(response, SmallRequestDTO.class);
+
+        assertThat(result).usingRecursiveComparison().isEqualTo(request);
+        assertThat(result.getId()).isNotZero();
+
+        // Assert
+        result = getSimpleRequest(request.getId());
+        
+        assertThat(result).usingRecursiveComparison().isEqualTo(request);
+        assertThat(result.getId()).isNotZero();
+    }
+
     private SmallRequestDTO createSimpleRequest() throws Exception {
         SmallRequest request = new SmallRequest();
         String response = this.mockMvc
                 .perform(post(REQUESTS_URL).contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(request))
                         .headers(TestUtils.userAuthorizationHeader(mockMvc)))
-                .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString();
+                .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
 
         return mapper.readValue(response, SmallRequestDTO.class);
     }
@@ -392,9 +424,76 @@ public class CreateRequestsControllerTests {
         String response = this.mockMvc
                 .perform(get(url).content(mapper.writeValueAsString(request))
                         .headers(TestUtils.userAuthorizationHeader(mockMvc)))
-                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
 
         return mapper.readValue(response, SmallRequestDTO.class);
+    }
+    
+    private void updateRequestWithValues(SmallRequestDTO request) {
+        // Arrange
+        String username = "jean";
+        String access = "difficult";
+        String description = "some service";
+        String address = "45 rue";
+        String email = "zet@ok.com";
+        String phone = "+330756874512";
+        String postCode = "35000";
+        String city = "Rennes";
+        String companyName = "Gateaux";
+        String lastName = "Brindacier";
+        String firstName = "Fifi";
+        String internal = "check phone number";
+        String otherTools = "chair";
+        HonorificTitle title = HonorificTitle.MME;
+        int reps = 5;
+        int wood = 12;
+        int donated = 50;
+        int nbPeople = 3;
+        int duration = 4;
+        LocalDate date = LocalDate.now();
+        
+        SmallUserDTO user = new SmallUserDTO();
+        user.setUsername(username);
+
+        SmallEstimationDTO estimation = new SmallEstimationDTO();
+        estimation.setEstimationResponsable(user);
+        estimation.setNumberEmployeesNeeded(nbPeople);
+        estimation.setToolsNeeded(List.of(Tool.FOR_SERVICE, Tool.SPECIFIC));
+        estimation.setOtherTools(otherTools);
+        estimation.setVehiclesNeeded(List.of(Vehicle.BENNE));
+        estimation.setExpectedDuration(duration);
+
+        SmallClientDTO client = new SmallClientDTO();
+        client.setEmail(email);
+        client.setPhoneNumber(phone);
+        client.setAddress(address);
+        client.setPostCode(postCode);
+        client.setCity(city);
+        client.setCompanyName(companyName);
+        client.setLastName(lastName);
+        client.setFirstName(firstName);
+        client.setHonorificTitle(title);
+        
+        request.setAccessDetails(access);
+        request.setDescription(description);
+        request.setDate(date);
+        request.setRepetitionTime(reps);
+        request.setRepetitionUnit(TimeUnit.MONTH);
+        request.setStatus(RequestStatus.NEW);
+        request.setPriority(Priority.HIGH);
+        request.setAmountWood(wood);
+        request.setAmountDonated(donated);
+        request.setAppointmentPlasmaDate(date);
+        request.setSatisfactionLevel(SatisfactionLevel.NOT_SATISFIED);
+        request.setType(Service.DONATION);
+        request.setInternalInfo(internal);
+        request.setSite(Site.COUTURE);
+
+        request.setClient(client);
+        request.setResponsable(user);
+        request.setClosedBy(user);
+        request.setLastUpdatedBy(user);
+        request.setEstimation(estimation);
     }
 
     // todo: test cannot add request with unknown user, or with unknown site

@@ -89,6 +89,21 @@ public class RequestController {
         SmallRequestDTO response = toDTO.convertToDTO(entity);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+    
+    @Operation(summary = "Update a request")
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "The request updated"),@ApiResponse(responseCode = "204", description = "If there is no request with this id"),
+            @ApiResponse(responseCode = "400", description = "If the input request body could not be parsed") })
+    @RequestMapping(method = RequestMethod.PATCH)
+    public ResponseEntity<SmallRequestDTO> updateRequest(@RequestBody SmallRequest request) {
+        Optional<SmallRequest> req = dao.findById(request.getId());
+        if (!req.isPresent())
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        
+        SmallRequest entity = creator.convertToEntity(request);
+        
+        SmallRequestDTO response = toDTO.convertToDTO(entity);
+        return ResponseEntity.ok(response);
+    }
 
     @Operation(summary = "Upload images for a request")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Images have been uploaded"),
