@@ -70,7 +70,8 @@ interface IState {
     requestStatus: string,
     requestAssignment: string,
     images: File [],
-    photos:string[]
+    photos:string[],
+    client: IClient,
     // request: IRequest
 
 }
@@ -117,12 +118,26 @@ class Request extends Component<IndexProps, IState> {
             requestStatus: "",
             requestAssignment: "",
             images: [],
-            photos:[]
+            photos:[],
+            client : {
+                clientStatus: "Particulier",
+                company: "",
+                siret:"",
+                gender: "",
+                lName: "",
+                fName: "",
+                phone: "",
+                email: "",
+                address: "",
+                cp: "",
+                city: ""
+            }
         }
         this.task = createRef();
         this.getTask = this.getTask.bind(this);
         this.addImage = this.addImage.bind(this); //upload images
         this.materialChecked = this.materialChecked.bind(this);
+        this.callbackFunction = this.callbackFunction.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.addRequest = this.addRequest.bind(this);
     }
@@ -237,7 +252,10 @@ class Request extends Component<IndexProps, IState> {
             data[indice] = false;
             this.setState({material : data })      
         } 
-        console.log(data);
+    }
+
+    callbackFunction(childData:IClient) {
+        this.setState({client: childData})
     }
 
     handleChange(event:any){
@@ -281,20 +299,9 @@ class Request extends Component<IndexProps, IState> {
         //     images: this.state.images,
         //     client: client,
         //     photos:[]
-        // }    
-        var client:IClient={
-            clientStatus: "",
-            company: "",
-            siret:"",
-            gender: "",
-            lName: "",
-            fName: "",
-            phone: "",
-            email: "",
-            address: "",
-            cp: "",
-            city: ""
-        }
+        // }  
+        var client = this.state.client;
+
         var request:IRequest={
             id: "1",
             site: this.state.service,
@@ -320,7 +327,7 @@ class Request extends Component<IndexProps, IState> {
           //  API.addRequest(request).then(() => this.setState({redirect: true}));
         }
 
-        console.log(request);
+        console.log(client);
 
     }
 
@@ -334,7 +341,7 @@ class Request extends Component<IndexProps, IState> {
                 <Form className="form">  
                 <Grid container direction="column" alignItems="flex-start" justify="center" >
                     <Grid item>
-                     <FormClient/>
+                     <FormClient parentCallback={this.callbackFunction}/>
                     </Grid>  
                     <Grid item>
                         <h3>Demande client : </h3>
@@ -465,7 +472,7 @@ class Request extends Component<IndexProps, IState> {
                                 </FormGroup>
                             </Grid>
                         </Grid>
-                        <Grid container className="Gridlabelfield">
+                        {/* <Grid container className="Gridlabelfield">
                             <Grid item className="Label">
                                 Particularité :
                             </Grid>
@@ -477,7 +484,7 @@ class Request extends Component<IndexProps, IState> {
                                     />                               
                                 </FormGroup>
                             </Grid>
-                        </Grid>
+                        </Grid> */}
                         <Grid container className="Gridlabelfield">
                             <Grid item className="Label">
                                 Informations internes :

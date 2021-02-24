@@ -8,22 +8,37 @@ import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import FormControl from "@material-ui/core/FormControl";
 
-interface Props {
 
+interface IClient {
+    clientStatus: string,
+    company: string,
+    siret: string,
+    gender: string,
+    lName: string,
+    fName: string,
+    phone: string,
+    email: string,
+    address: string,
+    cp: string,
+    city: string
+}
+
+interface Props {
+    parentCallback:Function
 }
 
 interface State {
-    statut: String;
-    gender: String;
-    nom: String;
-    siret: String;
-    lastName: String;
-    firstName: String;
+    statut: string;
+    gender: string;
+    nom: string;
+    siret: string;
+    lastName: string;
+    firstName: string;
     tel: string;
-    email: String;
-    address: String;
-    codepostal: String;
-    ville: String;
+    email: string;
+    address: string;
+    codepostal: string;
+    ville: string;
 }
 
 
@@ -44,17 +59,55 @@ class FormClient extends Component<Props, State> {
             codepostal: "",
             ville: ""
         };
-
         this.handleChange = this.handleChange.bind(this);
-
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
+
+    sendData(){
+        var client:IClient;
+        if(this.state.statut === "Particulier"){
+            client = {
+                clientStatus: this.state.statut,
+                company: "",
+                siret: "",
+                gender: this.state.gender,
+                lName: this.state.lastName,
+                fName: this.state.firstName,
+                phone: this.state.tel,
+                email: this.state.email,
+                address: this.state.address,
+                cp: this.state.codepostal,
+                city: this.state.ville
+            }
+        }else {
+            client = {
+                clientStatus: this.state.statut,
+                company: this.state.nom,
+                siret: this.state.siret,
+                gender: "",
+                lName: "",
+                fName: "",
+                phone: this.state.tel,
+                email: this.state.email,
+                address: this.state.address,
+                cp: this.state.codepostal,
+                city: this.state.ville
+            }
+        }
+        this.props.parentCallback(client);
+   }
 
 
     handleChange(event: any) {
         const {target: {name, value}} = event;
         const newState = {[name]: value} as Pick<State, keyof State>;
-        this.setState(newState);
+        this.setState(newState,this.handleSubmit);
     }
+
+    handleSubmit(){
+        this.sendData();
+    }
+
 
     render() {
         return (
@@ -67,7 +120,7 @@ class FormClient extends Component<Props, State> {
 
                     <Grid container className={styles.Gridlabelfield}>
                         <Grid item className={styles.Label}>
-                            Statut client :
+                            Statut client : 
                         </Grid>
                         <Grid item>
                             <FormControl>
@@ -94,8 +147,8 @@ class FormClient extends Component<Props, State> {
                                         name="gender"
                                         value={this.state.gender} onChange={this.handleChange} required
                                     >
-                                        <MenuItem value="Monsieur">Monsieur</MenuItem>
-                                        <MenuItem value="Madame">Madame</MenuItem>
+                                        <MenuItem value="M">M</MenuItem>
+                                        <MenuItem value="Mme">Mme</MenuItem>
                                     </Select>
                                 </FormControl>
                             </Grid>
@@ -105,7 +158,7 @@ class FormClient extends Component<Props, State> {
                                 Nom :
                             </Grid>
                             <Grid item>
-                                <TextField id="standard-basic" placeholder="Nom" name="nom"
+                                <TextField placeholder="Nom" name="nom"
                                             value={this.state.nom} onChange={this.handleChange} required/>
                             </Grid>
                         </Grid>
@@ -114,7 +167,7 @@ class FormClient extends Component<Props, State> {
                                 SIRET :
                             </Grid>
                             <Grid item>
-                                <TextField id="standard-basic" placeholder="SIRET" name="SIRET"
+                                <TextField placeholder="SIRET" name="siret"
                                             value={this.state.siret} onChange={this.handleChange} required/>
                             </Grid>
                         </Grid></div>
@@ -128,7 +181,7 @@ class FormClient extends Component<Props, State> {
                                     Nom :
                                 </Grid>
                                 <Grid item>
-                                    <TextField id="standard-basic" placeholder="Nom" name="lastName"
+                                    <TextField placeholder="Nom" name="lastName"
                                                 value={this.state.lastName} onChange={this.handleChange} required/>
                                 </Grid>
                             </Grid>
@@ -148,7 +201,7 @@ class FormClient extends Component<Props, State> {
                                     Adresse :
                                 </Grid>
                                 <Grid item>
-                                    <TextField id="standard-basic" placeholder="Adresse"
+                                    <TextField placeholder="Adresse"
                                                 name="address" value={this.state.address}
                                                 onChange={this.handleChange} required/>
                                 </Grid>
@@ -159,7 +212,7 @@ class FormClient extends Component<Props, State> {
                                     Ville :
                                 </Grid>
                                 <Grid item>
-                                    <TextField id="standard-basic" placeholder="Ville" name="ville"
+                                    <TextField  placeholder="Ville" name="ville"
                                                 value={this.state.ville} onChange={this.handleChange} required/>
                                 </Grid>
                             </Grid>
@@ -173,7 +226,7 @@ class FormClient extends Component<Props, State> {
                                     Prénom :
                                 </Grid>
                                 <Grid item>
-                                    <TextField id="standard-basic" placeholder="Prénom" name="firstName"
+                                    <TextField placeholder="Prénom" name="firstName"
                                                 value={this.state.firstName} onChange={this.handleChange} required/>
                                 </Grid>
                              </Grid>
@@ -185,7 +238,7 @@ class FormClient extends Component<Props, State> {
                                     Email :
                                 </Grid>
                                 <Grid item>
-                                    <TextField id="standard-basic" placeholder="Email" name="email"
+                                    <TextField  placeholder="Email" name="email"
                                                 value={this.state.email} onChange={this.handleChange} required/>
                                 </Grid>
                             </Grid>
@@ -194,7 +247,7 @@ class FormClient extends Component<Props, State> {
                                     Code postal :
                                 </Grid>
                                 <Grid item>
-                                    <TextField id="standard-basic" placeholder="Code postal" name="codepostal"
+                                    <TextField placeholder="Code postal" name="codepostal"
                                                 value={this.state.codepostal} onChange={this.handleChange} required/>
                                 </Grid>
                             </Grid>
