@@ -75,6 +75,9 @@ interface IState {
     images: File [],
     photos:string[],
     client: IClient,
+    nameEstimator: string, 
+    typeTruck: boolean[],
+    quantityWood: string
     // request: IRequest
 
 }
@@ -124,6 +127,9 @@ class Request extends Component<IndexProps, IState> {
             requestAssignment: "",
             images: [],
             photos:[],
+            nameEstimator: "", 
+            typeTruck: [false,false,false],
+            quantityWood: "",
             client : {
                 clientStatus: "Particulier",
                 company: "",
@@ -142,6 +148,7 @@ class Request extends Component<IndexProps, IState> {
         this.getTask = this.getTask.bind(this);
         this.addImage = this.addImage.bind(this); //upload images
         this.materialChecked = this.materialChecked.bind(this);
+        this.typeTruckChecked = this.typeTruckChecked.bind(this);
         this.callbackFunction = this.callbackFunction.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.addRequest = this.addRequest.bind(this);
@@ -259,8 +266,6 @@ class Request extends Component<IndexProps, IState> {
         this.forceUpdate()
     }
 
-
-
     addImage(e: any) {
         if (this.state.images.length < 3) {
             this.state.images.push(e.target.files[0])
@@ -285,6 +290,26 @@ class Request extends Component<IndexProps, IState> {
             data[indice] = false;
             this.setState({material : data })      
         } 
+    }
+
+    typeTruckChecked(event:any){
+        let data: boolean[] = this.state.typeTruck;
+        let indice: number;
+        if (event.target.name === "t1")
+            indice = 0;
+        else if (event.target.name === "t2")
+            indice = 1;
+        else
+            indice = 2;
+
+        if (event.target.checked) {
+            data[indice] = true;
+            this.setState({typeTruck: data})
+        } else {
+            data[indice] = false;
+            this.setState({typeTruck : data })      
+        } 
+        console.log(this.state.typeTruck);
     }
 
     callbackFunction(childData:IClient) {
@@ -387,7 +412,7 @@ class Request extends Component<IndexProps, IState> {
                         <h3>Demande client : </h3>
                     </Grid>
                     <Grid item>
-                    <Grid container className="Gridlabelfield">
+                       <Grid container className="Gridlabelfield">
                             <Grid item className="Label">
                                 Concierge :
                             </Grid>
@@ -400,6 +425,20 @@ class Request extends Component<IndexProps, IState> {
                                     onChange={this.handleChange} />
                             </Grid>
                         </Grid>
+                        { this.state.service == "Estimateur" &&
+                        <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Nom de l'estimateur :
+                            </Grid>
+                            <Grid item>
+                                <TextField 
+                                    variant="outlined"
+                                    size="small"
+                                    name="nameEstimator"
+                                    value={this.state.nameEstimator}
+                                    onChange={this.handleChange} />
+                            </Grid>
+                        </Grid>}
                         <Grid container className="Gridlabelfield">
                             <Grid item className="Label">
                                 Type de demande :
@@ -512,6 +551,47 @@ class Request extends Component<IndexProps, IState> {
                                 </FormGroup>
                             </Grid>
                         </Grid>
+                        { this.state.service == "Bois" && 
+                        <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Type de camion :
+                            </Grid>
+                            <Grid item>
+                                <FormGroup>
+                                    <FormControlLabel
+                                        control={<Checkbox name="t1" value={this.state.typeTruck[0]} onChange={this.typeTruckChecked}/>}
+                                        label="Renault Master"
+                                    />
+                                    <FormControlLabel
+                                        control={<Checkbox name="t2" value={this.state.typeTruck[1]} onChange={this.typeTruckChecked}/>}
+                                        label="Camion benne"
+                                    />
+                                    <FormControlLabel
+                                        control={<Checkbox name="t3" value={this.state.typeTruck[2]} onChange={this.typeTruckChecked} />}
+                                        label="Camion 20m3"
+                                    />                                    
+                                </FormGroup>
+                            </Grid>
+                        </Grid>}
+                        { this.state.service == "Bois" && 
+                        <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Quantité du bois (stère):
+                            </Grid>
+                            <Grid item>
+                                <TextField
+                                    type="number"
+                                    inputProps={{ step: "0.5" }} 
+                                    className="number"                                   
+                                    variant="outlined"
+                                    size="small"
+                                    name="quantityWood"
+                                    value={this.state.quantityWood}
+                                    onChange={this.handleChange}
+                                    required
+                                /> 
+                            </Grid>
+                        </Grid>}
                         {/* <Grid container className="Gridlabelfield">
                             <Grid item className="Label">
                                 Particularité :
