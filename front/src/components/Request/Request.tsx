@@ -51,6 +51,9 @@ type StateType = {
 
 
 interface IState {
+
+    displayError:boolean,
+    triedToAdd: boolean
     service: string,
     redirect: boolean,
     id: string,
@@ -99,6 +102,8 @@ class Request extends Component<IndexProps, IState> {
     constructor(props: IndexProps) {
         super(props);
         this.state = {
+            triedToAdd: false,
+            displayError:false,
             service: localStorage.getItem('service') || "",
             redirect: false,
             id: "",
@@ -140,10 +145,18 @@ class Request extends Component<IndexProps, IState> {
         this.callbackFunction = this.callbackFunction.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.addRequest = this.addRequest.bind(this);
+        this.DisplayError = this.DisplayError.bind(this);
 
 
     }
 
+    DisplayError(){
+        if(this.state.displayError){
+            return <p style={{color:"red"}}>Erreur : Champs invalides</p>
+        }else{
+            return <div/>
+        }
+    }
     dateNow() {
         let d = new Date();
         let m: any;
@@ -322,6 +335,7 @@ class Request extends Component<IndexProps, IState> {
         //     photos: []
         // }
 
+        this.setState({triedToAdd: true})
         var client = this.state.client;
 
         var request:IRequest={
@@ -348,6 +362,8 @@ class Request extends Component<IndexProps, IState> {
         API.addRequest(request).then((b) => {
                 if (b) {
                     this.setState({redirect: true})
+                }else{
+                    this.setState({displayError:true})
                 }
             }
         );
@@ -359,6 +375,7 @@ class Request extends Component<IndexProps, IState> {
                 <RedirectionIfNotConnected/>
                 <h1>Service {this.state.service}</h1>
                 <h1>Enregistrer une demande client</h1>
+                <this.DisplayError/>
 
                 <Form className="form">  
                 <Grid container direction="column" alignItems="flex-start" justify="center" >
@@ -389,7 +406,7 @@ class Request extends Component<IndexProps, IState> {
                             </Grid>
                             <Grid item>
                                 <Select name="typeRequest"
-                                        value={this.state.typeRequest} onChange={this.handleChange} required>
+                                        value={this.state.typeRequest} onChange={this.handleChange} required    >
                                     <MenuItem value="Prestation">Prestation</MenuItem>
                                     <MenuItem value="Don">Don</MenuItem>
                                     <MenuItem value="Enlèvement et don">Enlèvement et don</MenuItem>

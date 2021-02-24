@@ -381,7 +381,6 @@ const API = {
 
     backendRequestToFrontendRequest: function (request: BackendRequest): Request {
         console.log(request)
-        const date1 = new Date(2021, 1, 27);
         var client: IClient;
 
         if (request.client !== null) {
@@ -415,10 +414,6 @@ const API = {
             }
         }
 
-        var tempDate: Date = date1
-        if (request.date !== null) {
-            tempDate = request.date
-        }
         var tempResponsable: string
         if (request.responsable !== null) {
             tempResponsable = request.responsable.username
@@ -557,8 +552,9 @@ const API = {
         return ret;
     },
 
-    addUser: async function (username: string, password: string, role: string, site: string): Promise<any> {
+    addUser: async function (username: string, password: string, role: string, site: string): Promise<boolean> {
 
+        let success = false;
         var authorities = [];
         authorities[0]=role;
         if (role === "Responsable Site") {
@@ -583,11 +579,13 @@ const API = {
             .then(async response => {
                 if (!response.ok) {
                     return Promise.reject(response);
+                }else{
+                    success=true;
                 }
             }).catch(error => {
                 console.error('There was an error!', error);
             })
-
+    return success;
 
     },
 

@@ -1,5 +1,5 @@
 import React, {Component, createRef} from 'react';
-import {Button, InputLabel, Select, TextField} from "@material-ui/core";
+import {Button, FormHelperText, InputLabel, Select, TextField} from "@material-ui/core";
 import {Link, Redirect} from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import API from "../../network/API";
@@ -13,6 +13,7 @@ interface IState {
     redirect: boolean
     triedToCreate: boolean
     displaySite: boolean
+    displayError: boolean
 }
 
 function RedirectionIfNotConnected() {
@@ -33,6 +34,7 @@ class NewUserScreen extends Component<IProps, IState> {
         redirect: false,
         triedToCreate: false,
         displaySite: false,
+        displayError: false,
     }
     private readonly username: React.RefObject<any>;
     private readonly password: React.RefObject<any>;
@@ -51,6 +53,7 @@ class NewUserScreen extends Component<IProps, IState> {
         this.getRole = this.getRole.bind(this);
         this.getPassword = this.getPassword.bind(this);
         this.addUser = this.addUser.bind(this);
+        this.DisplayError = this.DisplayError.bind(this);
     }
 
     getUsername(): string {
@@ -87,8 +90,23 @@ class NewUserScreen extends Component<IProps, IState> {
 
     addUser() {
         this.setState({triedToCreate: true})
-        if (this.getUsername() !== "" && this.getRole() !== "" && this.getPassword() !== "") {
-            API.addUser(this.getUsername(), this.getPassword(), this.getRole(), this.getSite()).then(() => this.setState({redirect: true}));
+        if (this.getUsername() !== "" && this.getRole() !== undefined && this.getPassword() !== "") {
+            API.addUser(this.getUsername(), this.getPassword(), this.getRole(), this.getSite()).then((b) => {
+                if (b) {
+                    this.setState({redirect: true})
+                } else {
+                    this.setState({displayError: true})
+
+                }
+            });
+        }
+    }
+
+    DisplayError() {
+        if (this.state.displayError) {
+            return <p style={{color: "red"}}>Erreur : Utilisateur déjà présent</p>
+        } else {
+            return <div/>
         }
     }
 
@@ -116,7 +134,7 @@ class NewUserScreen extends Component<IProps, IState> {
                             inputRef={this.site}
                             id="outlined-margin-normal"
                             variant="outlined"
-                            error={(this.state.triedToCreate && this.getSite() === "")}
+                            error={(this.state.triedToCreate && this.getSite() === undefined)}
                     >
                         <MenuItem value="Bois">Bois</MenuItem>
                         <MenuItem value="Couture">Couture</MenuItem>
@@ -126,6 +144,8 @@ class NewUserScreen extends Component<IProps, IState> {
                         <MenuItem value="Estimateur">Estimateur</MenuItem>
                         <MenuItem value="Conciergerie">Conciergerie</MenuItem>
                     </Select>
+                    {(this.state.triedToCreate && this.getSite() === undefined) && <FormHelperText style={{color:"red",marginLeft:"16px"}}>Manquant</FormHelperText>}
+
                 </FormControl>
             </Grid>
         } else {
@@ -140,6 +160,7 @@ class NewUserScreen extends Component<IProps, IState> {
             <div>
                 <RedirectionIfNotConnected/>
                 <h1>Nouvel utilisateur</h1>
+                <this.DisplayError/>
                 <Grid container direction="column" justify="center" alignItems="center" spacing={2}>
                     <Grid item>
                         <TextField
@@ -175,7 +196,7 @@ class NewUserScreen extends Component<IProps, IState> {
                                     inputRef={this.role}
                                     id="outlined-margin-normal"
                                     variant="outlined"
-                                    error={(this.state.triedToCreate && this.getRole() === "")}
+                                    error={(this.state.triedToCreate && this.getRole() === undefined)}
                                     onChange={(e) => {
                                         this.testDisplaySite(String(e.target.value))
                                     }}
@@ -186,6 +207,7 @@ class NewUserScreen extends Component<IProps, IState> {
                                 <MenuItem value="Commercial">Commercial</MenuItem>
                                 <MenuItem value="ADMIN">ADMIN</MenuItem>
                             </Select>
+                            {(this.state.triedToCreate && this.getRole() === undefined) && <FormHelperText style={{color:"red",marginLeft:"16px"}}>Manquant</FormHelperText>}
                         </FormControl>
                     </Grid>
                     {this.DisplaySite()}
