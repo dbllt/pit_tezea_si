@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -25,6 +26,8 @@ import tezea.si.dao.UserTezeaDAO;
 import tezea.si.model.business.Site;
 import tezea.si.model.business.SmallClient;
 import tezea.si.model.business.UserTezea;
+import tezea.si.model.business.request.RequestStatus;
+import tezea.si.model.business.request.Service;
 import tezea.si.model.business.request.SmallRequest;
 import tezea.si.utils.TestUtils;
 
@@ -87,7 +90,7 @@ public class GetRequestsControllerTests {
 						.content(input)
 						.headers(TestUtils.userAuthorizationHeader(mockMvc)))
 				.andExpect(status().isOk()).andReturn().getResponse()
-				.getContentAsString();
+				.getContentAsString(StandardCharsets.UTF_8);
 
 		// Assert
 		assertThat(result).isEqualTo(expected);
@@ -110,7 +113,7 @@ public class GetRequestsControllerTests {
 						.content(input)
 						.headers(TestUtils.userAuthorizationHeader(mockMvc)))
 				.andExpect(status().isOk()).andReturn().getResponse()
-				.getContentAsString();
+				.getContentAsString(StandardCharsets.UTF_8);
 
 		// Assert
 		List<SmallRequest> resultList = mapper.readValue(result,
@@ -142,7 +145,7 @@ public class GetRequestsControllerTests {
 		String response = this.mockMvc
 				.perform(get(url).headers(TestUtils.userAuthorizationHeader(mockMvc)))
 				.andExpect(status().isOk()).andReturn().getResponse()
-				.getContentAsString();
+				.getContentAsString(StandardCharsets.UTF_8);
 
 		// Assert
 		SmallRequest result = mapper.readValue(response, SmallRequest.class);
@@ -173,7 +176,7 @@ public class GetRequestsControllerTests {
 						.content(input)
 						.headers(TestUtils.userAuthorizationHeader(mockMvc)))
 				.andExpect(status().isOk()).andReturn().getResponse()
-				.getContentAsString();
+				.getContentAsString(StandardCharsets.UTF_8);
 
 		// Assert
 		List<SmallRequest> resultList = mapper.readValue(result,
@@ -204,7 +207,7 @@ public class GetRequestsControllerTests {
 						.content(input)
 						.headers(TestUtils.userAuthorizationHeader(mockMvc)))
 				.andExpect(status().isOk()).andReturn().getResponse()
-				.getContentAsString();
+				.getContentAsString(StandardCharsets.UTF_8);
 
 		// Assert
 		assertThat(result).isEqualTo(expected);
@@ -233,7 +236,7 @@ public class GetRequestsControllerTests {
 						.content(input)
 						.headers(TestUtils.userAuthorizationHeader(mockMvc)))
 				.andExpect(status().isOk()).andReturn().getResponse()
-				.getContentAsString();
+				.getContentAsString(StandardCharsets.UTF_8);
 
 		// Assert
 		List<SmallRequest> resultList = mapper.readValue(result,
@@ -256,6 +259,7 @@ public class GetRequestsControllerTests {
 		SmallRequest request2 = new SmallRequest();
 		request2.setPhotos(List.of());
 		request2.setSite(Site.CONCIERGERIE);
+		requestDao.save(request2);
 
 		List<SmallRequest> expectedList = List.of(matching);
 
@@ -265,7 +269,77 @@ public class GetRequestsControllerTests {
 						.content(input)
 						.headers(TestUtils.userAuthorizationHeader(mockMvc)))
 				.andExpect(status().isOk()).andReturn().getResponse()
-				.getContentAsString();
+				.getContentAsString(StandardCharsets.UTF_8);
+
+		// Assert
+		List<SmallRequest> resultList = mapper.readValue(result,
+				new TypeReference<List<SmallRequest>>() {
+				});
+		assertThat(resultList).usingRecursiveFieldByFieldElementComparator()
+				.isEqualTo(expectedList);
+	}
+	
+	@Test
+	public void returnsRequestsWithSearchByStatus() throws Exception {
+		// Arrange
+		String input = TestUtils.createJsonString("status", "Facturé");
+
+		SmallRequest request = new SmallRequest();
+		request.setPhotos(List.of());
+		request.setSite(Site.COUTURE);
+		request.setStatus(RequestStatus.CLOSED);
+		requestDao.save(request);
+
+		SmallRequest request2 = new SmallRequest();
+		request2.setPhotos(List.of());
+		request2.setStatus(RequestStatus.BILLED);
+		request2.setSite(Site.CONCIERGERIE);
+		SmallRequest matching = requestDao.save(request2);
+
+		List<SmallRequest> expectedList = List.of(matching);
+
+		// Act
+		String result = this.mockMvc
+				.perform(get(REQUESTS_URL).contentType(MediaType.APPLICATION_JSON)
+						.content(input)
+						.headers(TestUtils.userAuthorizationHeader(mockMvc)))
+				.andExpect(status().isOk()).andReturn().getResponse()
+				.getContentAsString(StandardCharsets.UTF_8);
+
+		// Assert
+		List<SmallRequest> resultList = mapper.readValue(result,
+				new TypeReference<List<SmallRequest>>() {
+				});
+		assertThat(resultList).usingRecursiveFieldByFieldElementComparator()
+				.isEqualTo(expectedList);
+	}
+	
+	@Test
+	public void returnsRequestsWithSearchByRequestType() throws Exception {
+		// Arrange
+		String input = TestUtils.createJsonString("type", "Prestation");
+
+		SmallRequest request = new SmallRequest();
+		request.setPhotos(List.of());
+		request.setSite(Site.COUTURE);
+		request.setType(Service.DONATION);
+		requestDao.save(request);
+
+		SmallRequest request2 = new SmallRequest();
+		request2.setPhotos(List.of());
+		request2.setStatus(RequestStatus.BILLED);
+		request2.setType(Service.SERVICE);
+		SmallRequest matching = requestDao.save(request2);
+
+		List<SmallRequest> expectedList = List.of(matching);
+
+		// Act
+		String result = this.mockMvc
+				.perform(get(REQUESTS_URL).contentType(MediaType.APPLICATION_JSON)
+						.content(input)
+						.headers(TestUtils.userAuthorizationHeader(mockMvc)))
+				.andExpect(status().isOk()).andReturn().getResponse()
+				.getContentAsString(StandardCharsets.UTF_8);
 
 		// Assert
 		List<SmallRequest> resultList = mapper.readValue(result,
@@ -308,7 +382,7 @@ public class GetRequestsControllerTests {
 						.content(input)
 						.headers(TestUtils.userAuthorizationHeader(mockMvc)))
 				.andExpect(status().isOk()).andReturn().getResponse()
-				.getContentAsString();
+				.getContentAsString(StandardCharsets.UTF_8);
 
 		// Assert
 		List<SmallRequest> resultList = mapper.readValue(result,
@@ -350,7 +424,97 @@ public class GetRequestsControllerTests {
 						.content(input)
 						.headers(TestUtils.userAuthorizationHeader(mockMvc)))
 				.andExpect(status().isOk()).andReturn().getResponse()
-				.getContentAsString();
+				.getContentAsString(StandardCharsets.UTF_8);
+
+		// Assert
+		List<SmallRequest> resultList = mapper.readValue(result,
+				new TypeReference<List<SmallRequest>>() {
+				});
+		assertThat(resultList).usingRecursiveFieldByFieldElementComparator()
+				.isEqualTo(expectedList);
+	}
+	
+	@Test
+	public void returnsRequestsWithSearchPhoneNumber() throws Exception {
+		// Arrange
+		SmallClient client = new SmallClient();
+		SmallClient client2 = new SmallClient();
+		client.setLastName("Dula");
+		client2.setLastName("Lars");
+		client.setPhoneNumber("456");
+		client2.setPhoneNumber("658");
+		clientDao.save(client);
+		clientDao.save(client2);
+
+		SmallRequest request = new SmallRequest();
+		SmallRequest request2 = new SmallRequest();
+		request.setPhotos(List.of());
+		request2.setPhotos(List.of());
+		request.setClient(client);
+		request2.setClient(client2);
+
+		SmallRequest matching = requestDao.save(request);
+		requestDao.save(request2);
+
+		String inputClient = TestUtils.createJsonString("phoneNumber", "56");
+		String input = TestUtils.createJsonString("client", inputClient);
+		input = input.replaceAll("\"\\{", "{");
+		input = input.replaceAll("\\}\"", "}");
+		List<SmallRequest> expectedList = List.of(matching);
+
+		// Act
+		String result = this.mockMvc
+				.perform(get(REQUESTS_URL).contentType(MediaType.APPLICATION_JSON)
+						.content(input)
+						.headers(TestUtils.userAuthorizationHeader(mockMvc)))
+				.andExpect(status().isOk()).andReturn().getResponse()
+				.getContentAsString(StandardCharsets.UTF_8);
+
+		// Assert
+		List<SmallRequest> resultList = mapper.readValue(result,
+				new TypeReference<List<SmallRequest>>() {
+				});
+		assertThat(resultList).usingRecursiveFieldByFieldElementComparator()
+				.isEqualTo(expectedList);
+	}
+	
+	@Test
+	public void returnsRequestsWithSearchCity() throws Exception {
+		// Arrange
+		SmallClient client = new SmallClient();
+		SmallClient client2 = new SmallClient();
+		client.setLastName("Dula");
+		client2.setLastName("Lars");
+		client.setPhoneNumber("456");
+		client2.setPhoneNumber("658");
+		client.setCity("Rennes");
+		client2.setCity("Rouen");
+		clientDao.save(client);
+		clientDao.save(client2);
+
+		SmallRequest request = new SmallRequest();
+		SmallRequest request2 = new SmallRequest();
+		request.setPhotos(List.of());
+		request2.setPhotos(List.of());
+		request.setClient(client);
+		request2.setClient(client2);
+
+		SmallRequest matching = requestDao.save(request);
+		requestDao.save(request2);
+
+		String inputClient = TestUtils.createJsonString("city", "Ren");
+		String input = TestUtils.createJsonString("client", inputClient);
+		input = input.replaceAll("\"\\{", "{");
+		input = input.replaceAll("\\}\"", "}");
+		List<SmallRequest> expectedList = List.of(matching);
+
+		// Act
+		String result = this.mockMvc
+				.perform(get(REQUESTS_URL).contentType(MediaType.APPLICATION_JSON)
+						.content(input)
+						.headers(TestUtils.userAuthorizationHeader(mockMvc)))
+				.andExpect(status().isOk()).andReturn().getResponse()
+				.getContentAsString(StandardCharsets.UTF_8);
 
 		// Assert
 		List<SmallRequest> resultList = mapper.readValue(result,

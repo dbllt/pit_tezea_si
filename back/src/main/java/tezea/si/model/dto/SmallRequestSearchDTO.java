@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import tezea.si.model.business.Site;
+import tezea.si.model.business.request.RequestStatus;
+import tezea.si.model.business.request.Service;
 
 public class SmallRequestSearchDTO {
 
@@ -15,6 +17,8 @@ public class SmallRequestSearchDTO {
 	private LocalDate startDate;
 	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate endDate;
+	private Service type;
+	private RequestStatus status;
 
 	public String getDescription() {
 		return description;
@@ -54,6 +58,22 @@ public class SmallRequestSearchDTO {
 
 	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
+	}
+
+	public Service getType() {
+		return type;
+	}
+
+	public void setType(Service type) {
+		this.type = type;
+	}
+
+	public RequestStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(RequestStatus status) {
+		this.status = status;
 	}
 
 }

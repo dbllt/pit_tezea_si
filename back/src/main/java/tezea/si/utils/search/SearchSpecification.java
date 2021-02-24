@@ -40,7 +40,7 @@ public class SearchSpecification<T> implements Specification<T> {
 						"String search cannot use operation " + criteria.getOperation());
 			}
 		}
-		if (criteria.getJavaClass() == Site.class) {
+		if (criteria.getJavaClass().isEnum()) {
 			switch (criteria.getOperation()) {
 			case EQUALS:
 				return builder.equal(constructKey(root, criteria), criteria.getValue());
