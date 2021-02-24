@@ -6,7 +6,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import {Link, Redirect, RouteComponentProps} from "react-router-dom";
 import "./Request.css";
 import FormClient from "../FormClient/FormClient";
-import API, {PatchRequest} from "../../network/API";
+import API, {PatchRequest,PatchClient} from "../../network/API";
 
 interface IRequest {
     id: string,
@@ -308,8 +308,7 @@ class Request extends Component<IndexProps, IState> {
         } else {
             data[indice] = false;
             this.setState({typeTruck : data })      
-        } 
-        console.log(this.state.typeTruck);
+        }
     }
 
     callbackFunction(childData:IClient) {
@@ -402,12 +401,26 @@ class Request extends Component<IndexProps, IState> {
             var c= t[1] + "/" + t[0] + "/" + t[2]
             const date = new Date(c);
 
+            var patchClient:PatchClient={
+                email: client.email,
+                phoneNumber: client.phone,
+                address: client.address,
+                postCode: client.cp,
+                city: client.city,
+                companyName: client.company,
+                lastName: client.lName,
+                firstName: client.fName,
+                honorificTitle: client.gender,
+                type: client.clientStatus,
+
+            }
+
             var patchRequest:PatchRequest={
                 id: +this.state.id,
                 date: date,
                 site: this.state.service,
                 responsable: {username:this.state.concierge},
-                client:client,
+                client:patchClient,
                 description : this.state.requestDesc,
                 status: this.state.requestStatus,
                 accessDetails:this.state.place,
@@ -438,7 +451,6 @@ class Request extends Component<IndexProps, IState> {
                 <Form className="form">  
                 <Grid container direction="column" alignItems="flex-start" justify="center" >
                     <Grid item>
-                        {this.state.client.lName}
                      <FormClient parentCallback={this.callbackFunction} client={this.state.client}/>
                     </Grid>  
                     <Grid item>

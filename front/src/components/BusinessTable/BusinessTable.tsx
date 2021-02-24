@@ -208,7 +208,6 @@ class BusinessTable extends Component<IProps, IState> {
     }
 
     updateStatus = (status: string, id: string) => {
-        console.log(status)
         let request:PatchRequest={
             id:+id,
             status:status

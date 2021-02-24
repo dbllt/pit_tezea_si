@@ -48,7 +48,6 @@ class FormClient extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         const client = this.props.client;
-        console.log("form client", client)
 
         this.state = {
             statut: client.clientStatus,
@@ -189,7 +188,7 @@ class FormClient extends Component<Props, State> {
                                         name="gender"
                                         value={this.state.gender} onChange={this.handleChange} required
                                     >
-                                        <MenuItem value="M">M</MenuItem>
+                                        <MenuItem value="Mr">Mr</MenuItem>
                                         <MenuItem value="Mme">Mme</MenuItem>
                                     </Select>
                                 </FormControl>

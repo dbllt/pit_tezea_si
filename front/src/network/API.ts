@@ -240,7 +240,6 @@ const API = {
     formatDate: function (date: string): string {
         var t = date.split("-");
         var ret = t[2] + "-" + t[1] + "-" + t[0]
-        console.log(ret)
         return ret;
 
     },
@@ -308,7 +307,6 @@ const API = {
     },
 
     editRequest: async function (request:PatchRequest): Promise<boolean> {
-console.log(":)")
         let ret = false;
         let temp = localStorage.getItem('token');
         if (temp === null) {
