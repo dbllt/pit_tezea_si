@@ -84,6 +84,51 @@ export interface backendClosedBy {
 export interface backendEstimation {
 }
 
+export interface PatchRequest {
+    id?: number;
+    date?: Date;
+    site?: string;
+    responsable?: PatchClosedBy;
+    client?: PatchClient;
+    priority?: string;
+    description?: string;
+    status?: string;
+    closedBy?: PatchClosedBy;
+    accessDetails?: string;
+    repetitionTime?: number;
+    repetitionUnit?: string;
+    type?: string;
+    amountWood?: number;
+    amountDonated?: number;
+    appointmentPlasmaDate?: Date;
+    estimation?: PatchEstimation;
+    satisfactionLevel?: string;
+    lastUpdated?: Date;
+    lastUpdatedBy?: PatchClosedBy;
+    photos?: string[];
+}
+
+export interface PatchClient {
+    id?: number;
+    email?: string;
+    phoneNumber?: string;
+    address?: string;
+    postCode?: string;
+    city?: string;
+    companyName?: string;
+    lastName?: string;
+    firstName?: string;
+    honorificTitle?: string;
+    type?: string;
+}
+
+export interface PatchClosedBy {
+    id?: number;
+    username?: string;
+}
+
+export interface PatchEstimation {
+}
 
 interface User {
     id: string;
@@ -114,8 +159,8 @@ const API = {
                     localStorage.setItem('refreshToken', refreshToken)
 
 
-                    if(data.authorities.length>1 && data.authorities[1].authority==="Responsable Site") {
-                        localStorage.setItem('site',data.authorities[0].authority)
+                    if (data.authorities.length > 1 && data.authorities[1].authority === "Responsable Site") {
+                        localStorage.setItem('site', data.authorities[0].authority)
                         let role: string = "";
                         const temp = data.authorities[1]
                         if (temp !== undefined) {
@@ -124,7 +169,7 @@ const API = {
                             role = ""
                         }
                         localStorage.setItem('role', role)
-                    }else{
+                    } else {
 
                         let role: string = "";
                         const temp = data.authorities[0]
@@ -192,9 +237,9 @@ const API = {
         return ret;
     },
 
-    formatDate:function(date:string):string{
-            var t = date.split("-");
-            var ret= t[2] + "-" + t[1] + "-" + t[0]
+    formatDate: function (date: string): string {
+        var t = date.split("-");
+        var ret = t[2] + "-" + t[1] + "-" + t[0]
         console.log(ret)
         return ret;
 
@@ -210,8 +255,6 @@ const API = {
         let token: string = temp;
 
 
-
-
         const requestOptions = {
             method: 'POST',
             headers: {
@@ -221,18 +264,18 @@ const API = {
             body: JSON.stringify({
                 "site": request.site,
 
-                 "client": {
-                     email: request.client.email,
-                     phoneNumber: request.client.phone,
-                     address: request.client.address,
-                     postCode: request.client.cp,
-                     city: request.client.city,
-                     companyName: request.client.company,
-                     lastName: request.client.lName,
-                     firstName: request.client.fName,
-                     honorificTitle: request.client.gender,
-                     type: request.client.clientStatus
-                 },
+                "client": {
+                    email: request.client.email,
+                    phoneNumber: request.client.phone,
+                    address: request.client.address,
+                    postCode: request.client.cp,
+                    city: request.client.city,
+                    companyName: request.client.company,
+                    lastName: request.client.lName,
+                    firstName: request.client.fName,
+                    honorificTitle: request.client.gender,
+                    type: request.client.clientStatus
+                },
                 "priority": "Basse",
                 "description": request.requestDesc,
                 "repetitionTime": +request.regularity,
@@ -262,7 +305,7 @@ const API = {
 
     },
 
-    editRequest: async function (request: Request): Promise<boolean> {
+    editRequest: async function (request:PatchRequest): Promise<boolean> {
 
         let ret = false;
         let temp = localStorage.getItem('token');
@@ -278,30 +321,7 @@ const API = {
                 'Content-Type': 'application/json',
                 'Authorization': "Bearer " + token
             },
-            body: JSON.stringify({
-                "site": request.site,
-                "id": request.id,
-                "client": {
-                    email: request.client.email,
-                    phoneNumber: request.client.phone,
-                    address: request.client.address,
-                    postCode: request.client.cp,
-                    city: request.client.city,
-                    companyName: request.client.company,
-                    lastName: request.client.lName,
-                    firstName: request.client.fName,
-                    honorificTitle: request.client.gender,
-                    type: request.client.clientStatus
-                },
-                "priority": "Basse",
-                "description": request.requestDesc,
-                "repetitionTime": +request.regularity,
-                "date": request.executionDate,
-                "type": request.typeRequest,
-                "responsable": {"username": localStorage.getItem('username')},
-                "status": request.requestStatus,
-                "accessDetails": request.place
-            })
+            body: JSON.stringify(request)
         };
 
         await fetch('/requests/', requestOptions)
@@ -319,14 +339,21 @@ const API = {
         return ret;
 
     },
-    getRequests: async function (filter: Filter): Promise<Request[]> {
 
+
+    convertDate(d: any) {
+        if (d !== null) {
+            let day: string = ("0" + d.getDate()).slice(-2)
+            let month: string = ("0" + (d.getMonth() + 1)).slice(-2)
+            return day + "-" + month + "-" + d.getFullYear()
+        }
+    },
+    getRequests: async function (filter: Filter): Promise<Request[]> {
         let temp = localStorage.getItem('token');
         if (temp === null) {
             temp = "";
         }
         let token: string = temp;
-
 
         const requestOptions = {
             method: 'POST',
@@ -334,7 +361,20 @@ const API = {
                 'Content-Type': 'application/json',
                 'Authorization': "Bearer " + token
             },
-            body: JSON.stringify({})
+            body: JSON.stringify({
+                "client": {
+                    "postCode": "",
+                    "lastName": filter.clientName,
+                    "phoneNumber": filter.phoneNumber,
+                    "city": filter.localization
+                },
+                "startDate": this.convertDate(filter.startDate),
+                "endDate": this.convertDate(filter.endDate),
+                "site": filter.site === "" ? undefined : filter.site,
+                //"type": filter.requestObject, TODO
+                "status": filter.requestStatus === "" ? undefined : filter.requestStatus
+                //TODO urgence a faire coté front
+            })
         };
         var res: Request[] = []
         await fetch('/requests', requestOptions)
@@ -378,6 +418,8 @@ const API = {
 
         return ret;
     },
+
+    //frontendRequestToBackendRequest:function()
 
     backendRequestToFrontendRequest: function (request: BackendRequest): Request {
         console.log(request)
@@ -556,9 +598,9 @@ const API = {
 
         let success = false;
         var authorities = [];
-        authorities[0]=role;
+        authorities[0] = role;
         if (role === "Responsable Site") {
-            authorities[1] =site;
+            authorities[1] = site;
         }
 
         let temp = localStorage.getItem('token');
@@ -579,13 +621,13 @@ const API = {
             .then(async response => {
                 if (!response.ok) {
                     return Promise.reject(response);
-                }else{
-                    success=true;
+                } else {
+                    success = true;
                 }
             }).catch(error => {
                 console.error('There was an error!', error);
             })
-    return success;
+        return success;
 
     },
 
@@ -625,7 +667,7 @@ const API = {
     },
 
     getSite() {
-        return localStorage.getItem('site')||"";
+        return localStorage.getItem('site') || "";
     },
 
     getRequestStatus() {
@@ -641,9 +683,9 @@ const API = {
         return ["Normale", "Alerte orange", "Alerte Rouge"]
     },
 
-    sendEmail () {
+    sendEmail() {
         emailjs.init("user_xXE8w4OznmdPxlbf8cIz6");
-        emailjs.send('tezea', 'mail',{}, 'user_xXE8w4OznmdPxlbf8cIz6')
+        emailjs.send('tezea', 'mail', {}, 'user_xXE8w4OznmdPxlbf8cIz6')
             .then((result) => {
                 console.log(result.text);
             }, (error) => {
