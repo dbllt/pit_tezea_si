@@ -1,10 +1,12 @@
 package tezea.si.model;
 
+import tezea.si.model.business.ClientType;
 import tezea.si.model.business.HonorificTitle;
 
 public class SmallClientDTO {
 
 	private long id;
+	private ClientType type;
 	private String email;
 	private String phoneNumber;
 	private String address;
@@ -93,6 +95,14 @@ public class SmallClientDTO {
 
 	public void setHonorificTitle(HonorificTitle honorificTitle) {
 		this.honorificTitle = honorificTitle;
+	}
+
+	public ClientType getType() {
+		return type;
+	}
+
+	public void setType(ClientType type) {
+		this.type = type;
 	}
 
 }

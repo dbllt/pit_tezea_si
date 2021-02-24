@@ -34,6 +34,7 @@ import tezea.si.model.SmallClientDTO;
 import tezea.si.model.SmallEstimationDTO;
 import tezea.si.model.SmallRequestDTO;
 import tezea.si.model.SmallUserDTO;
+import tezea.si.model.business.ClientType;
 import tezea.si.model.business.HonorificTitle;
 import tezea.si.model.business.Site;
 import tezea.si.model.business.SmallClient;
@@ -238,6 +239,7 @@ public class CreateRequestsControllerTests {
         client.setLastName(lastName);
         client.setFirstName(firstName);
         client.setHonorificTitle(title);
+        client.setType(ClientType.COMPANY);
 
         SmallRequest request = new SmallRequest();
         request.setAccessDetails(access);
@@ -283,6 +285,7 @@ public class CreateRequestsControllerTests {
         expectedClient.setLastName(lastName);
         expectedClient.setFirstName(firstName);
         expectedClient.setHonorificTitle(title);
+        expectedClient.setType(ClientType.COMPANY);
 
         SmallRequestDTO expected = new SmallRequestDTO();
         expected.setAccessDetails(access);

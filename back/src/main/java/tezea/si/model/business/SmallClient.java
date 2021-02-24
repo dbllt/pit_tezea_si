@@ -7,6 +7,7 @@ import javax.persistence.Id;
 @Entity
 public class SmallClient {
 	private long id;
+	private ClientType type;
 	private String email;
 	private String phoneNumber;
 	private String address;
@@ -97,6 +98,14 @@ public class SmallClient {
 
 	public void setHonorificTitle(HonorificTitle honorificTitle) {
 		this.honorificTitle = honorificTitle;
+	}
+
+	public ClientType getType() {
+		return type;
+	}
+
+	public void setType(ClientType type) {
+		this.type = type;
 	}
 
 }

@@ -72,6 +72,7 @@ public class EntityToDTOService {
 		result.setLastName(client.getLastName());
 		result.setFirstName(client.getFirstName());
 		result.setHonorificTitle(client.getHonorificTitle());
+		result.setType(client.getType());
 		return result;
 	}
 
