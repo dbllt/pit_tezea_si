@@ -30,24 +30,25 @@ const tableClientHeadNames = ["Type Client", "Entreprise", "Civilité", "Nom", "
 
 
 interface Request {
-    id: string;
-    date: string,
-    hour: string,
+    id: string,
     concierge: string,
     site: string,
-    requestStatus: string,
-    requestAssignment: string,
-    executionDate: Date,
     typeRequest: string,
     requestDesc: string,
     numberPerson: string,
     place: string,
     regularity: string,
     duration: string,
-    material: string,
+    material: boolean [],
+    materialother: string,
     internalInfo: string,
+    executionDate: string,
+    executionTime: string,
+    requestStatus: string,
+    requestAssignment: string,
     images: File [],
-    client:IClient
+    photos: string[],
+    client: IClient
 }
 
 interface IClient {
@@ -69,13 +70,21 @@ function Row(props: { row: Request, updateStatus: (name: string, id: string) => 
     const classes = useRowStyles();
     const options = {year: 'numeric', month: 'numeric', day: 'numeric'}
 
-    const executionDate = row.executionDate.toLocaleDateString('FR', options);
+    const executionDate = row.executionDate;//.toLocaleDateString('FR', options);
+
+
+    function formatDate(d: string) {
+        var t=d.split("-");
+        return t[1]+"/"+t[0]+"/"+t[2]
+    }
 
     const chooseRowEmergencyStyle = () => {
         const sevenDays = 7 * 24 * 3600 * 1000;
         const fourteenDays = 14 * 24 * 3600 * 1000;
         const dateNow = new Date().getTime();
-        const execDate = row.executionDate.getTime();
+        const x = formatDate(row.executionDate);
+        const temp = new Date(x);
+        const execDate = temp.getTime();
 
         return ((execDate - dateNow) <= sevenDays) ? "high_emergency_style_class" :
             ((execDate - dateNow) <= fourteenDays) ? "medium_emergency_style_class" : "low_emergency_style_class";
@@ -85,7 +94,7 @@ function Row(props: { row: Request, updateStatus: (name: string, id: string) => 
     return (
         <React.Fragment>
             <TableRow className={chooseRowEmergencyStyle()}>
-                <TableCell  className={"noUglyBorder"} align={"center"}>
+                <TableCell className={"noUglyBorder"} align={"center"}>
                     <IconButton
                         aria-label="expand row"
                         size="small"
@@ -95,14 +104,19 @@ function Row(props: { row: Request, updateStatus: (name: string, id: string) => 
                     </IconButton>
                 </TableCell>
                 <TableCell className={"test"} align="center">{row.id}</TableCell>
-                <TableCell className={"noUglyBorder"}  align="center">{executionDate}</TableCell>
-                <TableCell  className={"noUglyBorder"} align="center">{row.client.clientStatus}</TableCell>
-                <TableCell  className={"noUglyBorder"} align="center">{row.client.fName}</TableCell>
-                <TableCell  className={"noUglyBorder"} align="center">{row.site}</TableCell>
-                <TableCell className={"noUglyBorder"}  align="center">{row.concierge}</TableCell>
+                <TableCell className={"noUglyBorder"} align="center">{executionDate}</TableCell>
+                <TableCell className={"noUglyBorder"} align="center">{row.client.clientStatus}</TableCell>
+                <TableCell className={"noUglyBorder"} align="center">{row.client.fName}</TableCell>
+                <TableCell className={"noUglyBorder"} align="center">{row.site}</TableCell>
+                <TableCell className={"noUglyBorder"} align="center">{row.concierge}</TableCell>
                 <SelectRequestStatusTableCell key={row.id} status={row.requestStatus} id={row.id}
                                               updateStatus={props.updateStatus}/>
-                <TableCell className={"noUglyBorder"}  align="center"><p style={{textAlign:"center",maxWidth:100,overflow:"hidden",maxHeight:13}}>{row.requestDesc}</p></TableCell>
+                <TableCell className={"noUglyBorder"} align="center"><p style={{
+                    textAlign: "center",
+                    maxWidth: 100,
+                    overflow: "hidden",
+                    maxHeight: 13
+                }}>{row.requestDesc}</p></TableCell>
             </TableRow>
             <TableRow className={classes.root}>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={10}>
@@ -125,10 +139,11 @@ function Row(props: { row: Request, updateStatus: (name: string, id: string) => 
                             </Typography>
                             <Table size="small" aria-label="purchases">
                                 <TableHead>
-                                    <TableRow >
+                                    <TableRow>
                                         {
                                             tableClientHeadNames.map((value, index) => (
-                                                <TableCell key={index} align="left" style={{fontWeight:"bold"}}>{value}</TableCell>
+                                                <TableCell key={index} align="left"
+                                                           style={{fontWeight: "bold"}}>{value}</TableCell>
                                             ))
                                         }
                                     </TableRow>
@@ -187,12 +202,16 @@ class BusinessTable extends Component<IProps, IState> {
                 <BusinessTableFilter applyFilter={this.applyFilter}/>
                 <TableContainer component={Paper}>
                     <Table size="small" aria-label="collapsible table">
-                        <TableHead >
-                            <TableRow style={{backgroundColor: '#01a1e4',height:"60px"}}>
-                                <TableCell  className={"noUglyBorder"} />
+                        <TableHead>
+                            <TableRow style={{backgroundColor: '#01a1e4', height: "60px"}}>
+                                <TableCell className={"noUglyBorder"}/>
                                 {
                                     tableHeadNames.map((value, index) => (
-                                        <TableCell  className={"noUglyBorder"}  key={index} align="center" style={{fontWeight:"bold",fontSize:15,color:"#fffaf0"}}>{value}</TableCell>
+                                        <TableCell className={"noUglyBorder"} key={index} align="center" style={{
+                                            fontWeight: "bold",
+                                            fontSize: 15,
+                                            color: "#fffaf0"
+                                        }}>{value}</TableCell>
                                     ))
                                 }
                             </TableRow>

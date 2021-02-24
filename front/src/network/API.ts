@@ -2,25 +2,25 @@ import {Filter} from '../components/BusinessTableFilter/BusinessTableFilter';
 
 
 interface Request {
-    id: string;
-    date: string,
-    hour: string,
+    id: string,
     concierge: string,
     site: string,
-    requestStatus: string,
-    requestAssignment: string,
-    executionDate: Date,
     typeRequest: string,
     requestDesc: string,
     numberPerson: string,
     place: string,
     regularity: string,
     duration: string,
-    material: string,
+    material: boolean [],
+    materialother: string,
     internalInfo: string,
+    executionDate: string,
+    executionTime: string,
+    requestStatus: string,
+    requestAssignment: string,
     images: File [],
-    client: IClient,
-    photos: string[]
+    photos: string[],
+    client: IClient
 }
 
 interface IClient {
@@ -34,6 +34,7 @@ interface IClient {
     address: string,
     cp: string,
     city: string
+    siret: string
 }
 
 export interface BackendRequest {
@@ -71,6 +72,7 @@ export interface backendClient {
     lastName: string;
     firstName: string;
     honorificTitle: string;
+    type:string;
 }
 
 export interface backendClosedBy {
@@ -82,126 +84,10 @@ export interface backendEstimation {
 }
 
 
-interface Client {
-    id: string;
-    name: string,
-    mail: string
-}
-
 interface User {
     id: string;
     username: string;
     authorities: string[];
-}
-
-
-const serge: User = {
-    id: "0",
-    username: "serge",
-    authorities: ["serge"]
-}
-
-const pierre: User = {
-    id: "1",
-    username: "pierre",
-    authorities: ["concierge"]
-}
-
-const paul: Client = {
-    id: "0",
-    name: "paul",
-    mail: "paul@mail.fr"
-}
-
-const date1 = new Date(2021, 1, 28);
-const date2 = new Date(2021, 2, 5);
-const date3 = new Date(2021, 2, 15);
-
-let requests: Request[] = [];
-addRequest("1", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date1, "Particulier", "Google", "M.", "Nom", "Pierre", "353535550", "email@email", "1 rue de la Paix", "35000", "Rennes", "Faire un truc", "3", "?", "2 fois par jour", "1 an", "1 camion", "coucou", [])
-addRequest("2", "2018-01-25", "10:30", "test", "Autre", "Don", "En cours", "Ouvrier 3", date2, "Entreprise", "Google", "M.", "Nom", "Paul", "353535550", "email@email", "1 rue de la Paix", "35000", "Rennes", "Faire un truc", "2", "?", "2 fois par jour", "1 an", "1 camion", "coucou", [])
-addRequest("3", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date3, "Particulier", "Amazon", "M.", "Nom", "Jaques", "353535550", "email@email", "1 rue de la Paix", "35000", "Rennes", "Faire un truc", "1", "?", "2 fois par jour", "1 an", "1 camion", "coucou", [])
-addRequest("4", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date1, "Particulier", "Amazon", "M.", "Nom", "Jean-Abdourrahmane", "353535550", "email@email", "1 rue de la Paix", "35000", "Rennes", "Faire un trucCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCcc", "2", "?", "2 fois par jour", "1 an", "1 camion", "coucou", [])
-addRequest("5", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "En cours", "Ouvrier 3", date1, "Entreprise", "Amazon", "M.", "Nom", "Prénom", "353535550", "email@email", "1 rue de la Paix", "35000", "Rennes", "Faire un truc", "3", "?", "2 fois par jour", "1 an", "1 camion", "coucou", [])
-addRequest("6", "2018-01-25", "10:30", "test", "Menuiserie", "Enlevement", "En cours", "Ouvrier 3", date3, "Particulier", "Facebook", "M.", "Nom", "Prénom", "353535550", "email@email", "1 rue de la Paix", "35000", "Rennes", "Faire un truc", "1", "?", "2 fois par jour", "1 an", "1 camion", "coucou", [])
-addRequest("7", "2018-01-25", "10:30", "Jouadé", "Autre", "Don", "En cours", "Ouvrier 3", date2, "Particulier", "Amazon", "M.", "Nom", "Prénom", "353535550", "email@email", "1 rue de la Paix", "35000", "Rennes", "Faire un truc", "4", "?", "2 fois par jour", "1 an", "1 camion", "coucou", [])
-addRequest("8", "2018-01-25", "10:30", "test", "Menuiserie", "Prestation", "En cours", "Ouvrier 3", date3, "Entreprise", "Facebook", "M.", "Nom", "Prénom", "353535550", "email@email", "1 rue de la Paix", "35000", "Rennes", "Faire un truc", "1", "?", "2 fois par jour", "1 an", "1 camion", "coucou", [])
-addRequest("9", "2018-01-25", "10:30", "Jouadé", "Menuiserie", "Don", "En cours", "Ouvrier 3", date2, "Particulier", "Facebook", "M.", "Nom", "Prénom", "353535550", "email@email", "1 rue de la Paix", "35000", "Rennes", "Faire un truc", "2", "?", "2 fois par jour", "1 an", "1 camion", "coucou", [])
-
-
-let clients: Client[] = [];
-let users: User[] = [];
-users.push(serge);
-users.push(pierre);
-clients.push(paul);
-
-function addRequest(
-    id: string,
-    date: string,
-    hour: string,
-    concierge: string,
-    site: string,
-    typeRequest: string,
-    requestStatus: string,
-    requestAssignment: string,
-    executionDate: Date,
-    clientStatus: string,
-    company: string,
-    gender: string,
-    lName: string,
-    fName: string,
-    phone: string,
-    email: string,
-    address: string,
-    cp: string,
-    city: string,
-    requestDesc: string,
-    numberPerson: string,
-    place: string,
-    regularity: string,
-    duration: string,
-    material: string,
-    internalInfo: string,
-    images: File [],
-) {
-
-    const temp: IClient = {
-        clientStatus: clientStatus,
-        gender: gender,
-        lName: lName,
-        fName: fName,
-        phone: phone,
-        email: email,
-        address: address,
-        cp: cp,
-        city: city,
-        company: company,
-
-    }
-    const request: Request = {
-        concierge: concierge,
-        date: date,
-        duration: duration,
-        executionDate: executionDate,
-        hour: hour,
-        id: id,
-        images: images,
-        internalInfo: internalInfo,
-        material: material,
-        numberPerson: numberPerson,
-        place: place,
-        regularity: regularity,
-        requestAssignment: requestAssignment,
-        requestDesc: requestDesc,
-        requestStatus: requestStatus,
-        site: site,
-        typeRequest: typeRequest,
-        client: temp,
-        photos: []
-    }
-
-    requests.push(request);
-
 }
 
 const API = {
@@ -305,7 +191,7 @@ const API = {
                 'Authorization': "Bearer " + token
             },
             body: JSON.stringify({
-                "site":request.site,
+                "site": request.site,
 
                 "client": {
                     email: request.client.email,
@@ -316,15 +202,16 @@ const API = {
                     companyName: request.client.company,
                     lastName: request.client.lName,
                     firstName: request.client.fName,
-                    honorificTitle:"Mr"
+                    honorificTitle: "Mr",
+                    type: request.client.clientStatus
                 },
                 "priority": "Basse",
                 "description": request.requestDesc,
                 "repetitionTime": +request.regularity,
-                 "date": "01-01-2001",
-                 "type": request.typeRequest,
+                "date": request.executionDate,
+                "type": request.typeRequest,
                 "responsable": {"username": localStorage.getItem('username')},
-                 "status": request.requestStatus,
+                "status": request.requestStatus,
                 "accessDetails": request.place
             })
         };
@@ -397,7 +284,7 @@ const API = {
                 }
             }).then(r => r.blob())
                 .then(blobFile => {
-                    var temp: File = new File([blobFile], "img"+i, {type: "image/jpeg"});
+                    var temp: File = new File([blobFile], "img" + i, {type: "image/jpeg"});
                     ret.push(temp);
                 });
         }
@@ -413,7 +300,7 @@ const API = {
 
         if (request.client !== null) {
             client = {
-                clientStatus: "",
+                clientStatus: request.client.type,
                 company: request.client.companyName,
                 gender: request.client.honorificTitle,
                 lName: request.client.lastName,
@@ -422,7 +309,8 @@ const API = {
                 email: request.client.email,
                 address: request.client.address,
                 cp: request.client.postCode,
-                city: request.client.city
+                city: request.client.city,
+                siret: "XXXX"
             }
         } else {
             client = {
@@ -436,6 +324,7 @@ const API = {
                 address: "",
                 cp: "",
                 city: "",
+                siret: ""
 
             }
         }
@@ -452,24 +341,25 @@ const API = {
         }
         var retRequest: Request = {
             id: request.id.toString(),
-            date: tempDate.toString(),
-            hour: "",
             concierge: tempResponsable,
             site: request.site,
             requestStatus: request.status,
             requestAssignment: "",
-            executionDate: date1,
             typeRequest: request.type,
             requestDesc: request.description,
             numberPerson: "",
             place: request.accessDetails,
             regularity: request.repetitionTime.toString(),
             duration: "",
-            material: "a",
             internalInfo: "",
             images: [],
             client: client,
-            photos: request.photos
+            photos: request.photos,
+            executionTime: "",
+            executionDate: request.date.toString(),
+            material: [],
+            materialother: "",
+
 
         }
 
@@ -549,58 +439,6 @@ const API = {
     },
 
 
-    editRequest: async function (id: string, request: Request): Promise<any> {
-        let index = requests.findIndex(x => x.id === id);
-        if (index > -1) {
-            requests.splice(index, 1);
-            requests.push(request);
-        }
-    },
-    removeRequest: async function (id: string): Promise<any> {
-        let index = requests.findIndex(x => x.id === id);
-        if (index > -1) {
-            requests.splice(index, 1);
-        }
-    },
-    getClients: async function (): Promise<Client[]> {
-        return clients;
-    },
-    addClient: async function (name: string, mail: string): Promise<any> {
-        const client: Client = {
-            id: clients.length.toString(),
-            name: name,
-            mail: mail
-        };
-
-        clients.push(client);
-
-    },
-
-    getClient: async function (id: string): Promise<any> {
-        clients.forEach(function (client) {
-            if (client.id === id) {
-                return client;
-            }
-        });
-        return false;
-    },
-
-    editClient: async function (id: string, client: Client): Promise<any> {
-        let index = clients.findIndex(x => x.id === id);
-        if (index > -1) {
-            clients.splice(index, 1);
-            clients.push(client);
-        }
-    },
-
-    removeClient: async function (id: string): Promise<any> {
-        let index = clients.findIndex(x => x.id === id);
-        if (index > -1) {
-            clients.splice(index, 1);
-        }
-    },
-
-
     getUsers: async function (): Promise<User[]> {
         let temp = localStorage.getItem('token');
         if (temp === null) {
@@ -661,22 +499,6 @@ const API = {
 
     },
 
-    getUser: async function (id: string): Promise<any> {
-        users.forEach(function (user) {
-            if (user.id === id) {
-                return user;
-            }
-        });
-        return false;
-    },
-
-    editUser: async function (id: string, user: User): Promise<any> {
-        let index = users.findIndex(x => x.id === id);
-        if (index > -1) {
-            users.splice(index, 1);
-            users.push(user);
-        }
-    },
 
     removeUserByUsername: async function (username: string): Promise<boolean> {
         let temp = localStorage.getItem('token');
@@ -717,46 +539,11 @@ const API = {
     },
 
     getServices() {
-        return ["Bois","Couture", "Tri", "Recyclerie", "Enlèvements", "Estimateur"];
+        return ["Bois", "Couture", "Tri", "Recyclerie", "Enlèvements", "Estimateur"];
     },
 
     getUrgencyStatus() {
         return ["Normale", "Alerte orange", "Alerte Rouge"]
-        // https://www.youtube.com/watch?v=luYF1H642FE
-// \\\\\\\\\\\\\\\\\\\rr\\**\++*~_:^^^^^^!!**\<=ittvvvvvtttzsx1Cuuuuuuuuuz**lfxsf]*^*\*\\***|=
-// ||||||?????????????=l=?|<++*",~^!!!!!!!*\|i7x1CuuuCCuuuuuo3wZ55555555552lc1oous!:,!\\*r**CC
-// <<<<<|?????????????|c?++r*^::~^!^^^^^!!!*+ltxTCuoyuuu{1uy23wZZ5555555Z55F]vuFuv^,:\+*!r\^!\
-// ?????=cc===?????????=|++\!~:~;^^^^^^^!!!*\?isTuyFVo1f}uyo23w555555555555Zoxsuui",~rtxi\+|++
-// iiiiiiiillclllllllcc?+++*"::~;^^^^^^^^!!*+lvx1uyFVux1uuuuF%4555555555Z55A52C{Cl~,~\isxlc?r<
-// !********\r+r\\r+<|??r*!"::~"^^!!!!!!!!!*r]CCu%3V2uxfvfCV%SwZ55555555555AP5Zul\",^+fCxCxut]
-// ~~";;;;^^!\*!!*!!****\*!~::~;^!!!!!!!**\+|]Cyo2haV1vtf1oSh3%a44ZZw%V3hZ5AAAwu+*^~!?\\isiszi
-// ~~~~^^""^!**!^^^!!*****!":::"^!;~:::~~^!\?isCyyVSVyuuCy3%Fu11uuC1{T1CuFwAAVxc\*^;*|*?sst+|=
-// ~~~"^^;;^^*\!~~~;^!!!!!^;:::~^^"~";"~~~"^*\+ixuyouuuyFSwVyuuCCuCuyV3%S45PP1+\\!~"!!!+*=+*\\
-// \*********\+\^,,,,::::~"~:,,~!!!!!!***\r\*!!!*lsxfxy3wZ5Z%FyuuuVSaS%w5AAPPC\**!!!*!+vi=\r++
-// ]lllc==??||??*_`` `.```.-_,,~!!!^;~,:~~;^^;^":"!\cxFw55Z%uxx{7vs1{7vxuhAPPu+****\\\*\i?\r\*
-// viill=???||?|\~` `:^~-.--_,:~!!!^~:,;^"~~!*~,,,~!+xV45A5u]il=\\l%HACTyaAAAu=\*****\****r?*!
-// v]ill====????|*-_~;^;~";;"~:~!*!^^;^!!^;^*\!""~"!lu%w555Fsl|?*!\1APwh5AAAAyx+!"~~~";;;";^^^
-// tvilllllllllll|~--`._-,:::,,:^**!!!****\**!!^^;^*]uo%wwwhuz]vsCFwAAA55AAA5u1uuuuuC11{xx}xxx
-// ft]iiiiiiiiiiil*    ```````-,"!*!!******!!!^^^^^*i1y3SShaa%ouyVS4waaw55APwCCuuyyyyyuuu5A55A
-// xxsz7v]]vv]]]]]c!^^;^^!!!!^^;^!!!!!****!!!!^^^!*\]CF3Shwww4waShhhhh4555AP4uuuuuuuuuCvuRRRNN
-// T}xsf7]]vv]]]vttfsz77ffsf7vi+*!!!!!!******!^^^!*\vu3w4Z4wwwwwSSSaw5AAPAAP5uuuuuuCT7c\Fg8QRR
-// }}xszv]i]]]]]]vv7tvvvt777tv]i?*!!!!!!****!^~:~^!\vyh5554a3oFV3%Sw5APPAAAG5u1xx7]c+*!\4m$Upm
-// xxxf7vv]]]]]]]vv7tvvtttttttfsv\!!!!!!!!!!;::"^!!\voaZZZwaVsl]u2Sw55AAAAPG%{]l?<r**!^]G$$$$$
-// xxxsztv]]]]]]]]]vttttvvvvvv7fz+!!!!!!!!!^:_,~^!!\vyw55ZwwaV7r=1VhwwZ55APAz|\**!****?VU$p$$$
-// zssz7tv]]]]]]]i]]vtvvvi|\*!^;,_!!!!!!!!!~__'_:!!*luS5554hS%Vx*|C%awZ5APG7^!!!!;";^*]V3G$U$p
-// llllliiiiiilliii=\!~,-`        :!!!^!!*^,__'-_:^*=}V4Souuuuyoi*=yw455AGo:`..-'-.`.:\C$p$UUA
-// \\\\\\rr++r*^:'`               `:!!!!*r*"~~::::;!*+<\\=71Cuuu1?\CaZ5AGy".``       `_^sAmmm$
-// ++++<|=ll*_                     `~*!!*is|\r|;"!**+?civ1yFu1uyus]yw55Ax~_'.``          .~*v3
-// iiiiiivz\.                       `:!^*ioo]C};"^*=zi]V2ul^_,!zCCyS5AAx,----.``` `````      `
-// ?===ll]?_                         `:^!+u2=+x\"~!iz*~^\*:,:\u2CuSAP$Ai,.''--.`` ````````````
-// \\\\r+?^                           ,!^!lv*!*=**+i1tr?s|^*1aZ%y%5Pm0A7:.'''--```````````````
-// **\\\\r,                          `:r*^!!^;;!+\|iiilil\iFZZ4SS5PU0gV?,`-''--..`````````````
-// ^!!!**^`                          `:*l\^^!^;;^\****+|iuSwwwSh5GE8REC\,.-'''-....```````````
-// ~~"""^"`                          _"*=]?*!*!^^!*r|=lzu3hwwhSwUHRNRGyc,.-''--........```````
-// ^^!!!!!,                         `~!rlv7vr*<\**+l]s1u23haS%5ERNMMR$V=_`-'--------...````...
-// !!!!!!!"`                        _^!+=]vs7<*+\*<if1uFSww4ZPHRNWMNHS1!`.-''-------....```...
-// !!!!!!!"`                        ,!\?=l]7sv<\\\<]xCuF%w55U0RNNMNDZyt^`.-'__'--------.......
-// ^^^^^^^~`                        _^!\\+<???+<*^*?i7x1Cuu3mH0gHHm3u}l"``....................
     }
 
 
