@@ -20,6 +20,7 @@ public class EntityToDTOService {
 		result.setAccessDetails(request.getAccessDetails());
 		result.setLastUpdated(request.getLastUpdated());
 		result.setDate(request.getDate());
+		result.setTime(request.getTime());
 		result.setDescription(request.getDescription());
 		result.setPriority(request.getPriority());
 		result.setRepetitionTime(request.getRepetitionTime());
