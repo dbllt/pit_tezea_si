@@ -4,23 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public enum Service {
 	@JsonProperty("Prestation")
-	SERVICE("Prestation"),
+	SERVICE,
 	@JsonProperty("Don")
-	DONATION("Don"),
+	DONATION,
 	@JsonProperty("Enlèvement et don")
-	SERVICE_DONATION("Enlèvement et don"),
+	SERVICE_DONATION,
 	@JsonProperty("Plasma")
-	PLASMA("Plasma"),
+	PLASMA,
 	@JsonProperty("Renseignement")
-	INFORMATION("Renseignement");
+	INFORMATION
 
-    private String message;
-
-    private Service(String s){
-        this.message=s;
-    }
-
-    public String getMessage() {
-        return message;
-    }
 }

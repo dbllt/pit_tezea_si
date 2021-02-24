@@ -4,17 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public enum HonorificTitle {
 	@JsonProperty("Mr")
-    MR("Mr"),
+    MR,
     @JsonProperty("Mme")
-    MME("Mme");
+    MME
 	
-    private String message;
-
-    private HonorificTitle(String s){
-        this.message=s;
-    }
-
-    public String getMessage() {
-        return message;
-    }
 }
