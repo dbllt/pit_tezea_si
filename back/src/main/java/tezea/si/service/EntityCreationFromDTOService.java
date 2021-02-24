@@ -1,6 +1,7 @@
 package tezea.si.service;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,59 +18,84 @@ import tezea.si.model.business.request.SmallRequest;
 @Component
 public class EntityCreationFromDTOService {
 
-	@Autowired
-	SmallRequestDAO requestDao;
+    @Autowired
+    SmallRequestDAO requestDao;
 
-	@Autowired
-	SmallClientDAO clientDao;
+    @Autowired
+    SmallClientDAO clientDao;
 
-	@Autowired
-	UserTezeaDAO userDao;
+    @Autowired
+    UserTezeaDAO userDao;
 
-	@Autowired
-	SmallEstimationDAO estimationDao;
+    @Autowired
+    SmallEstimationDAO estimationDao;
 
-	public SmallRequest convertToEntity(SmallRequest request) {
-		request.setLastUpdated(LocalDate.now());
-		request.setClient(convertToEntity(request.getClient()));
-		request.setResponsable(convertToEntity(request.getResponsable()));
-		request.setClosedBy(convertToEntity(request.getClosedBy()));
-		request.setLastUpdatedBy(convertToEntity(request.getLastUpdatedBy()));
-		request.setEstimation(convertToEntity(request.getEstimation()));
+    public SmallRequest convertToEntity(SmallRequest request) {
+        request.setLastUpdated(LocalDate.now());
 
-		SmallRequest result = requestDao.save(request);
-		return result;
-	}
+        request.setResponsable(convertToEntity(request.getResponsable()));
+        request.setClosedBy(convertToEntity(request.getClosedBy()));
+        request.setLastUpdatedBy(convertToEntity(request.getLastUpdatedBy()));
 
-	private SmallEstimation convertToEntity(SmallEstimation estimation) {
-		if (estimation == null) {
-			return null;
-		}
-		estimation.setId(0);
-		estimation.setEstimationResponsable(
-				convertToEntity(estimation.getEstimationResponsable()));
-		SmallEstimation result = estimationDao.save(estimation);
-		return result;
-	}
+        request.setClient(convertToEntity(request.getClient()));
+        request.setEstimation(convertToEntity(request.getEstimation()));
 
-	private UserTezea convertToEntity(UserTezea responsable) {
-		if (responsable == null) {
-			return null;
-		}
-		String username = responsable.getUsername();
-		if (userDao.checkForExistanceUsername(username)) {
-			return userDao.getUserByName(username);
-		}
-		throw new RuntimeException("Could not find user " + username);
-	}
+        return requestDao.save(request);
+    }
 
-	private SmallClient convertToEntity(SmallClient client) {
-		if (client == null) {
-			return null;
-		}
-		client.setId(0);
-		SmallClient result = clientDao.save(client);
-		return result;
-	}
+    private SmallEstimation convertToEntity(SmallEstimation estimation) {
+        if (estimation == null) {
+            return new SmallEstimation();
+        }
+
+        if (estimation.getId() != null) {
+            Optional<SmallEstimation> e = estimationDao.findById(estimation.getId());
+
+            if (e.isPresent()) {
+                e.get().updateFrom(estimation);
+                estimation = e.get();
+            } else {
+                SmallEstimation sc = new SmallEstimation();
+                sc.updateFrom(estimation);
+                return sc;
+            }
+
+        }
+        
+        estimation.setEstimationResponsable(convertToEntity(estimation.getEstimationResponsable()));
+        return estimation;
+    }
+
+    private UserTezea convertToEntity(UserTezea user) {
+        if (user == null) {
+            return null;
+        }
+        String username = user.getUsername();
+        if (userDao.checkForExistanceUsername(username)) {
+            return userDao.getUserByName(username);
+        }
+        throw new RuntimeException("Could not find user " + username);
+    }
+
+    private SmallClient convertToEntity(SmallClient client) {
+        if (client == null) {
+            return new SmallClient();
+        }
+
+        if (client.getId() != null) {
+            Optional<SmallClient> c = clientDao.findById(client.getId());
+
+            if (c.isPresent()) {
+                c.get().updateFrom(client);
+                client = c.get();
+            }else {
+                SmallClient sc = new SmallClient();
+                sc.updateFrom(client);
+                return sc;
+            }
+
+        }
+        return client;
+    }
 
 }

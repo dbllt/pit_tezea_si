@@ -118,7 +118,7 @@ public class CreateRequestsControllerTests {
 
         // Assert
         SmallRequestDTO result = mapper.readValue(response, SmallRequestDTO.class);
-        assertThat(result).usingRecursiveComparison().ignoringFields("id", "lastUpdated").isEqualTo(expected);
+        assertThat(result).usingRecursiveComparison().ignoringFields("id", "lastUpdated","client","estimation").isEqualTo(expected);
         assertThat(result.getId()).isNotZero();
         assertThat(result.getLastUpdated()).isNotNull();
     }
@@ -131,16 +131,12 @@ public class CreateRequestsControllerTests {
         request.setId(attemptedId);
 
         // Act
-        String response = this.mockMvc
+        this.mockMvc
                 .perform(post(REQUESTS_URL).contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(request))
                         .headers(TestUtils.userAuthorizationHeader(mockMvc)))
-                .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString();
+                .andExpect(status().isBadRequest());
 
-        // Assert
-        SmallRequestDTO result = mapper.readValue(response, SmallRequestDTO.class);
-        assertThat(result.getId()).isNotZero();
-        assertThat(result.getId()).isNotEqualTo(attemptedId);
     }
 
     @Test
@@ -191,7 +187,7 @@ public class CreateRequestsControllerTests {
 
         // Assert
         SmallRequestDTO result = mapper.readValue(response, SmallRequestDTO.class);
-        assertThat(result).usingRecursiveComparison().ignoringFields("id", "client.id", "lastUpdated")
+        assertThat(result).usingRecursiveComparison().ignoringFields("id", "client.id", "lastUpdated","estimation")
                 .isEqualTo(expected);
         assertThat(result.getId()).isNotZero();
     }
@@ -340,6 +336,10 @@ public class CreateRequestsControllerTests {
     public void uploadImage() throws Exception {
         // Arrange
         SmallRequestDTO smallReq = createSimpleRequest();
+        smallReq.setPhotos(List.of());
+        smallReq.getEstimation().setToolsNeeded(List.of());
+        smallReq.getEstimation().setVehiclesNeeded(List.of());
+        
         String url = REQUESTS_URL + "/" + smallReq.getId();
         String badUrl = REQUESTS_URL + "/105";
 
@@ -394,6 +394,8 @@ public class CreateRequestsControllerTests {
     public void updateRequest() throws Exception {
         SmallRequestDTO request = createSimpleRequest();
         request.setPhotos(List.of());
+        request.getEstimation().setToolsNeeded(List.of());
+        request.getEstimation().setVehiclesNeeded(List.of());
 
         // Assert
         SmallRequestDTO result = getSimpleRequest(request.getId());
@@ -427,25 +429,29 @@ public class CreateRequestsControllerTests {
         assertThat(result.getId()).isNotZero();
 
         // Modification of request for update
-//        updateRequestWithValues(request);
-//        
-//        String response = this.mockMvc
-//                .perform(patch(REQUESTS_URL).contentType(MediaType.APPLICATION_JSON)
-//                        .content(mapper.writeValueAsString(request))
-//                        .headers(TestUtils.userAuthorizationHeader(mockMvc)))
-//                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
-//        result = mapper.readValue(response, SmallRequestDTO.class);
-//        
-//        assertThat(result).usingRecursiveComparison().ignoringFields("id", "lastUpdated", "client.id", "closedBy.id",
-//                "estimation.estimationResponsable.id", "estimation.id", "lastUpdatedBy.id", "responsable.id").isEqualTo(request);
-//        assertThat(result.getId()).isNotZero();
-//        
-//        // Assert
-//        result = getSimpleRequest(request.getId());
-//        
-//        assertThat(result).usingRecursiveComparison().ignoringFields("id", "lastUpdated", "client.id", "closedBy.id",
-//                "estimation.estimationResponsable.id", "estimation.id", "lastUpdatedBy.id", "responsable.id").isEqualTo(request);
-//        assertThat(result.getId()).isNotZero();
+        updateRequestWithDifferentValues(request);
+        
+        response = this.mockMvc
+                .perform(patch(REQUESTS_URL).contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(request))
+                        .headers(TestUtils.userAuthorizationHeader(mockMvc)))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
+        result = mapper.readValue(response, SmallRequestDTO.class);
+        
+        assertThat(result)
+        .usingRecursiveComparison().ignoringFields("lastUpdated", "client.id", "closedBy.id",
+                "estimation.estimationResponsable.id", "estimation.id", "lastUpdatedBy.id", "responsable.id")
+        .isEqualTo(request);
+        assertThat(result.getId()).isNotZero();
+        
+        // Assert
+        result = getSimpleRequest(request.getId());
+        
+        assertThat(result)
+        .usingRecursiveComparison().ignoringFields("lastUpdated", "client.id", "closedBy.id",
+                "estimation.estimationResponsable.id", "estimation.id", "lastUpdatedBy.id", "responsable.id")
+        .isEqualTo(request);
+        assertThat(result.getId()).isNotZero();
     }
 
     private void updateRequestWithValues(SmallRequestDTO request) {
@@ -474,7 +480,7 @@ public class CreateRequestsControllerTests {
         SmallUserDTO user = new SmallUserDTO();
         user.setUsername(username);
 
-        SmallEstimationDTO estimation = new SmallEstimationDTO();
+        SmallEstimationDTO estimation = request.getEstimation();
         estimation.setEstimationResponsable(user);
         estimation.setNumberEmployeesNeeded(nbPeople);
         estimation.setToolsNeeded(List.of(Tool.FOR_SERVICE, Tool.SPECIFIC));
@@ -508,6 +514,73 @@ public class CreateRequestsControllerTests {
         request.setInternalInfo(internal);
         request.setSite(Site.COUTURE);
 
+        request.setClient(client);
+        request.setResponsable(user);
+        request.setClosedBy(user);
+        request.setLastUpdatedBy(user);
+        request.setEstimation(estimation);
+    }
+    
+    private void updateRequestWithDifferentValues(SmallRequestDTO request) {
+        // Arrange
+        String username = "jean";
+        String access = "difficult";
+        String description = "some other service";
+        String address = "15 allée harry";
+        String email = "fete@ok.com";
+        String phone = "+3359868475";
+        String postCode = "75000";
+        String city = "Paris";
+        String companyName = "Gateaux";
+        String lastName = "Dorian";
+        String firstName = "John";
+        String internal = "buy chair first";
+        String otherTools = "something";
+        HonorificTitle title = HonorificTitle.MME;
+        int reps = 1;
+        int wood = 24;
+        int donated = 32;
+        int nbPeople = 4;
+        int duration = 5;
+        LocalDate date = LocalDate.now();
+        
+        SmallUserDTO user = new SmallUserDTO();
+        user.setUsername(username);
+        
+        SmallEstimationDTO estimation = request.getEstimation();
+        estimation.setEstimationResponsable(user);
+        estimation.setNumberEmployeesNeeded(nbPeople);
+        estimation.setToolsNeeded(List.of(Tool.FOR_SERVICE, Tool.SPECIFIC));
+        estimation.setOtherTools(otherTools);
+        estimation.setVehiclesNeeded(List.of(Vehicle.BENNE));
+        estimation.setExpectedDuration(duration);
+        
+        SmallClientDTO client = new SmallClientDTO();
+        client.setEmail(email);
+        client.setPhoneNumber(phone);
+        client.setAddress(address);
+        client.setPostCode(postCode);
+        client.setCity(city);
+        client.setCompanyName(companyName);
+        client.setLastName(lastName);
+        client.setFirstName(firstName);
+        client.setHonorificTitle(title);
+        
+        request.setAccessDetails(access);
+        request.setDescription(description);
+        request.setDate(date);
+        request.setRepetitionTime(reps);
+        request.setRepetitionUnit(TimeUnit.MONTH);
+        request.setStatus(RequestStatus.NEW);
+        request.setPriority(Priority.HIGH);
+        request.setAmountWood(wood);
+        request.setAmountDonated(donated);
+        request.setAppointmentPlasmaDate(date);
+        request.setSatisfactionLevel(SatisfactionLevel.NOT_VERY_SATISFIED);
+        request.setType(Service.DONATION);
+        request.setInternalInfo(internal);
+        request.setSite(Site.BOIS_PALETTES);
+        
         request.setClient(client);
         request.setResponsable(user);
         request.setClosedBy(user);
