@@ -203,6 +203,7 @@ public class CreateRequestsControllerTests {
         String address = "45 rue";
         String email = "zet@ok.com";
         String phone = "+330756874512";
+        String phone2 = "+330765458452";
         String postCode = "35000";
         String city = "Rennes";
         String companyName = "Gateaux";
@@ -210,6 +211,7 @@ public class CreateRequestsControllerTests {
         String firstName = "Fifi";
         String internal = "check phone number";
         String otherTools = "chair";
+        String siret = "10201445";
         HonorificTitle title = HonorificTitle.MME;
         int reps = 5;
         int wood = 12;
@@ -232,10 +234,12 @@ public class CreateRequestsControllerTests {
         SmallClient client = new SmallClient();
         client.setEmail(email);
         client.setPhoneNumber(phone);
+        client.setPhoneNumber2(phone2);
         client.setAddress(address);
         client.setPostCode(postCode);
         client.setCity(city);
         client.setCompanyName(companyName);
+        client.setSiret(siret);
         client.setLastName(lastName);
         client.setFirstName(firstName);
         client.setHonorificTitle(title);
@@ -278,10 +282,12 @@ public class CreateRequestsControllerTests {
         SmallClientDTO expectedClient = new SmallClientDTO();
         expectedClient.setEmail(email);
         expectedClient.setPhoneNumber(phone);
+        expectedClient.setPhoneNumber2(phone2);
         expectedClient.setAddress(address);
         expectedClient.setPostCode(postCode);
         expectedClient.setCity(city);
         expectedClient.setCompanyName(companyName);
+        expectedClient.setSiret(siret);
         expectedClient.setLastName(lastName);
         expectedClient.setFirstName(firstName);
         expectedClient.setHonorificTitle(title);

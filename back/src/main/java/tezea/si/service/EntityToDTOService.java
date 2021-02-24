@@ -65,6 +65,7 @@ public class EntityToDTOService {
 		SmallClientDTO result = new SmallClientDTO();
 		result.setEmail(client.getEmail());
 		result.setPhoneNumber(client.getPhoneNumber());
+		result.setPhoneNumber2(client.getPhoneNumber2());
 		result.setAddress(client.getAddress());
 		result.setPostCode(client.getPostCode());
 		result.setCity(client.getCity());
@@ -73,6 +74,7 @@ public class EntityToDTOService {
 		result.setFirstName(client.getFirstName());
 		result.setHonorificTitle(client.getHonorificTitle());
 		result.setType(client.getType());
+		result.setSiret(client.getSiret());
 		return result;
 	}
 

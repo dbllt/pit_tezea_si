@@ -9,10 +9,12 @@ public class SmallClientDTO {
 	private ClientType type;
 	private String email;
 	private String phoneNumber;
+	private String phoneNumber2;
 	private String address;
 	private String postCode;
 	private String city;
 	private String companyName;
+	private String siret;
 	private String lastName;
 	private String firstName;
 	private HonorificTitle honorificTitle;
@@ -103,6 +105,22 @@ public class SmallClientDTO {
 
 	public void setType(ClientType type) {
 		this.type = type;
+	}
+
+	public String getSiret() {
+		return siret;
+	}
+
+	public void setSiret(String siret) {
+		this.siret = siret;
+	}
+
+	public String getPhoneNumber2() {
+		return phoneNumber2;
+	}
+
+	public void setPhoneNumber2(String phoneNumber2) {
+		this.phoneNumber2 = phoneNumber2;
 	}
 
 }
