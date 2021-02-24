@@ -7,11 +7,13 @@ import API from "../../network/API";
 
 
 interface IProps {
+    handler: (arg0: string) => void
+
 }
 
 interface IState {
     redirect: boolean
-    triedToLogin:boolean
+    triedToLogin: boolean
 }
 
 function RedirectionIfNotConnected() {
@@ -28,13 +30,12 @@ function RedirectionIfNotConnected() {
 }
 
 class LoginScreen extends Component<IProps, IState> {
-    private username: React.RefObject<any>;
-    private password: React.RefObject<any>;
-
     state = {
         redirect: false,
-        triedToLogin:false,
+        triedToLogin: false,
     }
+    private readonly username: React.RefObject<any>;
+    private readonly password: React.RefObject<any>;
 
     constructor(props: IProps) {
         super(props);
@@ -44,14 +45,16 @@ class LoginScreen extends Component<IProps, IState> {
         this.getUsername = this.getUsername.bind(this);
         this.getPassword = this.getPassword.bind(this);
         this.login = this.login.bind(this);
+
+        this.keyPress = this.keyPress.bind(this);
     }
 
     login() {
-        this.setState({triedToLogin:true})
+        this.setState({triedToLogin: true})
         if (this.getUsername() !== "" && this.getPassword() !== "") {
             API.login(this.getUsername(), this.getPassword()).then((b) => {
                     if (b) {
-                        this.setState({redirect: true})
+                        this.props.handler(this.getUsername())
                     }
                 }
             );
@@ -74,6 +77,11 @@ class LoginScreen extends Component<IProps, IState> {
         }
     };
 
+    keyPress(e: React.KeyboardEvent<HTMLInputElement>) {
+        if(e.key==="Enter"){
+            this.login();
+        }
+    }
 
     render() {
         return (
@@ -83,13 +91,13 @@ class LoginScreen extends Component<IProps, IState> {
                 <Grid container direction="column" justify="center" alignItems="center" spacing={5}>
                     <Grid item>
                         <TextField
-                            label="Identifiant:"
+                            label="Identifiant"
                             inputRef={this.username}
                             id="outlined-margin-normal"
                             margin="normal"
                             variant="outlined"
-                            error={(this.state.triedToLogin&&this.getUsername()==="")}
-                            helperText={(this.state.triedToLogin&&this.getUsername()==="") ? 'Manquant' : ' '}
+                            error={(this.state.triedToLogin && this.getUsername() === "")}
+                            helperText={(this.state.triedToLogin && this.getUsername() === "") ? 'Manquant' : ' '}
                         />
                     </Grid>
                     <Grid item>
@@ -100,8 +108,9 @@ class LoginScreen extends Component<IProps, IState> {
                             id="outlined-margin-normal"
                             margin="normal"
                             variant="outlined"
-                            error={(this.state.triedToLogin&&this.getPassword()==="")}
-                            helperText={(this.state.triedToLogin&&this.getPassword()==="") ? 'Manquant' : ' '}
+                            error={(this.state.triedToLogin && this.getPassword() === "")}
+                            helperText={(this.state.triedToLogin && this.getPassword() === "") ? 'Manquant' : ' '}
+                            onKeyDown={this.keyPress}
                         />
                     </Grid>
                     <Grid>
@@ -110,7 +119,6 @@ class LoginScreen extends Component<IProps, IState> {
                         </Button>
                     </Grid>
                 </Grid>
-                {this.state.redirect ? (<Redirect push to="/"/>) : null}
             </div>
         )
     }

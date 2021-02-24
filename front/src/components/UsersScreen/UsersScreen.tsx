@@ -6,38 +6,26 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import {Button} from "@material-ui/core";
+import {Button, IconButton} from "@material-ui/core";
 import {Link, Redirect} from "react-router-dom";
 import "./UsersScreen.css";
 import API from "../../network/API";
+import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
 
 
-const tableHeadNames = ["Identifiant", "Rôle"];
+const tableHeadNames = ["Identifiant", "Rôle", ""];
 
-function createRequestData(username: string, role: string) {
+function createRequestData(username: string, authorities: string[]) {
     return {
-        username, role,
+        username, authorities,
     };
-}
-
-function Row(props: { row: ReturnType<typeof createRequestData> }) {
-    const {row} = props;
-
-    return (
-        <React.Fragment>
-            <TableRow hover>
-                <TableCell align="center">{row.username}</TableCell>
-                <TableCell align="center">{row.role}</TableCell>
-            </TableRow>
-        </React.Fragment>
-    );
 }
 
 
 interface User {
     id: string;
     username: string;
-    role: string;
+    authorities: string[]
 }
 
 
@@ -54,24 +42,82 @@ function RedirectionIfNotConnected() {
         temp = "";
     }
     let token: string = temp;
-    if (token==="") {
+    if (token === "") {
         return <Redirect to="/login"/>
-    }else{
+    } else {
         return <div/>
     }
 }
 
+
 class UsersScreen extends Component<IProps, IState> {
+
     state = {
         users: []
     }
 
+    constructor(props: React.ClassAttributes<any>) {
+        super(props)
+        this.handler = this.handler.bind(this)
+    }
+
+    row(props: {
+        row: ReturnType<typeof createRequestData>,
+        handler: () => void
+    }) {
+        const {row, handler} = props;
+
+        function removeUser(name: string) {
+            API.removeUserByUsername(name).then(() => {
+                    handler();
+                }
+            )
+        }
+
+        function DisplayRemove(username:string) {
+            if (username !== API.getUsername()) {
+                return <IconButton
+                    aria-label="expand row"
+                    size="small"
+                    onClick={() => removeUser(row.username)}
+                >
+                    <CancelOutlinedIcon style={{color: "red"}}/>
+                </IconButton>
+            } else {
+            return <div/>
+            }
+        }
+
+        return (
+            <React.Fragment>
+                <TableRow hover>
+                    <TableCell align="center">{row.username}</TableCell>
+                    <TableCell align="center">{row.authorities[0]}</TableCell>
+                    <TableCell align="center" style={{width: "10%"}}>
+                        {DisplayRemove(row.username)}
+
+
+                    </TableCell>
+                </TableRow>
+            </React.Fragment>
+        )
+            ;
+    }
+
+    handler() {
+        this.loadUsers()
+    }
+
     componentDidMount() {
+        this.loadUsers()
+    }
+
+    loadUsers() {
         API.getUsers().then((data => {
             this.setState({users: data})
         }));
-    }
 
+    }
 
     render() {
         return (
@@ -90,7 +136,7 @@ class UsersScreen extends Component<IProps, IState> {
                         </TableHead>
                         <TableBody>
                             {this.state.users.map((user: User) => (
-                                <Row key={user.id} row={user}/>
+                                <this.row key={user.id} row={user} handler={this.handler}/>
                             ))}
                         </TableBody>
                     </Table>

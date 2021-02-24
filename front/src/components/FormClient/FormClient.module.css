@@ -1,8 +1,3 @@
-.FormClient {
-    width: 80%;
-    margin: 10px;
-    align-content: flex-start;
-}
 
 .Gridlabelfield {
     align-items: center;
@@ -11,8 +6,4 @@
 
 .Label {
     width: 120px;
-}
-.Grid2 {
-    margin: 50cm;
-    color : yellow;
 }

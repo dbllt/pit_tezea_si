@@ -1,7 +1,5 @@
 import React from "react";
-import {
-    Link, Redirect
-} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import {Button} from '@material-ui/core';
 import API from "../../network/API";
 import styles from './Menu.module.css';
@@ -34,9 +32,9 @@ class Menu extends React.Component<IProps, IState> {
     }
 
     render() {
-        var usersList;
-        if (API.getRole() === "serge" || true) {//TODO remove true
-            usersList = <Link to="/users" >
+        let usersList;
+        if (API.getRole() === "ADMIN") {
+            usersList = <Link to="/users">
                 <Button variant="contained" className={styles.MyButton}>
                     Liste utilisateurs
                 </Button>
@@ -50,12 +48,12 @@ class Menu extends React.Component<IProps, IState> {
         return (
             <div className={styles.MyDiv}>
                 <RedirectionIfNotConnected/>
-                <Link to="/requestsList" >
+                <Link to="/requestsList">
                     <Button variant="contained" className={styles.MyButton}>
                         Liste de demandes
                     </Button>
                 </Link>
-                <Link to="/serviceList" >
+                <Link to="/serviceList">
                     <Button variant="contained" className={styles.MyButton}>
                         Nouvelle demande
                     </Button>
