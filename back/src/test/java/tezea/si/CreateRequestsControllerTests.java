@@ -390,7 +390,7 @@ public class CreateRequestsControllerTests {
     public void updateRequest() throws Exception {
         SmallRequestDTO request = createSimpleRequest();
         request.setPhotos(List.of());
-        
+
         // Assert
         SmallRequestDTO result = getSimpleRequest(request.getId());
 
@@ -407,17 +407,21 @@ public class CreateRequestsControllerTests {
                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
         result = mapper.readValue(response, SmallRequestDTO.class);
 
-        assertThat(result).usingRecursiveComparison().ignoringFields("lastUpdated", "client.id", "closedBy.id",
-                "estimation.estimationResponsable.id", "estimation.id", "lastUpdatedBy.id", "responsable.id").isEqualTo(request);
+        assertThat(result)
+                .usingRecursiveComparison().ignoringFields("lastUpdated", "client.id", "closedBy.id",
+                        "estimation.estimationResponsable.id", "estimation.id", "lastUpdatedBy.id", "responsable.id")
+                .isEqualTo(request);
         assertThat(result.getId()).isNotZero();
 
         // Assert
         result = getSimpleRequest(request.getId());
 
-        assertThat(result).usingRecursiveComparison().ignoringFields("lastUpdated", "client.id", "closedBy.id",
-                "estimation.estimationResponsable.id", "estimation.id", "lastUpdatedBy.id", "responsable.id").isEqualTo(request);
+        assertThat(result)
+                .usingRecursiveComparison().ignoringFields("lastUpdated", "client.id", "closedBy.id",
+                        "estimation.estimationResponsable.id", "estimation.id", "lastUpdatedBy.id", "responsable.id")
+                .isEqualTo(request);
         assertThat(result.getId()).isNotZero();
-        
+
         // Modification of request for update
 //        updateRequestWithValues(request);
 //        
@@ -522,9 +526,7 @@ public class CreateRequestsControllerTests {
     private SmallRequestDTO getSimpleRequest(Long id) throws Exception {
         String url = REQUESTS_URL + "/" + id;
 
-        String response = this.mockMvc
-                .perform(get(url)
-                        .headers(TestUtils.userAuthorizationHeader(mockMvc)))
+        String response = this.mockMvc.perform(get(url).headers(TestUtils.userAuthorizationHeader(mockMvc)))
                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
 
         return mapper.readValue(response, SmallRequestDTO.class);
