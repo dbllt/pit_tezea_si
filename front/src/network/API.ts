@@ -710,6 +710,53 @@ const API = {
 
     getUsername() {
         return localStorage.getItem('username');
+    },
+
+    getRequestStatus() {
+        return ["Nouvelle", "En cours", "Devis signé", "Doublon", "Facturée", "Refusée", "Clôturée"];
+    },
+
+    getServices() {
+        return ["Bois","Couture", "Tri", "Recyclerie", "Enlèvements", "Estimateur"];
+    },
+
+    getUrgencyStatus() {
+        return ["Normale", "Alerte orange", "Alerte Rouge"]
+        // https://www.youtube.com/watch?v=luYF1H642FE
+// \\\\\\\\\\\\\\\\\\\rr\\**\++*~_:^^^^^^!!**\<=ittvvvvvtttzsx1Cuuuuuuuuuz**lfxsf]*^*\*\\***|=
+// ||||||?????????????=l=?|<++*",~^!!!!!!!*\|i7x1CuuuCCuuuuuo3wZ55555555552lc1oous!:,!\\*r**CC
+// <<<<<|?????????????|c?++r*^::~^!^^^^^!!!*+ltxTCuoyuuu{1uy23wZZ5555555Z55F]vuFuv^,:\+*!r\^!\
+// ?????=cc===?????????=|++\!~:~;^^^^^^^!!!*\?isTuyFVo1f}uyo23w555555555555Zoxsuui",~rtxi\+|++
+// iiiiiiiillclllllllcc?+++*"::~;^^^^^^^^!!*+lvx1uyFVux1uuuuF%4555555555Z55A52C{Cl~,~\isxlc?r<
+// !********\r+r\\r+<|??r*!"::~"^^!!!!!!!!!*r]CCu%3V2uxfvfCV%SwZ55555555555AP5Zul\",^+fCxCxut]
+// ~~";;;;^^!\*!!*!!****\*!~::~;^!!!!!!!**\+|]Cyo2haV1vtf1oSh3%a44ZZw%V3hZ5AAAwu+*^~!?\\isiszi
+// ~~~~^^""^!**!^^^!!*****!":::"^!;~:::~~^!\?isCyyVSVyuuCy3%Fu11uuC1{T1CuFwAAVxc\*^;*|*?sst+|=
+// ~~~"^^;;^^*\!~~~;^!!!!!^;:::~^^"~";"~~~"^*\+ixuyouuuyFSwVyuuCCuCuyV3%S45PP1+\\!~"!!!+*=+*\\
+// \*********\+\^,,,,::::~"~:,,~!!!!!!***\r\*!!!*lsxfxy3wZ5Z%FyuuuVSaS%w5AAPPC\**!!!*!+vi=\r++
+// ]lllc==??||??*_`` `.```.-_,,~!!!^;~,:~~;^^;^":"!\cxFw55Z%uxx{7vs1{7vxuhAPPu+****\\\*\i?\r\*
+// viill=???||?|\~` `:^~-.--_,:~!!!^~:,;^"~~!*~,,,~!+xV45A5u]il=\\l%HACTyaAAAu=\*****\****r?*!
+// v]ill====????|*-_~;^;~";;"~:~!*!^^;^!!^;^*\!""~"!lu%w555Fsl|?*!\1APwh5AAAAyx+!"~~~";;;";^^^
+// tvilllllllllll|~--`._-,:::,,:^**!!!****\**!!^^;^*]uo%wwwhuz]vsCFwAAA55AAA5u1uuuuuC11{xx}xxx
+// ft]iiiiiiiiiiil*    ```````-,"!*!!******!!!^^^^^*i1y3SShaa%ouyVS4waaw55APwCCuuyyyyyuuu5A55A
+// xxsz7v]]vv]]]]]c!^^;^^!!!!^^;^!!!!!****!!!!^^^!*\]CF3Shwww4waShhhhh4555AP4uuuuuuuuuCvuRRRNN
+// T}xsf7]]vv]]]vttfsz77ffsf7vi+*!!!!!!******!^^^!*\vu3w4Z4wwwwwSSSaw5AAPAAP5uuuuuuCT7c\Fg8QRR
+// }}xszv]i]]]]]]vv7tvvvt777tv]i?*!!!!!!****!^~:~^!\vyh5554a3oFV3%Sw5APPAAAG5u1xx7]c+*!\4m$Upm
+// xxxf7vv]]]]]]]vv7tvvtttttttfsv\!!!!!!!!!!;::"^!!\voaZZZwaVsl]u2Sw55AAAAPG%{]l?<r**!^]G$$$$$
+// xxxsztv]]]]]]]]]vttttvvvvvv7fz+!!!!!!!!!^:_,~^!!\vyw55ZwwaV7r=1VhwwZ55APAz|\**!****?VU$p$$$
+// zssz7tv]]]]]]]i]]vtvvvi|\*!^;,_!!!!!!!!!~__'_:!!*luS5554hS%Vx*|C%awZ5APG7^!!!!;";^*]V3G$U$p
+// llllliiiiiilliii=\!~,-`        :!!!^!!*^,__'-_:^*=}V4Souuuuyoi*=yw455AGo:`..-'-.`.:\C$p$UUA
+// \\\\\\rr++r*^:'`               `:!!!!*r*"~~::::;!*+<\\=71Cuuu1?\CaZ5AGy".``       `_^sAmmm$
+// ++++<|=ll*_                     `~*!!*is|\r|;"!**+?civ1yFu1uyus]yw55Ax~_'.``          .~*v3
+// iiiiiivz\.                       `:!^*ioo]C};"^*=zi]V2ul^_,!zCCyS5AAx,----.``` `````      `
+// ?===ll]?_                         `:^!+u2=+x\"~!iz*~^\*:,:\u2CuSAP$Ai,.''--.`` ````````````
+// \\\\r+?^                           ,!^!lv*!*=**+i1tr?s|^*1aZ%y%5Pm0A7:.'''--```````````````
+// **\\\\r,                          `:r*^!!^;;!+\|iiilil\iFZZ4SS5PU0gV?,`-''--..`````````````
+// ^!!!**^`                          `:*l\^^!^;;^\****+|iuSwwwSh5GE8REC\,.-'''-....```````````
+// ~~"""^"`                          _"*=]?*!*!^^!*r|=lzu3hwwhSwUHRNRGyc,.-''--........```````
+// ^^!!!!!,                         `~!rlv7vr*<\**+l]s1u23haS%5ERNMMR$V=_`-'--------...````...
+// !!!!!!!"`                        _^!+=]vs7<*+\*<if1uFSww4ZPHRNWMNHS1!`.-''-------....```...
+// !!!!!!!"`                        ,!\?=l]7sv<\\\<]xCuF%w55U0RNNMNDZyt^`.-'__'--------.......
+// ^^^^^^^~`                        _^!\\+<???+<*^*?i7x1Cuu3mH0gHHm3u}l"``....................
     }
 
 

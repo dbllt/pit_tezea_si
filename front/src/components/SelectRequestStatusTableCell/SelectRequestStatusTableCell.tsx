@@ -3,6 +3,8 @@ import TableCell from '@material-ui/core/TableCell';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import API from "../../network/API";
+
 
 interface Props {
     status: string;
@@ -32,9 +34,9 @@ class SelectRequestStatusTableCell extends Component<Props, State> {
     };
 
     render() {
-        const choices = ["Nouvelle", "En cours", "Devis signé", "Doublon", "Facturée", "Refusée", "Clôturée"];
+        const choices = API.getRequestStatus();;
         return (
-            <TableCell  className={"noUglyBorder"} align={"center"}>
+            <TableCell className={"noUglyBorder"} align={"center"}>
                 <FormControl>
                     <Select
                         value={this.state.status}
