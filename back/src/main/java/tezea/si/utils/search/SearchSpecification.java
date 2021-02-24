@@ -1,5 +1,7 @@
 package tezea.si.utils.search;
 
+import java.time.LocalDate;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
@@ -47,6 +49,17 @@ public class SearchSpecification<T> implements Specification<T> {
 						"Site search cannot use operation " + criteria.getOperation());
 			}
 		}
+		if (criteria.getJavaClass() == LocalDate.class) {
+			switch (criteria.getOperation()) {
+			case BEFORE:
+				return builder.lessThanOrEqualTo(constructDateKey(root, criteria), (LocalDate) criteria.getValue());
+			case AFTER:
+				return builder.greaterThanOrEqualTo(constructDateKey(root, criteria), (LocalDate) criteria.getValue());
+			default:
+				throw new InvalidSearchTypeException(
+						"Site search cannot use operation " + criteria.getOperation());
+			}
+		}
 		throw new InvalidSearchTypeException(
 				"Cannot search on type " + criteria.getJavaClass());
 	}
@@ -56,5 +69,12 @@ public class SearchSpecification<T> implements Specification<T> {
 			return root.get(criteria.getKey()).<String>get(criteria.getNestedKey());
 		}
 		return root.<String>get(criteria.getKey());
+	}
+	
+	private Expression<LocalDate> constructDateKey(Root<T> root, SearchCriteria criteria) {
+		if (criteria.hasNestedKey()) {
+			return root.get(criteria.getKey()).<LocalDate>get(criteria.getNestedKey());
+		}
+		return root.<LocalDate>get(criteria.getKey());
 	}
 }

@@ -29,6 +29,10 @@ public class SmallRequestSearchService {
 			builder.with(SmallRequest_.site, SearchOperations.EQUALS,
 					smallRequest.getSite());
 		}
+		if(smallRequest.getEndDate() != null && smallRequest.getStartDate() != null) {
+			builder.with(SmallRequest_.date, SearchOperations.BEFORE, smallRequest.getEndDate());
+			builder.with(SmallRequest_.date, SearchOperations.AFTER, smallRequest.getStartDate());
+		}
 		return builder.build();
 	}
 

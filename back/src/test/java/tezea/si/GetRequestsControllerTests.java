@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
@@ -316,4 +317,47 @@ public class GetRequestsControllerTests {
 		assertThat(resultList).usingRecursiveFieldByFieldElementComparator()
 				.isEqualTo(expectedList);
 	}
+	
+	@Test
+	public void returnsRequestsWithSearchByDate() throws Exception {
+		// Arrange
+		SmallClient client = new SmallClient();
+		SmallClient client2 = new SmallClient();
+		client.setLastName("Dula");
+		client2.setLastName("Lars");
+		clientDao.save(client);
+		clientDao.save(client2);
+
+		SmallRequest request = new SmallRequest();
+		SmallRequest request2 = new SmallRequest();
+		request.setPhotos(List.of());
+		request2.setPhotos(List.of());
+		request.setClient(client);
+		request2.setClient(client2);
+		request.setDate(LocalDate.of(2020, 1, 8));
+		request2.setDate(LocalDate.of(2021, 1, 5));
+
+		requestDao.save(request);
+		SmallRequest matching = requestDao.save(request2);
+
+		String input = TestUtils.createJsonString("startDate", "02-01-2021", "endDate", "08-01-2021");
+
+		List<SmallRequest> expectedList = List.of(matching);
+
+		// Act
+		String result = this.mockMvc
+				.perform(get(REQUESTS_URL).contentType(MediaType.APPLICATION_JSON)
+						.content(input)
+						.headers(TestUtils.userAuthorizationHeader(mockMvc)))
+				.andExpect(status().isOk()).andReturn().getResponse()
+				.getContentAsString();
+
+		// Assert
+		List<SmallRequest> resultList = mapper.readValue(result,
+				new TypeReference<List<SmallRequest>>() {
+				});
+		assertThat(resultList).usingRecursiveFieldByFieldElementComparator()
+				.isEqualTo(expectedList);
+	}
+
 }
