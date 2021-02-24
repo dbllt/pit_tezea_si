@@ -12,7 +12,7 @@ interface Request {
     place: string,
     regularity: string,
     duration: string,
-    material: boolean [],
+    material: string [],
     materialother: string,
     internalInfo: string,
     executionDate: string,
@@ -59,7 +59,8 @@ export interface BackendRequest {
     satisfactionLevel: string;
     lastUpdated: Date;
     lastUpdatedBy: backendClosedBy;
-    photos: string[];
+    internalInfo:string,
+    photos: string[],
 }
 
 export interface backendClient {
@@ -82,11 +83,14 @@ export interface backendClosedBy {
 }
 
 export interface backendEstimation {
+    numberEmployeesNeeded:number,
+    expectedDuration:number,
+    toolsNeeded:string[]
 }
 
 export interface PatchRequest {
     id?: number;
-    date?: Date;
+    date?: string;
     site?: string;
     responsable?: PatchClosedBy;
     client?: PatchClient;
@@ -106,6 +110,7 @@ export interface PatchRequest {
     lastUpdated?: Date;
     lastUpdatedBy?: PatchClosedBy;
     photos?: string[];
+    internalInfo?:string
 }
 
 export interface PatchClient {
@@ -128,6 +133,9 @@ export interface PatchClosedBy {
 }
 
 export interface PatchEstimation {
+    numberEmployeesNeeded?:number,
+    expectedDuration?:number,
+    toolsNeeded?:string[]
 }
 
 interface User {
@@ -137,6 +145,7 @@ interface User {
 }
 
 const API = {
+
     login: async function (username: string, password: string): Promise<boolean> {
         let found = false;
 
@@ -157,6 +166,7 @@ const API = {
                     localStorage.setItem('token', token)
                     const refreshToken = data.refreshtoken
                     localStorage.setItem('refreshToken', refreshToken)
+                    localStorage.setItem('hourOfToken', new Date().getFullYear().toString())
 
 
                     if (data.authorities.length > 1 && data.authorities[1].authority === "Responsable Site") {
@@ -282,9 +292,15 @@ const API = {
                 "repetitionTime": +request.regularity,
                 "date": this.formatDate(request.executionDate),
                 "type": request.typeRequest,
-                "responsable": {"username": localStorage.getItem('username')},//TODO parler avec Sigrid
+                "responsable": {"username": localStorage.getItem('username')},
                 "status": "Nouveau",
-                "accessDetails": request.place
+                "accessDetails": request.place,
+                "internalInfo":request.internalInfo,
+                "estimation": {
+                    "numberEmployeesNeeded":request.numberPerson,
+                    "expectedDuration":request.duration,
+                    "toolsNeeded":request.material
+                }
             })
         };
 
@@ -419,8 +435,6 @@ const API = {
         return ret;
     },
 
-    //frontendRequestToBackendRequest:function()
-
     backendRequestToFrontendRequest: function (request: BackendRequest): Request {
         console.log(request)
         var client: IClient;
@@ -470,17 +484,17 @@ const API = {
             requestAssignment: "",
             typeRequest: request.type,
             requestDesc: request.description,
-            numberPerson: "",
+            numberPerson: request.estimation.numberEmployeesNeeded.toString(),
             place: request.accessDetails,
             regularity: request.repetitionTime.toString(),
-            duration: "",
-            internalInfo: "",
+            duration: request.estimation.expectedDuration.toString(),
+            internalInfo: request.internalInfo,
             images: [],
             client: client,
             photos: request.photos,
             executionTime: "",
             executionDate: request.date.toString(),
-            material: [],
+            material: request.estimation.toolsNeeded,
             materialother: "",
 
 

@@ -39,7 +39,7 @@ interface Request {
     place: string,
     regularity: string,
     duration: string,
-    material: boolean [],
+    material: string [],
     materialother: string,
     internalInfo: string,
     executionDate: string,
