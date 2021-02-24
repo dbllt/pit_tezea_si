@@ -9,29 +9,30 @@ import FormClient from "../FormClient/FormClient";
 import API from "../../network/API";
 
 interface IRequest {
-    id: string;
-    date: string,
-    hour: string,
-    concierge: string,
+    id: string,
     site: string,
-    requestStatus: string,
-    requestAssignment: string,
-    executionDate: Date,
+    concierge: string,
     typeRequest: string,
     requestDesc: string,
     numberPerson: string,
     place: string,
     regularity: string,
     duration: string,
-    material: string,
+    material: boolean[],
+    materialother: string,
     internalInfo: string,
+    executionDate: string,
+    executionTime: string,
     images: File [],
+    requestStatus: string,
+    requestAssignment: string,
     client:IClient
 }
 
 interface IClient {
     clientStatus: string,
     company: string,
+    siret: string,
     gender: string,
     lName: string,
     fName: string,
@@ -51,9 +52,7 @@ type StateType = {
 interface IState {
     service: string,
     redirect: boolean,
-    id: string;
-    date: string,
-    hour: string,
+    id: string,
     concierge: string,
     site: string,
     typeRequest: string,
@@ -62,9 +61,11 @@ interface IState {
     place: string,
     regularity: string,
     duration: string,
-    material: string,
+    material: boolean [],
+    materialother: string,
     internalInfo: string,
-    executionDate: Date,
+    executionDate: string,
+    executionTime: string,
     requestStatus: string,
     requestAssignment: string,
     images: File [],
@@ -99,8 +100,6 @@ class Request extends Component<IndexProps, IState> {
             service: localStorage.getItem('service') || "",
             redirect: false,
             id: "",
-            date: "",
-            hour: "",
             concierge: "",
             site: "",
             typeRequest: "",
@@ -109,9 +108,11 @@ class Request extends Component<IndexProps, IState> {
             place: "",
             regularity: "", 
             duration: "",
-            material: "",   
+            material:[false,false,false],
+            materialother: "",
             internalInfo:"", 
-            executionDate: new Date(),       
+            executionDate: this.dateNow(), 
+            executionTime: "",      
             requestStatus: "",
             requestAssignment: "",
             images: []
@@ -119,9 +120,22 @@ class Request extends Component<IndexProps, IState> {
         this.task = createRef();
         this.getTask = this.getTask.bind(this);
         this.addImage = this.addImage.bind(this); //upload images
+        this.materialChecked = this.materialChecked.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.addRequest = this.addRequest.bind(this);
+    }
 
+    dateNow(){
+        let d = new Date();
+        let m:any;
+        let day:any;
+        if(d.getMonth() < 9) m="0"+(d.getMonth()+1);
+        else m=d.getMonth();
+
+        if(d.getDate() < 9) day="0"+d.getDate();
+        else day=d.getDate();
+
+        return d.getFullYear()+"-"+m+"-"+day;
     }
 
     getTask(): string {
@@ -139,8 +153,6 @@ class Request extends Component<IndexProps, IState> {
 
                 this.setState({
                     id: rr.id,
-                    date: rr.date,
-                    hour: rr.hour,
                     concierge: rr.concierge,
                     site: rr.site,
                     typeRequest: rr.typeRequest,
@@ -159,8 +171,6 @@ class Request extends Component<IndexProps, IState> {
             } else {
                 this.setState({
                     id: "",
-                    date: "",
-                    hour: "",
                     concierge: "",
                     site: "",
                     typeRequest: "",
@@ -169,9 +179,11 @@ class Request extends Component<IndexProps, IState> {
                     place: "",
                     regularity: "",
                     duration: "",
-                    material: "",
+                    material: [false,false,false],
+                    materialother: "",
                     internalInfo:"",
-                    executionDate: new Date(),
+                    executionDate: this.dateNow(),
+                    executionTime: "",
                     requestStatus: "",
                     requestAssignment: "",
                     images: []
@@ -203,12 +215,26 @@ class Request extends Component<IndexProps, IState> {
     }; // upload images
 
     materialChecked(event:any){
+        let data: boolean[] = this.state.material;
+        let indice: number;
+        if(event.target.name === "m1")
+            indice=0;
+        else if(event.target.name === "m2")
+            indice=1;
+        else
+            indice=2;
+
+        if(event.target.checked){
+            data[indice] = true;
+            this.setState({material : data })            
+        }else {
+            data[indice] = false;
+            this.setState({material : data })      
+        } 
+        console.log(data);
     }
 
     handleChange(event:any){
-        // const {target: {name, value}} = event;
-        // const newState = {request : {[name]: value}} as Pick<IState, keyof IState>;
-        // this.setState(newState);
         const {target: {name, value}} = event;
         const newState = {[name]: value} as Pick<IState, keyof IState>;
         this.setState(newState);
@@ -218,6 +244,7 @@ class Request extends Component<IndexProps, IState> {
         var client:IClient={
             clientStatus: "",
             company: "",
+            siret:"",
             gender: "",
             lName: "",
             fName: "",
@@ -229,47 +256,61 @@ class Request extends Component<IndexProps, IState> {
         }
         var request:IRequest={
             id: "1",
-            date: "",
-            hour: "",
-            concierge: "",
-            site: "",
-            typeRequest: "",
-            requestDesc : "",
-            numberPerson: "",
-            place: "",
-            regularity: "",
-            duration: "",
-            material: "",
-            internalInfo:"",
-            executionDate: new Date(),
+            site: this.state.service,
+            concierge: this.state.concierge,            
+            typeRequest:this.state.typeRequest,
+            requestDesc : this.state.requestDesc,
+            numberPerson: this.state.numberPerson,
+            place: this.state.place,
+            regularity: this.state.regularity,
+            duration: this.state.duration,
+            material: this.state.material,
+            materialother: this.state.materialother,
+            internalInfo:this.state.internalInfo,
+            executionDate: this.state.executionDate,
+            executionTime:this.state.executionTime,
+            images: this.state.images,
             requestStatus: "",
-            requestAssignment: "",
-            images: [],
+            requestAssignment: "",            
             client:client
         }
         if (true) {
-            API.addRequest(request).then(() => this.setState({redirect: true}));
+          //  API.addRequest(request).then(() => this.setState({redirect: true}));
         }
+
+        console.log(request);
 
     }
 
     render() {
         return (
-            <Container>
+            <Container fixed>
                 <RedirectionIfNotConnected/>
                 <h1>Service {this.state.service}</h1>
                 <h1>Enregistrer une demande client</h1>
-                
+
                 <Form className="form">  
-                <Grid container direction="column" alignItems="flex-start" justify="flex-start">
+                <Grid container direction="column" alignItems="flex-start" justify="center" >
                     <Grid item>
                      <FormClient/>
-                    </Grid> 
-                 
+                    </Grid>  
                     <Grid item>
                         <h3>Demande client : </h3>
                     </Grid>
                     <Grid item>
+                    <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Concierge :
+                            </Grid>
+                            <Grid item>
+                                <TextField 
+                                    variant="outlined"
+                                    size="small"
+                                    name="concierge"
+                                    value={this.state.concierge}
+                                    onChange={this.handleChange} />
+                            </Grid>
+                        </Grid>
                         <Grid container className="Gridlabelfield">
                             <Grid item className="Label">
                                 Type de demande :
@@ -366,18 +407,19 @@ class Request extends Component<IndexProps, IState> {
                             <Grid item>
                                 <FormGroup>
                                     <FormControlLabel
-                                        control={<Checkbox value="Matériel lié au port de charge" onChange={this.materialChecked}/>}
+                                        control={<Checkbox name="m1" value={this.state.material[0]} onChange={this.materialChecked}/>}
                                         label="Matériel lié au port de charge"
                                     />
                                     <FormControlLabel
-                                        control={<Checkbox value="Matériel lié à la prestation" onChange={this.materialChecked}/>}
+                                        control={<Checkbox name="m2" value={this.state.material[1]} onChange={this.materialChecked}/>}
                                         label="Matériel lié à la prestation"
                                     />
                                     <FormControlLabel
-                                        control={<Checkbox value="Autre" onChange={this.materialChecked} />}
+                                        control={<Checkbox name="m3" value={this.state.material[2]} onChange={this.materialChecked} />}
                                         label="Autre"
                                     />
-                                   { <TextField value={this.state.material}></TextField> }                                     
+                                   { this.state.material[2] && <TextField name="materialother" value={this.state.materialother} 
+                                                                    onChange={this.handleChange}/> }                                     
                                 </FormGroup>
                             </Grid>
                         </Grid>
@@ -414,14 +456,12 @@ class Request extends Component<IndexProps, IState> {
                                 Date d’exécution :
                             </Grid>
                             <Grid item>
-                                <TextField
+                                <input
                                     id="date"
                                     type="date"
-                                    value={this.state.executionDate}
+                                    name="executionDate"
+                                    value={this.state.executionDate}                                                                      
                                     onChange={this.handleChange}
-                                    InputLabelProps={{
-                                    shrink: true,
-                                    }}
                                 />
                             </Grid>
                         </Grid> 
@@ -432,9 +472,11 @@ class Request extends Component<IndexProps, IState> {
                             <Grid item>
                                 <TextField
                                     type="time"
+                                    name="executionTime"
+                                    value={this.state.executionTime}
                                     onChange={this.handleChange}
-                               />
-                            </Grid>
+                               />                             
+                            </Grid> 
                         </Grid> 
                         <Grid container className="Gridlabelfield">
                             <Grid item className="Label">

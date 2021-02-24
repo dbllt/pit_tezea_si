@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Container, TextField} from "@material-ui/core";
+import { TextField} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
@@ -16,6 +16,7 @@ interface State {
     statut: String;
     gender: String;
     nom: String;
+    siret: String;
     lastName: String;
     firstName: String;
     tel: string;
@@ -34,6 +35,7 @@ class FormClient extends Component<Props, State> {
             statut: "Particulier",
             gender: "",
             nom: "",
+            siret: "",
             lastName: "",
             firstName: "",
             tel: "",
@@ -56,143 +58,150 @@ class FormClient extends Component<Props, State> {
 
     render() {
         return (
-            <Container>
-                <form>
-                    <Grid container direction="column" alignItems="flex-start">
+            <form>
+                <Grid container direction="column" alignItems="flex-start" justify="flex-start">
+                    
+                    <Grid item>
+                        <h3>Informations client :</h3>
+                    </Grid>
 
-                        <Grid item>
-                            <h3>Informations client :</h3>
+                    <Grid container className={styles.Gridlabelfield}>
+                        <Grid item className={styles.Label}>
+                            Statut client :
                         </Grid>
+                        <Grid item>
+                            <FormControl>
+                            <Select placeholder="Statut" name="statut"
+                                    value={this.state.statut} onChange={this.handleChange} required>
+                                <MenuItem value="Particulier">Particulier</MenuItem>
+                                <MenuItem value="Entreprise">Entreprise</MenuItem>
+                                <MenuItem value="Collectivité">Collectivité</MenuItem>
+                                <MenuItem value="Association">Association</MenuItem>
+                            </Select>
+                            </FormControl>
+                        </Grid>
+                    </Grid>
 
-                        <Grid container className={styles.Gridlabelfield}>
+
+                    {this.state.statut === 'Particulier'
+                        ? <Grid container className={styles.Gridlabelfield}>
                             <Grid item className={styles.Label}>
-                                Statut client :
+                                Civilité :
                             </Grid>
                             <Grid item>
                                 <FormControl>
-                                <Select placeholder="Statut" name="statut"
-                                        value={this.state.statut} onChange={this.handleChange} required>
-                                    <MenuItem value="Particulier">Particulier</MenuItem>
-                                    <MenuItem value="Entreprise">Entreprise</MenuItem>
-                                    <MenuItem value="Collectivité">Collectivité</MenuItem>
-                                    <MenuItem value="Association">Association</MenuItem>
-                                </Select>
+                                    <Select
+                                        name="gender"
+                                        value={this.state.gender} onChange={this.handleChange} required
+                                    >
+                                        <MenuItem value="Monsieur">Monsieur</MenuItem>
+                                        <MenuItem value="Madame">Madame</MenuItem>
+                                    </Select>
                                 </FormControl>
                             </Grid>
                         </Grid>
-
-
-                        {this.state.statut === 'Particulier'
-                            ? <Grid container className={styles.Gridlabelfield}>
-                                <Grid item className={styles.Label}>
-                                    Civilité :
-                                </Grid>
-                                <Grid item>
-                                    <FormControl>
-                                        <Select
-                                            name="gender"
-                                            value={this.state.gender} onChange={this.handleChange} required
-                                        >
-                                            <MenuItem value="Monsieur">Monsieur</MenuItem>
-                                            <MenuItem value="Madame">Madame</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
+                        : <div><Grid container className={styles.Gridlabelfield}>
+                            <Grid item className={styles.Label}>
+                                Nom :
                             </Grid>
-                            : <Grid container className={styles.Gridlabelfield}>
+                            <Grid item>
+                                <TextField id="standard-basic" placeholder="Nom" name="nom"
+                                            value={this.state.nom} onChange={this.handleChange} required/>
+                            </Grid>
+                        </Grid>
+                        <Grid container className={styles.Gridlabelfield}>
+                            <Grid item className={styles.Label}>
+                                SIRET :
+                            </Grid>
+                            <Grid item>
+                                <TextField id="standard-basic" placeholder="SIRET" name="SIRET"
+                                            value={this.state.siret} onChange={this.handleChange} required/>
+                            </Grid>
+                        </Grid></div>
+                    }
+
+                    <Grid container> {/* grill row */}
+                        <Grid item xs={6}> {/* 1ère Grille gauche */}
+                            {this.state.statut === 'Particulier' &&
+                            <Grid container className={styles.Gridlabelfield}>
                                 <Grid item className={styles.Label}>
                                     Nom :
                                 </Grid>
                                 <Grid item>
-                                    <TextField id="standard-basic" placeholder="Nom" name="nom"
-                                               value={this.state.nom} onChange={this.handleChange} required/>
+                                    <TextField id="standard-basic" placeholder="Nom" name="lastName"
+                                                value={this.state.lastName} onChange={this.handleChange} required/>
                                 </Grid>
                             </Grid>
-                        }
-
-                        <Grid container> {/* grill row */}
-                            <Grid item xs={6}> {/* 1ère Grille gauche */}
-                                {this.state.statut === 'Particulier' &&
-                                <Grid container className={styles.Gridlabelfield}>
-                                    <Grid item className={styles.Label}>
-                                        Nom :
-                                    </Grid>
-                                    <Grid item>
-                                        <TextField id="standard-basic" placeholder="Nom" name="lastName"
-                                                   value={this.state.lastName} onChange={this.handleChange} required/>
-                                    </Grid>
+                            }
+                            <Grid container className={styles.Gridlabelfield}>
+                                <Grid item className={styles.Label}>
+                                    Téléphone :
                                 </Grid>
-                                }
-                                <Grid container className={styles.Gridlabelfield}>
-                                    <Grid item className={styles.Label}>
-                                        Téléphone :
-                                    </Grid>
-                                    <Grid item>
-                                        <PhoneInput country={'fr'} value={this.state.tel}
-                                                    onChange={phone => this.setState({tel: "+" + phone})}/>
-                                    </Grid>
-                                </Grid>
-
-                                <Grid container className={styles.Gridlabelfield}>
-                                    <Grid item className={styles.Label}>
-                                        Adresse :
-                                    </Grid>
-                                    <Grid item>
-                                        <TextField id="standard-basic" placeholder="Adresse"
-                                                   name="address" value={this.state.address}
-                                                   onChange={this.handleChange} required/>
-                                    </Grid>
-                                </Grid>
-
-                                <Grid container className={styles.Gridlabelfield}>
-                                    <Grid item className={styles.Label}>
-                                        Ville :
-                                    </Grid>
-                                    <Grid item>
-                                        <TextField id="standard-basic" placeholder="Ville" name="ville"
-                                                   value={this.state.ville} onChange={this.handleChange} required/>
-                                    </Grid>
+                                <Grid item>
+                                    <PhoneInput country={'fr'} value={this.state.tel}
+                                                onChange={phone => this.setState({tel: "+" + phone})}/>
                                 </Grid>
                             </Grid>
 
-                            <Grid item xs={6}> {/* 2éme Grille droite */}
-                                {this.state.statut === 'Particulier' &&
-                                <Grid container className={styles.Gridlabelfield}>
-
-                                    <Grid item className={styles.Label}>
-                                        Prénom :
-                                    </Grid>
-                                    <Grid item>
-                                        <TextField id="standard-basic" placeholder="Prénom" name="firstName"
-                                                   value={this.state.firstName} onChange={this.handleChange} required/>
-                                    </Grid>
+                            <Grid container className={styles.Gridlabelfield}>
+                                <Grid item className={styles.Label}>
+                                    Adresse :
                                 </Grid>
-                                }
-
-                                <Grid container className={styles.Gridlabelfield}>
-                                    <Grid item className={styles.Label}>
-                                        Email :
-                                    </Grid>
-                                    <Grid item>
-                                        <TextField id="standard-basic" placeholder="Email" name="email"
-                                                   value={this.state.email} onChange={this.handleChange} required/>
-                                    </Grid>
+                                <Grid item>
+                                    <TextField id="standard-basic" placeholder="Adresse"
+                                                name="address" value={this.state.address}
+                                                onChange={this.handleChange} required/>
                                 </Grid>
-                                <Grid container className={styles.Gridlabelfield}>
-                                    <Grid item className={styles.Label}>
-                                        Code postal :
-                                    </Grid>
-                                    <Grid item>
-                                        <TextField id="standard-basic" placeholder="Code postal" name="codepostal"
-                                                   value={this.state.codepostal} onChange={this.handleChange} required/>
-                                    </Grid>
+                            </Grid>
+
+                            <Grid container className={styles.Gridlabelfield}>
+                                <Grid item className={styles.Label}>
+                                    Ville :
+                                </Grid>
+                                <Grid item>
+                                    <TextField id="standard-basic" placeholder="Ville" name="ville"
+                                                value={this.state.ville} onChange={this.handleChange} required/>
                                 </Grid>
                             </Grid>
                         </Grid>
 
+                        <Grid item xs={6}> {/* 2éme Grille droite */}
+                            {(this.state.statut === 'Particulier') &&
+                             <Grid container className={styles.Gridlabelfield}>
+
+                                <Grid item className={styles.Label}>
+                                    Prénom :
+                                </Grid>
+                                <Grid item>
+                                    <TextField id="standard-basic" placeholder="Prénom" name="firstName"
+                                                value={this.state.firstName} onChange={this.handleChange} required/>
+                                </Grid>
+                             </Grid>
+                            
+                            }
+
+                            <Grid container className={styles.Gridlabelfield}>
+                                <Grid item className={styles.Label}>
+                                    Email :
+                                </Grid>
+                                <Grid item>
+                                    <TextField id="standard-basic" placeholder="Email" name="email"
+                                                value={this.state.email} onChange={this.handleChange} required/>
+                                </Grid>
+                            </Grid>
+                            <Grid container className={styles.Gridlabelfield}>
+                                <Grid item className={styles.Label}>
+                                    Code postal :
+                                </Grid>
+                                <Grid item>
+                                    <TextField id="standard-basic" placeholder="Code postal" name="codepostal"
+                                                value={this.state.codepostal} onChange={this.handleChange} required/>
+                                </Grid>
+                            </Grid>
+                        </Grid>
                     </Grid>
-                </form>
-            </Container>
+                </Grid>
+            </form> 
         );
     }
 
