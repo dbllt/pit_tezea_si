@@ -10,23 +10,23 @@ import API from "../../network/API";
 
 interface IRequest {
     id: string,
-    site: string,
     concierge: string,
+    site: string,
     typeRequest: string,
     requestDesc: string,
     numberPerson: string,
     place: string,
     regularity: string,
     duration: string,
-    material: boolean[],
+    material: boolean [],
     materialother: string,
     internalInfo: string,
     executionDate: string,
     executionTime: string,
-    images: File [],
-    photos:string[]
     requestStatus: string,
     requestAssignment: string,
+    images: File [],
+    photos:string[],
     client:IClient
 }
 
@@ -110,11 +110,11 @@ class Request extends Component<IndexProps, IState> {
             place: "",
             regularity: "",
             duration: "",
-            material:[false,false,false],
+            material: [false, false, false],
             materialother: "",
-            internalInfo:"", 
-            executionDate: this.dateNow(), 
-            executionTime: "",      
+            internalInfo: "",
+            executionDate: this.dateNow(),
+            executionTime: "",
             requestStatus: "",
             requestAssignment: "",
             images: [],
@@ -142,17 +142,17 @@ class Request extends Component<IndexProps, IState> {
         this.addRequest = this.addRequest.bind(this);
     }
 
-    dateNow(){
+    dateNow() {
         let d = new Date();
-        let m:any;
-        let day:any;
-        if(d.getMonth() < 9) m="0"+(d.getMonth()+1);
-        else m=d.getMonth();
+        let m: any;
+        let day: any;
+        if (d.getMonth() < 9) m = "0" + (d.getMonth() + 1);
+        else m = d.getMonth();
 
-        if(d.getDate() < 9) day="0"+d.getDate();
-        else day=d.getDate();
+        if (d.getDate() < 9) day = "0" + d.getDate();
+        else day = d.getDate();
 
-        return d.getFullYear()+"-"+m+"-"+day;
+        return d.getFullYear() + "-" + m + "-" + day;
     }
 
     getTask(): string {
@@ -184,10 +184,12 @@ class Request extends Component<IndexProps, IState> {
                     requestStatus: rr.requestStatus,
                     requestAssignment: rr.requestAssignment,
                     images: rr.images,
-                    photos:rr.photos
+                    photos: rr.photos
                 });
 
-                API.photosAddressesToFiles(rr.photos).then((files:File[])=>{this.setState({images:files})});
+                API.photosAddressesToFiles(rr.photos).then((files: File[]) => {
+                    this.setState({images: files})
+                });
             } else {
                 this.setState({
                     id: "",
@@ -199,9 +201,9 @@ class Request extends Component<IndexProps, IState> {
                     place: "",
                     regularity: "",
                     duration: "",
-                    material: [false,false,false],
+                    material: [false, false, false],
                     materialother: "",
-                    internalInfo:"",
+                    internalInfo: "",
                     executionDate: this.dateNow(),
                     executionTime: "",
                     requestStatus: "",
@@ -235,20 +237,20 @@ class Request extends Component<IndexProps, IState> {
         }
     }; // upload images
 
-    materialChecked(event:any){
+    materialChecked(event: any) {
         let data: boolean[] = this.state.material;
         let indice: number;
-        if(event.target.name === "m1")
-            indice=0;
-        else if(event.target.name === "m2")
-            indice=1;
+        if (event.target.name === "m1")
+            indice = 0;
+        else if (event.target.name === "m2")
+            indice = 1;
         else
-            indice=2;
+            indice = 2;
 
-        if(event.target.checked){
+        if (event.target.checked) {
             data[indice] = true;
-            this.setState({material : data })            
-        }else {
+            this.setState({material: data})
+        } else {
             data[indice] = false;
             this.setState({material : data })      
         } 
@@ -258,45 +260,82 @@ class Request extends Component<IndexProps, IState> {
         this.setState({client: childData})
     }
 
-    handleChange(event:any){
+    handleChange(event: any) {
         const {target: {name, value}} = event;
         const newState = {[name]: value} as Pick<IState, keyof IState>;
         this.setState(newState);
     }
 
     addRequest() {
-        // var client: IClient = {
-        //     clientStatus: "Particulier",
-        //     company: "Google",
-        //     gender: "M",
-        //     lName: "Pouet",
-        //     fName: "Grogu",
-        //     phone: "06",
-        //     email: "grogu@sw.mdr",
-        //     address: "2 rue de la paix",
-        //     cp: "35000",
-        //     city: "Rennes"
-        // }
+        var client: IClient = {
+            clientStatus: "Collectivité",
+            company: "Google",
+            gender: "M",
+            lName: "Pouet",
+            fName: "Grogu",
+            phone: "06",
+            email: "grogu@sw.mdr",
+            address: "2 rue de la paix",
+            cp: "35000",
+            city: "Rennes",
+            siret:"XXXX"
+        }
 
-        // const date1 = new Date(2021, 1, 28);
+        const date1 = new Date(2021, 1, 28);
+        var request: IRequest = {
+            id: "-1",
+            concierge: "Jonzé",
+            site: "Couture",
+            typeRequest: "Don",
+            requestDesc: "faireééé un truc",
+            numberPerson: "3",
+            place: "boueux",
+            regularity: "2",
+            duration: "1 an",
+            internalInfo: "coucou",
+            requestStatus: "En cours",
+            requestAssignment: "Pierre",
+            material:[true,false,true],
+            materialother:"une pelle",
+            executionDate:"05-03-2021",
+            executionTime:"???",
+            images: this.state.images,
+            client: client,
+            photos: []
+        }
+
+
+        // var client: IClient = {
+        //     clientStatus: "",
+        //     company: "",
+        //     siret: "",
+        //     gender: "",
+        //     lName: "",
+        //     fName: "",
+        //     phone: "",
+        //     email: "",
+        //     address: "",
+        //     cp: "",
+        //     city: ""
+        // }
         // var request: IRequest = {
-        //     id: "-1",
-        //     date: "",
-        //     hour: "",
-        //     concierge: "Jonzé",
-        //     site: "Bois",
-        //     typeRequest: "Don",
-        //     requestDesc: "faire un truc",
-        //     numberPerson: "3",
-        //     place: "boueux",
-        //     regularity: "2",
-        //     duration: "1 an",
-        //     material: "2 camions",
-        //     internalInfo: "coucou",
-        //     executionDate: date1,
-        //     requestStatus: "En cours",
-        //     requestAssignment: "Pierre",
+        //     id: "1",
+        //     site: this.state.service,
+        //     concierge: this.state.concierge,
+        //     typeRequest: this.state.typeRequest,
+        //     requestDesc: this.state.requestDesc,
+        //     numberPerson: this.state.numberPerson,
+        //     place: this.state.place,
+        //     regularity: this.state.regularity,
+        //     duration: this.state.duration,
+        //     material: this.state.material,
+        //     materialother: this.state.materialother,
+        //     internalInfo: this.state.internalInfo,
+        //     executionDate: this.state.executionDate,
+        //     executionTime: this.state.executionTime,
         //     images: this.state.images,
+        //     requestStatus: "",
+        //     requestAssignment: "",
         //     client: client,
         //     photos:[]
         // }  
@@ -330,7 +369,6 @@ class Request extends Component<IndexProps, IState> {
         console.log(client);
 
     }
-
     render() {
         return (
             <Container fixed>

@@ -45,6 +45,7 @@ public class EntityCreationFromDTOService {
 		if (estimation == null) {
 			return null;
 		}
+		estimation.setId(0);
 		estimation.setEstimationResponsable(
 				convertToEntity(estimation.getEstimationResponsable()));
 		SmallEstimation result = estimationDao.save(estimation);
@@ -66,6 +67,7 @@ public class EntityCreationFromDTOService {
 		if (client == null) {
 			return null;
 		}
+		client.setId(0);
 		SmallClient result = clientDao.save(client);
 		return result;
 	}

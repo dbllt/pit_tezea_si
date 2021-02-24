@@ -4,23 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public enum Priority {
 	@JsonProperty("Basse")
-    LOW("Basse"),
+    LOW,
 	@JsonProperty("Normale")
-    NORMAL("Normale"),
+    NORMAL,
 	@JsonProperty("Moyenne")
-    MEDIUM("Moyenne"),
+    MEDIUM,
 	@JsonProperty("Haute")
-    HIGH("Haute"),
+    HIGH,
 	@JsonProperty("Très haute")
-    VERY_HIGH("Très haute");
-
-    private String message;
-
-    private Priority(String s){
-        this.message=s;
-    }
-
-    public String getMessage() {
-        return message;
-    }
+    VERY_HIGH;
 }
