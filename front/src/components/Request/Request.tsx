@@ -70,7 +70,9 @@ interface IState {
     requestStatus: string,
     requestAssignment: string,
     images: File [],
-    photos: string[]
+    photos:string[],
+    client: IClient,
+    // request: IRequest
 
 }
 
@@ -116,12 +118,26 @@ class Request extends Component<IndexProps, IState> {
             requestStatus: "",
             requestAssignment: "",
             images: [],
-            photos: []
+            photos:[],
+            client : {
+                clientStatus: "Particulier",
+                company: "",
+                siret:"",
+                gender: "",
+                lName: "",
+                fName: "",
+                phone: "",
+                email: "",
+                address: "",
+                cp: "",
+                city: ""
+            }
         }
         this.task = createRef();
         this.getTask = this.getTask.bind(this);
         this.addImage = this.addImage.bind(this); //upload images
         this.materialChecked = this.materialChecked.bind(this);
+        this.callbackFunction = this.callbackFunction.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.addRequest = this.addRequest.bind(this);
     }
@@ -236,9 +252,12 @@ class Request extends Component<IndexProps, IState> {
             this.setState({material: data})
         } else {
             data[indice] = false;
-            this.setState({material: data})
-        }
-        console.log(data);
+            this.setState({material : data })      
+        } 
+    }
+
+    callbackFunction(childData:IClient) {
+        this.setState({client: childData})
     }
 
     handleChange(event: any) {
@@ -318,21 +337,38 @@ class Request extends Component<IndexProps, IState> {
         //     requestStatus: "",
         //     requestAssignment: "",
         //     client: client,
-        //     photos: []
-        // }
+        //     photos:[]
+        // }  
+        var client = this.state.client;
 
-         API.addRequest(request).then((b) => {
-                 if (b) {
-                    this.setState({redirect: true})
-                }
-            }
-        );
+        var request:IRequest={
+            id: "1",
+            site: this.state.service,
+            concierge: this.state.concierge,            
+            typeRequest:this.state.typeRequest,
+            requestDesc : this.state.requestDesc,
+            numberPerson: this.state.numberPerson,
+            place: this.state.place,
+            regularity: this.state.regularity,
+            duration: this.state.duration,
+            material: this.state.material,
+            materialother: this.state.materialother,
+            internalInfo:this.state.internalInfo,
+            executionDate: this.state.executionDate,
+            executionTime:this.state.executionTime,
+            images: this.state.images,
+            requestStatus: "",
+            requestAssignment: "",            
+            client:client,
+            photos:[]
+        }
+        if (true) {
+          //  API.addRequest(request).then(() => this.setState({redirect: true}));
+        }
 
-
-        //console.log(request);
+        console.log(client);
 
     }
-
     render() {
         return (
             <Container fixed>
@@ -340,251 +376,246 @@ class Request extends Component<IndexProps, IState> {
                 <h1>Service {this.state.service}</h1>
                 <h1>Enregistrer une demande client</h1>
 
-                <Form className="form">
-                    <Grid container direction="column" alignItems="flex-start" justify="center">
-                        <Grid item>
-                            <FormClient/>
+                <Form className="form">  
+                <Grid container direction="column" alignItems="flex-start" justify="center" >
+                    <Grid item>
+                     <FormClient parentCallback={this.callbackFunction}/>
+                    </Grid>  
+                    <Grid item>
+                        <h3>Demande client : </h3>
+                    </Grid>
+                    <Grid item>
+                    <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Concierge :
+                            </Grid>
+                            <Grid item>
+                                <TextField 
+                                    variant="outlined"
+                                    size="small"
+                                    name="concierge"
+                                    value={this.state.concierge}
+                                    onChange={this.handleChange} />
+                            </Grid>
                         </Grid>
-                        <Grid item>
-                            <h3>Demande client : </h3>
+                        <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Type de demande :
+                            </Grid>
+                            <Grid item>
+                                <Select name="typeRequest"
+                                        value={this.state.typeRequest} onChange={this.handleChange} required>
+                                    <MenuItem value="Prestation">Prestation</MenuItem>
+                                    <MenuItem value="Don">Don</MenuItem>
+                                    <MenuItem value="Enlèvement et don">Enlèvement et don</MenuItem>
+                                    <MenuItem value="Renseignement">Renseignement</MenuItem>
+                                </Select>
+                            </Grid>
                         </Grid>
-                        <Grid item>
-                            <Grid container className="Gridlabelfield">
-                                <Grid item className="Label">
-                                    Concierge :
-                                </Grid>
-                                <Grid item>
-                                    <TextField
-                                        variant="outlined"
-                                        size="small"
-                                        name="concierge"
-                                        value={this.state.concierge}
-                                        onChange={this.handleChange}/>
-                                </Grid>
+                        <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Demande client :
                             </Grid>
-                            <Grid container className="Gridlabelfield">
-                                <Grid item className="Label">
-                                    Type de demande :
-                                </Grid>
-                                <Grid item>
-                                    <Select name="typeRequest"
-                                            value={this.state.typeRequest} onChange={this.handleChange} required>
-                                        <MenuItem value="Prestation">Prestation</MenuItem>
-                                        <MenuItem value="Don">Don</MenuItem>
-                                        <MenuItem value="Enlèvement et don">Enlèvement et don</MenuItem>
-                                        <MenuItem value="Renseignement">Renseignement</MenuItem>
-                                    </Select>
-                                </Grid>
+                            <Grid item>
+                                <TextField
+                                    className="text"                                   
+                                    variant="outlined"
+                                    size="small"
+                                    name="requestDesc"
+                                    value={this.state.requestDesc}
+                                    onChange={this.handleChange}
+                                />
                             </Grid>
-                            <Grid container className="Gridlabelfield">
-                                <Grid item className="Label">
-                                    Demande client :
-                                </Grid>
-                                <Grid item>
-                                    <TextField
-                                        className="text"
-                                        variant="outlined"
-                                        size="small"
-                                        name="requestDesc"
-                                        value={this.state.requestDesc}
-                                        onChange={this.handleChange}
+                        </Grid>                        
+                        <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Nombre de personnes :
+                            </Grid>
+                            <Grid item>
+                                <TextField type="number"
+                                    variant="outlined"
+                                    className="number"
+                                    size="small"
+                                    name="numberPerson"
+                                    value={this.state.numberPerson}
+                                    onChange={this.handleChange} />
+                            </Grid>
+                        </Grid>
+                        <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Accès au lieu :
+                            </Grid>
+                            <Grid item>
+                                <TextField
+                                    className="text"                                   
+                                    variant="outlined"
+                                    size="small"
+                                    name="place"
+                                    value={this.state.place}
+                                    onChange={this.handleChange}
+                                />
+                            </Grid>
+                        </Grid>
+                        <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Regularité :
+                            </Grid>
+                            <Grid item>
+                                <TextField type="number"
+                                    variant="outlined"
+                                    className="number"
+                                    size="small"
+                                    name="regularity"
+                                    value={this.state.regularity}
+                                    onChange={this.handleChange} />
+                            </Grid>
+                        </Grid>
+                        <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Estimation du temps (heure) :
+                            </Grid>
+                            <Grid item>
+                                <TextField
+                                    type="number"
+                                    inputProps={{ step: "0.5" }} 
+                                    className="number"                                   
+                                    variant="outlined"
+                                    size="small"
+                                    name="duration"
+                                    value={this.state.duration}
+                                    onChange={this.handleChange}
+                                /> 
+                            </Grid>
+                        </Grid>
+                        <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Matériel attendu :
+                            </Grid>
+                            <Grid item>
+                                <FormGroup>
+                                    <FormControlLabel
+                                        control={<Checkbox name="m1" value={this.state.material[0]} onChange={this.materialChecked}/>}
+                                        label="Matériel lié au port de charge"
                                     />
-                                </Grid>
-                            </Grid>
-                            <Grid container className="Gridlabelfield">
-                                <Grid item className="Label">
-                                    Nombre de personnes :
-                                </Grid>
-                                <Grid item>
-                                    <TextField type="number"
-                                               variant="outlined"
-                                               className="number"
-                                               size="small"
-                                               name="numberPerson"
-                                               value={this.state.numberPerson}
-                                               onChange={this.handleChange}/>
-                                </Grid>
-                            </Grid>
-                            <Grid container className="Gridlabelfield">
-                                <Grid item className="Label">
-                                    Accès au lieu :
-                                </Grid>
-                                <Grid item>
-                                    <TextField
-                                        className="text"
-                                        variant="outlined"
-                                        size="small"
-                                        name="place"
-                                        value={this.state.place}
-                                        onChange={this.handleChange}
+                                    <FormControlLabel
+                                        control={<Checkbox name="m2" value={this.state.material[1]} onChange={this.materialChecked}/>}
+                                        label="Matériel lié à la prestation"
                                     />
-                                </Grid>
-                            </Grid>
-                            <Grid container className="Gridlabelfield">
-                                <Grid item className="Label">
-                                    Regularité :
-                                </Grid>
-                                <Grid item>
-                                    <TextField type="number"
-                                               variant="outlined"
-                                               className="number"
-                                               size="small"
-                                               name="regularity"
-                                               value={this.state.regularity}
-                                               onChange={this.handleChange}/>
-                                </Grid>
-                            </Grid>
-                            <Grid container className="Gridlabelfield">
-                                <Grid item className="Label">
-                                    Estimation du temps (heure) :
-                                </Grid>
-                                <Grid item>
-                                    <TextField
-                                        type="number"
-                                        inputProps={{step: "0.5"}}
-                                        className="number"
-                                        variant="outlined"
-                                        size="small"
-                                        name="duration"
-                                        value={this.state.duration}
-                                        onChange={this.handleChange}
+                                    <FormControlLabel
+                                        control={<Checkbox name="m3" value={this.state.material[2]} onChange={this.materialChecked} />}
+                                        label="Autre"
                                     />
-                                </Grid>
+                                   { this.state.material[2] && <TextField name="materialother" value={this.state.materialother} 
+                                                                    onChange={this.handleChange}/> }                                     
+                                </FormGroup>
                             </Grid>
-                            <Grid container className="Gridlabelfield">
-                                <Grid item className="Label">
-                                    Matériel attendu :
-                                </Grid>
-                                <Grid item>
-                                    <FormGroup>
-                                        <FormControlLabel
-                                            control={<Checkbox name="m1" value={this.state.material[0]}
-                                                               onChange={this.materialChecked}/>}
-                                            label="Matériel lié au port de charge"
+                        </Grid>
+                        {/* <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Particularité :
+                            </Grid>
+                            <Grid item>
+                                <FormGroup>
+                                    <FormControlLabel
+                                        control={<Checkbox value="??" onChange={this.materialChecked}/>}
+                                        label="??"
+                                    />                               
+                                </FormGroup>
+                            </Grid>
+                        </Grid> */}
+                        <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Informations internes :
+                            </Grid>
+                            <Grid item>
+                                <TextField
+                                    className="text"                                   
+                                    variant="outlined"
+                                    size="small"
+                                    name="internalInfo"
+                                    value={this.state.internalInfo}
+                                    onChange={this.handleChange}
+                                />
+                            </Grid>
+                        </Grid>
+                        <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Date d’exécution :
+                            </Grid>
+                            <Grid item>
+                                <input
+                                    id="date"
+                                    type="date"
+                                    name="executionDate"
+                                    value={this.state.executionDate}                                                                      
+                                    onChange={this.handleChange}
+                                />
+                            </Grid>
+                        </Grid> 
+                        <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Horaire d’exécution :
+                            </Grid>
+                            <Grid item>
+                                <TextField
+                                    type="time"
+                                    name="executionTime"
+                                    value={this.state.executionTime}
+                                    onChange={this.handleChange}
+                               />                             
+                            </Grid> 
+                        </Grid> 
+                        <Grid container className="Gridlabelfield">
+                            <Grid item className="Label">
+                                Joindre des images
+                            </Grid>
+                            <Grid item>
+                                <Grid container justify={"space-evenly"} spacing={2}>
+                                    <Grid item>
+                                        <input type="file" accept="image/*" id="contained-button-file"
+                                            onChange={this.addImage} multiple style={{display: 'none'}}
                                         />
-                                        <FormControlLabel
-                                            control={<Checkbox name="m2" value={this.state.material[1]}
-                                                               onChange={this.materialChecked}/>}
-                                            label="Matériel lié à la prestation"
-                                        />
-                                        <FormControlLabel
-                                            control={<Checkbox name="m3" value={this.state.material[2]}
-                                                               onChange={this.materialChecked}/>}
-                                            label="Autre"
-                                        />
-                                        {this.state.material[2] &&
-                                        <TextField name="materialother" value={this.state.materialother}
-                                                   onChange={this.handleChange}/>}
-                                    </FormGroup>
-                                </Grid>
-                            </Grid>
-                            <Grid container className="Gridlabelfield">
-                                <Grid item className="Label">
-                                    Particularité :
-                                </Grid>
-                                <Grid item>
-                                    <FormGroup>
-                                        <FormControlLabel
-                                            control={<Checkbox value="??" onChange={this.materialChecked}/>}
-                                            label="??"
-                                        />
-                                    </FormGroup>
-                                </Grid>
-                            </Grid>
-                            <Grid container className="Gridlabelfield">
-                                <Grid item className="Label">
-                                    Informations internes :
-                                </Grid>
-                                <Grid item>
-                                    <TextField
-                                        className="text"
-                                        variant="outlined"
-                                        size="small"
-                                        name="internalInfo"
-                                        value={this.state.internalInfo}
-                                        onChange={this.handleChange}
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Grid container className="Gridlabelfield">
-                                <Grid item className="Label">
-                                    Date d’exécution :
-                                </Grid>
-                                <Grid item>
-                                    <input
-                                        id="date"
-                                        type="date"
-                                        name="executionDate"
-                                        value={this.state.executionDate}
-                                        onChange={this.handleChange}
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Grid container className="Gridlabelfield">
-                                <Grid item className="Label">
-                                    Horaire d’exécution :
-                                </Grid>
-                                <Grid item>
-                                    <TextField
-                                        type="time"
-                                        name="executionTime"
-                                        value={this.state.executionTime}
-                                        onChange={this.handleChange}
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Grid container className="Gridlabelfield">
-                                <Grid item className="Label">
-                                    Joindre des images
-                                </Grid>
-                                <Grid item>
-                                    <Grid container justify={"space-evenly"} spacing={2}>
-                                        <Grid item>
-                                            <input type="file" accept="image/*" id="contained-button-file"
-                                                   onChange={this.addImage} multiple style={{display: 'none'}}
-                                            />
-                                            <label htmlFor="contained-button-file">
-                                                <Button variant="outlined" color="primary" component="span">
-                                                    Ajouter une image
-                                                </Button>
-                                            </label>
-                                        </Grid>
-                                        <Grid container spacing={3} justify="center">
-                                            {this.state.images.map((image, index) => (
-                                                <Grid item key={index}>
-                                                    <Grid container direction="column">
-                                                        <Grid item>
-                                                            <img src={URL.createObjectURL(image)} alt="" width="150"
-                                                                 height="100"/>
-                                                        </Grid>
-                                                        <Grid item>
-                                                            <Button variant="outlined" onClick={() => {
-                                                                this.state.images.splice(index, 1)
-                                                                this.setState({images: this.state.images});
-                                                            }}>Supprimer</Button>
-                                                        </Grid>
+                                        <label htmlFor="contained-button-file">
+                                            <Button variant="outlined" color="primary" component="span">
+                                                Ajouter une image
+                                            </Button>
+                                        </label>
+                                    </Grid>
+                                    <Grid container spacing={3} justify="center">
+                                        {this.state.images.map((image, index) => (
+                                            <Grid item key={index}>
+                                                <Grid container direction="column">
+                                                    <Grid item>
+                                                        <img src={URL.createObjectURL(image)} alt="" width="150" height="100"/>
+                                                    </Grid>
+                                                    <Grid item>
+                                                        <Button variant="outlined" onClick={() => {
+                                                            this.state.images.splice(index, 1)
+                                                            this.setState({images: this.state.images});
+                                                        }}>Supprimer</Button>
                                                     </Grid>
                                                 </Grid>
-                                            ))}
-                                        </Grid>
+                                            </Grid>
+                                        ))}
                                     </Grid>
                                 </Grid>
                             </Grid>
-                        </Grid>
-
+                        </Grid> 
                     </Grid>
+                 
+                </Grid>
+                                                             
+                <Button className={"MyButton"} variant="contained" onClick={this.addRequest}>
+                    Enregistrer la demande
+                </Button>
 
-                    <Button className={"MyButton"} variant="contained" onClick={this.addRequest}>
-                        Enregistrer la demande
+                <Link to="/">
+                    <Button className={"MyButton"} type="button" color="primary">
+                        Retour
                     </Button>
-
-                    <Link to="/">
-                        <Button className={"MyButton"} type="button" color="primary">
-                            Retour
-                        </Button>
-                    </Link>
-                    {this.state.redirect ? (<Redirect push to="/"/>) : null}
-                </Form>
+                </Link>
+                {this.state.redirect ? (<Redirect push to="/"/>) : null}
+              </Form>
             </Container>
 
         );
