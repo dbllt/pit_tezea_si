@@ -187,7 +187,6 @@ public class BusinessRequestTests {
 		assertNotNull(e.getDate(), "e no date");
 		assertNotNull(e.getEstimationResponsable(), "e no resps");
 
-		logger.info(test.getPriority().getMessage());
 		logger.info(test.getDate().toGMTString());
 		logger.info(test.getDescription());
 		logger.info(test.getClient().getEmail());
