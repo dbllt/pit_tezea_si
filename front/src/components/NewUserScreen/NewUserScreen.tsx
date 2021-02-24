@@ -87,12 +87,12 @@ class NewUserScreen extends Component<IProps, IState> {
     addUser() {
         this.setState({triedToCreate: true})
         if (this.getUsername() !== "" && this.getRole() !== "" && this.getPassword() !== "") {
-            API.addUser(this.getUsername(), this.getPassword(), this.getRole()).then(() => this.setState({redirect: true}));
+            API.addUser(this.getUsername(), this.getPassword(), this.getRole(),this.getSite()).then(() => this.setState({redirect: true}));
         }
     }
 
     testDisplaySite(value: string) {
-        if (value === "Concierge") {
+        if (value === "Concierge" || value === "Responsable Site") {
             this.setState({displaySite: true});
             this.forceUpdate()
         }else{

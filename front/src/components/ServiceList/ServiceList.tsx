@@ -31,7 +31,7 @@ class ServiceList extends Component {
                     {services.map(function (value, index) {
                         if (value !== "Conciergerie") {
                             return (
-                                <Grid item>
+                                <Grid item key={index}>
                                     <Link to={{
                                         pathname: '/request',
                                         state: {
@@ -54,6 +54,8 @@ class ServiceList extends Component {
                                     </Link>
                                 </Grid>
                             )
+                        }else{
+                            return <div key={index}/>
                         }
                     }
                     )}

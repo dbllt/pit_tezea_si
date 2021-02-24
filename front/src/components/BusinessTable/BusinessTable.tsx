@@ -74,8 +74,8 @@ function Row(props: { row: Request, updateStatus: (name: string, id: string) => 
 
 
     function formatDate(d: string) {
-        var t=d.split("-");
-        return t[1]+"/"+t[0]+"/"+t[2]
+        var t = d.split("-");
+        return t[1] + "/" + t[0] + "/" + t[2]
     }
 
     const chooseRowEmergencyStyle = () => {
@@ -90,86 +90,171 @@ function Row(props: { row: Request, updateStatus: (name: string, id: string) => 
             ((execDate - dateNow) <= fourteenDays) ? "medium_emergency_style_class" : "low_emergency_style_class";
     }
 
+    if (API.getRole() === "Responsable Site") {
+        if (API.getSite() === row.site) {
+            return (
+                <React.Fragment>
+                    <TableRow className={chooseRowEmergencyStyle()}>
+                        <TableCell className={"noUglyBorder"} align={"center"}>
+                            <IconButton
+                                aria-label="expand row"
+                                size="small"
+                                onClick={() => setOpen(!open)}
+                            >
+                                {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
+                            </IconButton>
+                        </TableCell>
+                        <TableCell className={"test"} align="center">{row.id}</TableCell>
+                        <TableCell className={"noUglyBorder"} align="center">{executionDate}</TableCell>
+                        <TableCell className={"noUglyBorder"} align="center">{row.client.clientStatus}</TableCell>
+                        <TableCell className={"noUglyBorder"} align="center">{row.client.fName}</TableCell>
+                        <TableCell className={"noUglyBorder"} align="center">{row.site}</TableCell>
+                        <TableCell className={"noUglyBorder"} align="center">{row.concierge}</TableCell>
+                        <SelectRequestStatusTableCell key={row.id} status={row.requestStatus} id={row.id}
+                                                      updateStatus={props.updateStatus}/>
+                        <TableCell className={"noUglyBorder"} align="center"><p style={{
+                            textAlign: "center",
+                            maxWidth: 100,
+                            overflow: "hidden",
+                            maxHeight: 13
+                        }}>{row.requestDesc}</p></TableCell>
+                    </TableRow>
+                    <TableRow className={classes.root}>
+                        <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={10}>
+                            <Collapse in={open} timeout="auto" unmountOnExit>
+                                <Box margin={1}>
+                                    <Typography variant="h6" gutterBottom component="div">
+                                        Détails
+                                        <Link to={{
+                                            pathname: '/request',
+                                            state: {
+                                                service: row.site,
+                                                requestId: row.id
 
-    return (
-        <React.Fragment>
-            <TableRow className={chooseRowEmergencyStyle()}>
-                <TableCell className={"noUglyBorder"} align={"center"}>
-                    <IconButton
-                        aria-label="expand row"
-                        size="small"
-                        onClick={() => setOpen(!open)}
-                    >
-                        {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
-                    </IconButton>
-                </TableCell>
-                <TableCell className={"test"} align="center">{row.id}</TableCell>
-                <TableCell className={"noUglyBorder"} align="center">{executionDate}</TableCell>
-                <TableCell className={"noUglyBorder"} align="center">{row.client.clientStatus}</TableCell>
-                <TableCell className={"noUglyBorder"} align="center">{row.client.fName}</TableCell>
-                <TableCell className={"noUglyBorder"} align="center">{row.site}</TableCell>
-                <TableCell className={"noUglyBorder"} align="center">{row.concierge}</TableCell>
-                <SelectRequestStatusTableCell key={row.id} status={row.requestStatus} id={row.id}
-                                              updateStatus={props.updateStatus}/>
-                <TableCell className={"noUglyBorder"} align="center"><p style={{
-                    textAlign: "center",
-                    maxWidth: 100,
-                    overflow: "hidden",
-                    maxHeight: 13
-                }}>{row.requestDesc}</p></TableCell>
-            </TableRow>
-            <TableRow className={classes.root}>
-                <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={10}>
-                    <Collapse in={open} timeout="auto" unmountOnExit>
-                        <Box margin={1}>
-                            <Typography variant="h6" gutterBottom component="div">
-                                Détails
-                                <Link to={{
-                                    pathname: '/request',
-                                    state: {
-                                        service: row.site,
-                                        requestId: row.id
+                                            }
+                                        }} style={{margin: 20}}>
+                                            <Button variant="contained">
+                                                Éditer
+                                            </Button>
+                                        </Link>
+                                    </Typography>
+                                    <Table size="small" aria-label="purchases">
+                                        <TableHead>
+                                            <TableRow>
+                                                {
+                                                    tableClientHeadNames.map((value, index) => (
+                                                        <TableCell key={index} align="left"
+                                                                   style={{fontWeight: "bold"}}>{value}</TableCell>
+                                                    ))
+                                                }
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            <TableRow hover>
+                                                <TableCell>{row.client.clientStatus}</TableCell>
+                                                <TableCell align="left">{row.client.company}</TableCell>
+                                                <TableCell align="left">{row.client.gender}</TableCell>
+                                                <TableCell align="left">{row.client.lName}</TableCell>
+                                                <TableCell align="left">{row.client.fName}</TableCell>
+                                                <TableCell align="left">{row.client.phone}</TableCell>
+                                                <TableCell align="left">{row.client.email}</TableCell>
+                                                <TableCell align="left">{row.client.address}</TableCell>
+                                                <TableCell align="left">{row.client.cp}</TableCell>
+                                                <TableCell align="left">{row.client.city}</TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                    </Table>
+                                </Box>
+                            </Collapse>
+                        </TableCell>
+                    </TableRow>
+                </React.Fragment>
+            );
+        } else {
+            return <div/>
+        }
+    } else {
+        return (
+            <React.Fragment>
+                <TableRow className={chooseRowEmergencyStyle()}>
+                    <TableCell className={"noUglyBorder"} align={"center"}>
+                        <IconButton
+                            aria-label="expand row"
+                            size="small"
+                            onClick={() => setOpen(!open)}
+                        >
+                            {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
+                        </IconButton>
+                    </TableCell>
+                    <TableCell className={"test"} align="center">{row.id}</TableCell>
+                    <TableCell className={"noUglyBorder"} align="center">{executionDate}</TableCell>
+                    <TableCell className={"noUglyBorder"} align="center">{row.client.clientStatus}</TableCell>
+                    <TableCell className={"noUglyBorder"} align="center">{row.client.fName}</TableCell>
+                    <TableCell className={"noUglyBorder"} align="center">{row.site}</TableCell>
+                    <TableCell className={"noUglyBorder"} align="center">{row.concierge}</TableCell>
+                    <SelectRequestStatusTableCell key={row.id} status={row.requestStatus} id={row.id}
+                                                  updateStatus={props.updateStatus}/>
+                    <TableCell className={"noUglyBorder"} align="center"><p style={{
+                        textAlign: "center",
+                        maxWidth: 100,
+                        overflow: "hidden",
+                        maxHeight: 13
+                    }}>{row.requestDesc}</p></TableCell>
+                </TableRow>
+                <TableRow className={classes.root}>
+                    <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={10}>
+                        <Collapse in={open} timeout="auto" unmountOnExit>
+                            <Box margin={1}>
+                                <Typography variant="h6" gutterBottom component="div">
+                                    Détails
+                                    <Link to={{
+                                        pathname: '/request',
+                                        state: {
+                                            service: row.site,
+                                            requestId: row.id
 
-                                    }
-                                }} style={{margin: 20}}>
-                                    <Button variant="contained">
-                                        Éditer
-                                    </Button>
-                                </Link>
-                            </Typography>
-                            <Table size="small" aria-label="purchases">
-                                <TableHead>
-                                    <TableRow>
-                                        {
-                                            tableClientHeadNames.map((value, index) => (
-                                                <TableCell key={index} align="left"
-                                                           style={{fontWeight: "bold"}}>{value}</TableCell>
-                                            ))
                                         }
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    <TableRow hover>
-                                        <TableCell>{row.client.clientStatus}</TableCell>
-                                        <TableCell align="left">{row.client.company}</TableCell>
-                                        <TableCell align="left">{row.client.gender}</TableCell>
-                                        <TableCell align="left">{row.client.lName}</TableCell>
-                                        <TableCell align="left">{row.client.fName}</TableCell>
-                                        <TableCell align="left">{row.client.phone}</TableCell>
-                                        <TableCell align="left">{row.client.email}</TableCell>
-                                        <TableCell align="left">{row.client.address}</TableCell>
-                                        <TableCell align="left">{row.client.cp}</TableCell>
-                                        <TableCell align="left">{row.client.city}</TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
-                        </Box>
-                    </Collapse>
-                </TableCell>
-            </TableRow>
-        </React.Fragment>
-    );
+                                    }} style={{margin: 20}}>
+                                        <Button variant="contained">
+                                            Éditer
+                                        </Button>
+                                    </Link>
+                                </Typography>
+                                <Table size="small" aria-label="purchases">
+                                    <TableHead>
+                                        <TableRow>
+                                            {
+                                                tableClientHeadNames.map((value, index) => (
+                                                    <TableCell key={index} align="left"
+                                                               style={{fontWeight: "bold"}}>{value}</TableCell>
+                                                ))
+                                            }
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        <TableRow hover>
+                                            <TableCell>{row.client.clientStatus}</TableCell>
+                                            <TableCell align="left">{row.client.company}</TableCell>
+                                            <TableCell align="left">{row.client.gender}</TableCell>
+                                            <TableCell align="left">{row.client.lName}</TableCell>
+                                            <TableCell align="left">{row.client.fName}</TableCell>
+                                            <TableCell align="left">{row.client.phone}</TableCell>
+                                            <TableCell align="left">{row.client.email}</TableCell>
+                                            <TableCell align="left">{row.client.address}</TableCell>
+                                            <TableCell align="left">{row.client.cp}</TableCell>
+                                            <TableCell align="left">{row.client.city}</TableCell>
+                                        </TableRow>
+                                    </TableBody>
+                                </Table>
+                            </Box>
+                        </Collapse>
+                    </TableCell>
+                </TableRow>
+            </React.Fragment>
+        );
+    }
 }
+
 
 interface IProps {
 }

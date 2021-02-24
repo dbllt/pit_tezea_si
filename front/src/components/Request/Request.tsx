@@ -266,7 +266,7 @@ class Request extends Component<IndexProps, IState> {
         var request: IRequest = {
             id: "-1",
             concierge: "Jonzé",
-            site: "Bois",
+            site: "Couture",
             typeRequest: "Don",
             requestDesc: "faireééé un truc",
             numberPerson: "3",

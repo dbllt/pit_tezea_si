@@ -72,7 +72,7 @@ export interface backendClient {
     lastName: string;
     firstName: string;
     honorificTitle: string;
-    type:string;
+    type: string;
 }
 
 export interface backendClosedBy {
@@ -111,14 +111,30 @@ const API = {
                     localStorage.setItem('token', token)
                     const refreshToken = data.refreshtoken
                     localStorage.setItem('refreshToken', refreshToken)
-                    var role: string = "";
-                    const temp = data.authorities[0]
-                    if (temp !== undefined) {
-                        role = temp.authority;
-                    } else {
-                        role = ""
+
+
+                    if(data.authorities.length>1 && data.authorities[1].authority==="Responsable Site") {
+                        localStorage.setItem('site',data.authorities[0].authority)
+                        let role: string = "";
+                        const temp = data.authorities[1]
+                        if (temp !== undefined) {
+                            role = temp.authority;
+                        } else {
+                            role = ""
+                        }
+                        localStorage.setItem('role', role)
+                    }else{
+
+                        let role: string = "";
+                        const temp = data.authorities[0]
+                        if (temp !== undefined) {
+                            role = temp.authority;
+                        } else {
+                            role = ""
+                        }
+                        localStorage.setItem('role', role)
                     }
-                    localStorage.setItem('role', role)
+
                     found = true;
                 }
             }).catch(error => {
@@ -157,6 +173,8 @@ const API = {
                 } else {
                     localStorage.setItem('token', "")
                     localStorage.setItem('refreshToken', "")
+                    localStorage.setItem('role', "")
+                    localStorage.setItem('site', "")
                 }
             }).catch(error => {
                 console.error('There was an error!', error);
@@ -471,7 +489,13 @@ const API = {
         return ret;
     },
 
-    addUser: async function (username: string, password: string, role: string): Promise<any> {
+    addUser: async function (username: string, password: string, role: string, site: string): Promise<any> {
+
+        var authorities = [];
+        authorities[0]=role;
+        if (role === "Responsable Site") {
+            authorities[1] =site;
+        }
 
         let temp = localStorage.getItem('token');
         if (temp === null) {
@@ -484,7 +508,7 @@ const API = {
                 'Content-Type': 'application/json',
                 'Authorization': "Bearer " + token
             },
-            body: JSON.stringify({username: username, password: password, authorities: [role]})
+            body: JSON.stringify({username: username, password: password, authorities: authorities})
         };
 
         await fetch('/register', requestOptions)
@@ -534,13 +558,17 @@ const API = {
         return localStorage.getItem('username');
     },
 
+    getSite() {
+        return localStorage.getItem('site')||"";
+    },
+
     getRequestStatus() {
-        return ["En cours","Nouveau","Devis signé","Doublon","Facturé","Refusé","Clôturé","Client a appelé","Devis en cours","Autre"];
+        return ["En cours", "Nouveau", "Devis signé", "Doublon", "Facturé", "Refusé", "Clôturé", "Client a appelé", "Devis en cours", "Autre"];
     },
 
     getServices() {
         return [
-            "Bois","Couture","Tri démantèlement","Recyclerie","Dons enlèvements","Estimateur","Conciergerie"];
+            "Bois", "Couture", "Tri démantèlement", "Recyclerie", "Dons enlèvements", "Estimateur", "Conciergerie"];
     },
 
     getUrgencyStatus() {
