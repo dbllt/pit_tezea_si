@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
@@ -219,7 +220,8 @@ public class CreateRequestsControllerTests {
         int donated = 50;
         int nbPeople = 3;
         int duration = 4;
-        LocalDate date = LocalDate.now();
+        LocalDate date = LocalDate.of(2021, 02, 05);
+        LocalTime time = LocalTime.of(15, 20);
 
         UserTezea user = new UserTezea();
         user.setUsername(username);
@@ -250,6 +252,7 @@ public class CreateRequestsControllerTests {
         request.setAccessDetails(access);
         request.setDescription(description);
         request.setDate(date);
+        request.setTime(time);
         request.setRepetitionTime(reps);
         request.setRepetitionUnit(TimeUnit.MONTH);
         request.setStatus(RequestStatus.NEW);
@@ -297,6 +300,7 @@ public class CreateRequestsControllerTests {
         expected.setAccessDetails(access);
         expected.setDescription(description);
         expected.setDate(date);
+        expected.setTime(time);
         expected.setRepetitionTime(reps);
         expected.setRepetitionUnit(TimeUnit.MONTH);
         expected.setStatus(RequestStatus.NEW);

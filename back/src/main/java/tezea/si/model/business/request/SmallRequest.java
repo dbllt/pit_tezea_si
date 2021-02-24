@@ -1,6 +1,7 @@
 package tezea.si.model.business.request;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -22,6 +23,16 @@ public class SmallRequest {
 	private long id;
 	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate date;
+	@JsonFormat(pattern = "HH:mm")
+	private LocalTime time;
+	public LocalTime getTime() {
+		return time;
+	}
+
+	public void setTime(LocalTime time) {
+		this.time = time;
+	}
+
 	private Site site;
 	private UserTezea responsable;
 	private SmallClient client;
