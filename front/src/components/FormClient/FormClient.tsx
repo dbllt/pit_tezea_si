@@ -47,40 +47,62 @@ class FormClient extends Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        console.log(this.props)
+        const client = this.props.client;
+        console.log("form client", client)
+
         this.state = {
-            statut:this.props.client.clientStatus,
-            gender: this.props.client.gender,
-            nom: "",
-            siret: "",
-            lastName: this.props.client.lName,
-            firstName: "",
-            tel: "",
-            email: "",
-            address: "",
-            codepostal: "",
-            ville: ""
+            statut: client.clientStatus,
+            gender: client.gender,
+            nom: client.company,
+            siret: client.siret,
+            lastName: client.lName,
+            firstName: client.fName,
+            tel: client.phone,
+            email: client.email,
+            address: client.address,
+            codepostal: client.cp,
+            ville: client.city
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
 
-    componentDidMount() {
-        console.log(this.props)
-        this.setState({
-            statut:this.props.client.clientStatus,
-            gender: this.props.client.gender,
-            nom: "",
-            siret: "",
-            lastName: this.props.client.lName,
-            firstName: "",
-            tel: "",
-            email: "",
-            address: "",
-            codepostal: "",
-            ville: ""
-        });
+    // componentDidMount() {
+    //     const client = this.props.client;
+    //     console.log(this.props)
+    //     this.setState({
+    //         statut: client.clientStatus,
+    //         gender: client.gender,
+    //         nom: client.company,
+    //         siret: client.siret,
+    //         lastName: client.lName,
+    //         firstName: client.fName,
+    //         tel: client.phone,
+    //         email: client.email,
+    //         address: client.address,
+    //         codepostal: client.cp,
+    //         ville: client.city
+    //     });
+    // }
+
+    componentDidUpdate(prevProps: { client: any; }) {
+        if(prevProps.client !== this.props.client) {
+            const client = this.props.client;
+            this.setState({
+                statut: client.clientStatus,
+                gender: client.gender,
+                nom: client.company,
+                siret: client.siret,
+                lastName: client.lName,
+                firstName: client.fName,
+                tel: client.phone,
+                email: client.email,
+                address: client.address,
+                codepostal: client.cp,
+                ville: client.city
+            });
+        }
     }
 
     sendData(){
