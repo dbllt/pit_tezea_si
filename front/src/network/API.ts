@@ -535,11 +535,12 @@ const API = {
     },
 
     getRequestStatus() {
-        return ["Nouvelle", "En cours", "Devis signé", "Doublon", "Facturée", "Refusée", "Clôturée"];
+        return ["En cours","Nouveau","Devis signé","Doublon","Facturé","Refusé","Clôturé","Client a appelé","Devis en cours","Autre"];
     },
 
     getServices() {
-        return ["Bois", "Couture", "Tri", "Recyclerie", "Enlèvements", "Estimateur"];
+        return [
+            "Bois","Couture","Tri démantèlement","Recyclerie","Dons enlèvements","Estimateur","Conciergerie"];
     },
 
     getUrgencyStatus() {
