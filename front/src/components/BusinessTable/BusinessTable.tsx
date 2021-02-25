@@ -64,7 +64,7 @@ interface IClient {
     city: string
 }
 
-function Row(props: { row: Request, urgency:string|undefined,updateStatus: (name: string, id: string) => void }) {
+function Row(props: { row: Request, urgency: string | undefined, updateStatus: (name: string, id: string) => void }) {
     const {row} = props;
     const [open, setOpen] = React.useState(false);
     const classes = useRowStyles();
@@ -90,7 +90,7 @@ function Row(props: { row: Request, urgency:string|undefined,updateStatus: (name
     }
 
     function DisplayRow() {
-          return <React.Fragment>
+        return <React.Fragment>
             <TableRow className={chooseRowEmergencyStyle()}>
                 <TableCell className={"noUglyBorder"} align={"center"}>
                     <IconButton
@@ -169,16 +169,61 @@ function Row(props: { row: Request, urgency:string|undefined,updateStatus: (name
     }
 
 
-//TODO filter urgency
-    if (API.getRole() === "Responsable Site") {
-        if (API.getSite() === row.site) {
-            return DisplayRow()
+    if (props.urgency === "Alerte Rouge") {
+        if (chooseRowEmergencyStyle() === "high_emergency_style_class") {
+            if (API.getRole() === "Responsable Site") {
+                if (API.getSite() === row.site) {
+                    return DisplayRow()
+                } else {
+                    return <div/>
+                }
+            } else {
+                return DisplayRow()
+            }
+        } else {
+            return <div/>
+        }
+    } else if (props.urgency === "Alerte orange") {
+        if (chooseRowEmergencyStyle() === "medium_emergency_style_class") {
+            if (API.getRole() === "Responsable Site") {
+                if (API.getSite() === row.site) {
+                    return DisplayRow()
+                } else {
+                    return <div/>
+                }
+            } else {
+                return DisplayRow()
+            }
+        } else {
+            return <div/>
+        }
+    } else if (props.urgency === "Normale") {
+        if (chooseRowEmergencyStyle() === "low_emergency_style_class") {
+            if (API.getRole() === "Responsable Site") {
+                if (API.getSite() === row.site) {
+                    return DisplayRow()
+                } else {
+                    return <div/>
+                }
+            } else {
+                return DisplayRow()
+            }
         } else {
             return <div/>
         }
     } else {
-        return DisplayRow()
+        if (API.getRole() === "Responsable Site") {
+            if (API.getSite() === row.site) {
+                return DisplayRow()
+            } else {
+                return <div/>
+            }
+        } else {
+            return DisplayRow()
+        }
     }
+
+
 }
 
 
@@ -187,19 +232,19 @@ interface IProps {
 
 interface IState {
     requests: Request[];
-    urgency:string|undefined;
+    urgency: string | undefined;
 }
 
 
 class BusinessTable extends Component<IProps, IState> {
     state: IState = {
         requests: [],
-        urgency:undefined
+        urgency: undefined
     };
 
     applyFilter = (filter: Filter) => {
         API.getRequests(filter).then(data => {
-            this.setState({requests: data,urgency:filter.urgency})
+            this.setState({requests: data, urgency: filter.urgency})
         });
     }
 
@@ -208,9 +253,9 @@ class BusinessTable extends Component<IProps, IState> {
     }
 
     updateStatus = (status: string, id: string) => {
-        let request:PatchRequest={
-            id:+id,
-            status:status
+        let request: PatchRequest = {
+            id: +id,
+            status: status
         }
         API.editRequest(request)
     };
@@ -241,7 +286,8 @@ class BusinessTable extends Component<IProps, IState> {
                         </TableHead>
                         <TableBody>
                             {this.state.requests.map((row: Request) => (
-                                <Row key={row.id} row={row} urgency={this.state.urgency} updateStatus={this.updateStatus}/>
+                                <Row key={row.id} row={row} urgency={this.state.urgency}
+                                     updateStatus={this.updateStatus}/>
                             ))}
                         </TableBody>
                     </Table>

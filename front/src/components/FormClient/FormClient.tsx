@@ -67,24 +67,6 @@ class FormClient extends Component<Props, State> {
     }
 
 
-    // componentDidMount() {
-    //     const client = this.props.client;
-    //     console.log(this.props)
-    //     this.setState({
-    //         statut: client.clientStatus,
-    //         gender: client.gender,
-    //         nom: client.company,
-    //         siret: client.siret,
-    //         lastName: client.lName,
-    //         firstName: client.fName,
-    //         tel: client.phone,
-    //         email: client.email,
-    //         address: client.address,
-    //         codepostal: client.cp,
-    //         ville: client.city
-    //     });
-    // }
-
     componentDidUpdate(prevProps: { client: any; }) {
         if(prevProps.client !== this.props.client) {
             const client = this.props.client;

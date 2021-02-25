@@ -27,7 +27,8 @@ interface IRequest {
     requestAssignment: string,
     images: File [],
     photos: string[],
-    client: IClient
+    client: IClient,
+    wood:string
 }
 
 interface IClient {
@@ -78,7 +79,6 @@ interface IState {
     nameEstimator: string,
     typeTruck: boolean[],
     quantityWood: string
-    // request: IRequest
 
 }
 
@@ -196,6 +196,8 @@ class Request extends Component<IndexProps, IState> {
         API.getRequest(id).then(r => {
             if (r !== null) {
                 var rr: IRequest = r;
+
+
                 this.setState({
                     id: rr.id,
                     concierge: rr.concierge,
@@ -207,12 +209,14 @@ class Request extends Component<IndexProps, IState> {
                     regularity: rr.regularity,
                     duration: rr.duration,
                     material: rr.material,
+                    materialother:rr.materialother,
                     internalInfo: rr.internalInfo,
                     executionDate: this.truc(rr.executionDate),
                     requestStatus: rr.requestStatus,
                     requestAssignment: rr.requestAssignment,
                     images: rr.images,
                     photos: rr.photos,
+                    quantityWood:rr.wood,
                     client: {
                         clientStatus: rr.client.clientStatus,
                         company: rr.client.company,
@@ -338,42 +342,6 @@ class Request extends Component<IndexProps, IState> {
     }
 
     addRequest() {
-        // var client: IClient = {
-        //     clientStatus: "Collectivité",
-        //     company: "Google",
-        //     gender: "Mr",
-        //     lName: "Pouet",
-        //     fName: "Grogu",
-        //     phone: "06",
-        //     email: "grogu@sw.mdr",
-        //     address: "2 rue de la paix",
-        //     cp: "35000",
-        //     city: "Rennes",
-        //     siret:"XXXX"
-        // }
-        //
-        // const date1 = new Date(2021, 1, 28);
-        // var request: IRequest = {
-        //     id: "-1",
-        //     concierge: "Jonzé",
-        //     site: "Couture",
-        //     typeRequest: "Don",
-        //     requestDesc: "faireééé un truc",
-        //     numberPerson: "3",
-        //     place: "boueux",
-        //     regularity: "2",
-        //     duration: "1 an",
-        //     internalInfo: "coucou",
-        //     requestStatus: "En cours",
-        //     requestAssignment: "Pierre",
-        //     material:[true,false,true],
-        //     materialother:"une pelle",
-        //     executionDate:"05-03-2021",
-        //     executionTime:"???",
-        //     images: this.state.images,
-        //     client: client,
-        //     photos: []
-        // }
 
         this.setState({triedToAdd: true})
         var client = this.state.client;
@@ -397,7 +365,8 @@ class Request extends Component<IndexProps, IState> {
             requestStatus: "",
             requestAssignment: "",
             client: client,
-            photos: []
+            photos: [],
+            wood:this.state.quantityWood
         }
 
 
@@ -439,13 +408,13 @@ class Request extends Component<IndexProps, IState> {
                 status: this.state.requestStatus,
                 accessDetails: this.state.place,
                 repetitionTime: +this.state.regularity,
-                //repetitionUnit: "HOUR",
                 type: this.state.typeRequest,
                 amountWood: +this.state.quantityWood,
                 estimation: {
                     numberEmployeesNeeded: +this.state.numberPerson,
                     expectedDuration: +this.state.duration,
-                    toolsNeeded:this.state.material
+                    toolsNeeded:this.state.material,
+                    otherTools:this.state.materialother
                 },
                 internalInfo: this.state.internalInfo
             }
@@ -605,51 +574,51 @@ class Request extends Component<IndexProps, IState> {
                                 <Grid item>
                                     <FormGroup>
                                         <FormControlLabel
-                                            control={<Checkbox name="m1" value={this.containsMaterial(this.state.material,"Port de charge")}
+                                            control={<Checkbox name="m1" checked={this.containsMaterial(this.state.material,"Port de charge")}
                                                                onChange={this.materialChecked}/>}
                                             label="Matériel lié au port de charge"
                                         />
                                         <FormControlLabel
-                                            control={<Checkbox name="m2" value={this.containsMaterial(this.state.material,"Lié à la prestation")}
+                                            control={<Checkbox name="m2" checked={this.containsMaterial(this.state.material,"Lié à la prestation")}
                                                                onChange={this.materialChecked}/>}
                                             label="Matériel lié à la prestation"
                                         />
                                         <FormControlLabel
-                                            control={<Checkbox name="m3" value={this.containsMaterial(this.state.material,"Spécifique")}
+                                            control={<Checkbox name="m3" checked={this.containsMaterial(this.state.material,"Spécifique")}
                                                                onChange={this.materialChecked}/>}
                                             label="Spécifique"
                                         />
-                                        {this.state.material[2] &&
+                                        {this.containsMaterial(this.state.material,"Spécifique") &&
                                         <TextField name="materialother" value={this.state.materialother}
                                                    onChange={this.handleChange}/>}
                                     </FormGroup>
                                 </Grid>
                             </Grid>
-                            {this.state.service === "Bois" &&
-                            <Grid container className="Gridlabelfield">
-                                <Grid item className="Label">
-                                    Type de camion :
-                                </Grid>
-                                <Grid item>
-                                    <FormGroup>
-                                        <FormControlLabel
-                                            control={<Checkbox name="t1" value={this.state.typeTruck[0]}
-                                                               onChange={this.typeTruckChecked}/>}
-                                            label="Renault Master"
-                                        />
-                                        <FormControlLabel
-                                            control={<Checkbox name="t2" value={this.state.typeTruck[1]}
-                                                               onChange={this.typeTruckChecked}/>}
-                                            label="Camion benne"
-                                        />
-                                        <FormControlLabel
-                                            control={<Checkbox name="t3" value={this.state.typeTruck[2]}
-                                                               onChange={this.typeTruckChecked}/>}
-                                            label="Camion 20m3"
-                                        />
-                                    </FormGroup>
-                                </Grid>
-                            </Grid>}
+                            {/*{this.state.service === "Bois" &&*/}
+                            {/*<Grid container className="Gridlabelfield">*/}
+                            {/*    <Grid item className="Label">*/}
+                            {/*        Type de camion :*/}
+                            {/*    </Grid>*/}
+                            {/*    <Grid item>*/}
+                            {/*        <FormGroup>*/}
+                            {/*            <FormControlLabel*/}
+                            {/*                control={<Checkbox name="t1" value={this.state.typeTruck[0]}*/}
+                            {/*                                   onChange={this.typeTruckChecked}/>}*/}
+                            {/*                label="Renault Master"*/}
+                            {/*            />*/}
+                            {/*            <FormControlLabel*/}
+                            {/*                control={<Checkbox name="t2" value={this.state.typeTruck[1]}*/}
+                            {/*                                   onChange={this.typeTruckChecked}/>}*/}
+                            {/*                label="Camion benne"*/}
+                            {/*            />*/}
+                            {/*            <FormControlLabel*/}
+                            {/*                control={<Checkbox name="t3" value={this.state.typeTruck[2]}*/}
+                            {/*                                   onChange={this.typeTruckChecked}/>}*/}
+                            {/*                label="Camion 20m3"*/}
+                            {/*            />*/}
+                            {/*        </FormGroup>*/}
+                            {/*    </Grid>*/}
+                            {/*</Grid>}*/}
                             {this.state.service === "Bois" &&
                             <Grid container className="Gridlabelfield">
                                 <Grid item className="Label">
@@ -711,19 +680,19 @@ class Request extends Component<IndexProps, IState> {
                                     />
                                 </Grid>
                             </Grid>
-                            <Grid container className="Gridlabelfield">
-                                <Grid item className="Label">
-                                    Horaire d’exécution :
-                                </Grid>
-                                <Grid item>
-                                    <TextField
-                                        type="time"
-                                        name="executionTime"
-                                        value={this.state.executionTime}
-                                        onChange={this.handleChange}
-                                    />
-                                </Grid>
-                            </Grid>
+                            {/*<Grid container className="Gridlabelfield">*/}
+                            {/*    <Grid item className="Label">*/}
+                            {/*        Horaire d’exécution :*/}
+                            {/*    </Grid>*/}
+                            {/*    <Grid item>*/}
+                            {/*        <TextField*/}
+                            {/*            type="time"*/}
+                            {/*            name="executionTime"*/}
+                            {/*            value={this.state.executionTime}*/}
+                            {/*            onChange={this.handleChange}*/}
+                            {/*        />*/}
+                            {/*    </Grid>*/}
+                            {/*</Grid>*/}
                             <Grid container className="Gridlabelfield">
                                 <Grid item className="Label">
                                     Joindre des images

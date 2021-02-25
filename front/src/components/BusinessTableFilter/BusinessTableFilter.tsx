@@ -299,16 +299,17 @@ class BusinessTableFilter extends Component<Props, State> {
 
                     </Grid>
 
-                    <Grid item>
-                        <TextField
-                            label="Objet demande"
-                            inputRef={this.requestObject}
-                            id="outlined-margin-normal"
-                            margin="normal"
-                            variant="outlined"
-                            onChange={() => this.refresh()}
-                        />
-                    </Grid>
+                {/*    <Grid item> TODO FIX THIS WITH BACK*/}
+                {/*        <TextField*/}
+                {/*            label="Objet demande"*/}
+                {/*            inputRef={this.requestObject}*/}
+                {/*            id="outlined-margin-normal"*/}
+                {/*            margin="normal"*/}
+                {/*            variant="outlined"*/}
+                {/*            onChange={() => this.refresh()}*/}
+                {/*        />*/}
+                {/*    </Grid>*/}
+
                 </Grid>
 
                 <Grid container spacing={1} direction="row" justify="center" alignItems="center">

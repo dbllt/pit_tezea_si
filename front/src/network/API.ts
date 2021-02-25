@@ -21,7 +21,8 @@ interface Request {
     requestAssignment: string,
     images: File [],
     photos: string[],
-    client: IClient
+    client: IClient,
+    wood:string
 }
 
 interface IClient {
@@ -85,7 +86,8 @@ export interface backendClosedBy {
 export interface backendEstimation {
     numberEmployeesNeeded:number,
     expectedDuration:number,
-    toolsNeeded:string[]
+    toolsNeeded:string[],
+    otherTools:string
 }
 
 export interface PatchRequest {
@@ -135,7 +137,8 @@ export interface PatchClosedBy {
 export interface PatchEstimation {
     numberEmployeesNeeded?:number,
     expectedDuration?:number,
-    toolsNeeded?:string[]
+    toolsNeeded?:string[],
+    otherTools?:string
 }
 
 interface User {
@@ -296,10 +299,12 @@ const API = {
                 "status": "Nouveau",
                 "accessDetails": request.place,
                 "internalInfo":request.internalInfo,
+                "amountWood":request.wood,
                 "estimation": {
                     "numberEmployeesNeeded":request.numberPerson,
                     "expectedDuration":request.duration,
-                    "toolsNeeded":request.material
+                    "toolsNeeded":request.material,
+                    "otherTools":request.materialother
                 }
             })
         };
@@ -313,7 +318,6 @@ const API = {
                     ret = true;
                     if (request.images.length > 0)
                         this.uploadFile(request.images, data.id.toString())
-                    console.log(data)
                 }
             }).catch(error => {
                 console.error('There was an error!', error);
@@ -345,9 +349,7 @@ const API = {
                 if (response.status !== 200) {
                     return Promise.reject(response);
                 } else {
-                    const data: BackendRequest = await response.json();
                     ret = true;
-                    console.log(data)
                 }
             }).catch(error => {
                 console.error('There was an error!', error);
@@ -389,7 +391,6 @@ const API = {
                 "site": filter.site === "" ? undefined : filter.site,
                 //"type": filter.requestObject, TODO
                 "status": filter.requestStatus === "" ? undefined : filter.requestStatus
-                //TODO urgence a faire coté front
             })
         };
         var res: Request[] = []
@@ -406,8 +407,7 @@ const API = {
             })
 
         return res;
-        //return requests.filter((request => request.site.toLocaleLowerCase().includes(filter.site.toLocaleLowerCase())))
-    },
+     },
 
     photosAddressesToFiles: async function (addresses: string[]): Promise<File[]> {
         const ret: File[] = []
@@ -436,8 +436,8 @@ const API = {
     },
 
     backendRequestToFrontendRequest: function (request: BackendRequest): Request {
-        console.log(request)
         var client: IClient;
+
 
         if (request.client !== null) {
             client = {
@@ -476,6 +476,8 @@ const API = {
         } else {
             tempResponsable = ""
         }
+
+
         var retRequest: Request = {
             id: request.id.toString(),
             concierge: tempResponsable,
@@ -495,10 +497,11 @@ const API = {
             executionTime: "",
             executionDate: request.date.toString(),
             material: request.estimation.toolsNeeded,
-            materialother: "",
-
+            materialother: request.estimation.otherTools,
+            wood:request.amountWood.toString()
 
         }
+
 
         return retRequest;
 
@@ -563,7 +566,6 @@ const API = {
                 } else {
                     const data: BackendRequest = await response.json();
                     var temp: Request = await this.backendRequestToFrontendRequest(data)
-                    console.log(temp)
                     ret = temp;
                 }
             }).catch(error => {
