@@ -1,6 +1,6 @@
 
 import React, { Component, createRef } from 'react';
-import { TextField, MenuItem, FormControl, Select, Grid } from "@material-ui/core";
+import { TextField, MenuItem, FormControl, Select, Grid, InputLabel } from "@material-ui/core";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import API from "../../network/API";
@@ -40,6 +40,12 @@ class BusinessTableFilter extends Component<Props, State> {
             endDate: null,
             requestObject: ""
         }
+    };
+
+    testStyle = {
+        big: {
+            backgroundColor: 'red',
+        },
     };
 
     private readonly clientName: React.RefObject<any>;
@@ -256,50 +262,57 @@ class BusinessTableFilter extends Component<Props, State> {
                 </Grid>
 
                 <Grid container spacing={1} direction="row" justify="space-evenly" alignItems="center">
-                    <Grid item>
-                        <FormControl>
+                    <Grid item xs>
+                        <FormControl variant="outlined" fullWidth>
+                            <InputLabel id="status-label">Statut demande</InputLabel>
                             <Select
                                 value={this.state.filter.requestStatus}
                                 onChange={this.refreshStatus}
                                 displayEmpty
-                                inputProps={{ 'aria-label': 'Without label' }}
+                                autoWidth={true}
+                                label="Statut demande"
                             >
-                                <MenuItem value="" disabled>Statut demande</MenuItem>
+                                <MenuItem value="">Tous Empty</MenuItem>
                                 {requestStatus.map((value, index) => (<MenuItem key={index} value={value}>{value}</MenuItem>))}
                             </Select>
                         </FormControl>
                     </Grid>
 
-                    <Grid item>
-                        <FormControl>
+                    <Grid item xs>
+                        <FormControl variant="outlined" fullWidth>
+                            <InputLabel>Site demande</InputLabel>
                             <Select
                                 value={this.state.filter.site}
                                 onChange={this.refreshSite}
                                 displayEmpty
-                                inputProps={{ 'aria-label': 'Without label' }}
+                                label="Site demande"
+                                autoWidth={true}
+
                             >
-                                <MenuItem value="" disabled>Site demande</MenuItem>
+                                <MenuItem value="">Tous Empty</MenuItem>
                                 {sites.map((value, index) => (<MenuItem key={index} value={value}>{value}</MenuItem>))}
                             </Select>
                         </FormControl>
                     </Grid>
 
-                    <Grid item>
-                        <FormControl>
+                    <Grid item xs>
+                        <FormControl variant="outlined" style={{minWidth: '400'}}>
+                            <InputLabel>Urgence demande</InputLabel>
                             <Select
                                 value={this.state.filter.urgency}
                                 onChange={this.refreshUrgency}
                                 displayEmpty
-                                inputProps={{ 'aria-label': 'Without label' }}
+                                label="Urgence label"
+                                autoWidth={true}
                             >
-                                <MenuItem value="" disabled>Urgence demande</MenuItem>
+                                <MenuItem value="">Tous Empty</MenuItem>
                                 {urgencies.map((value, index) => (<MenuItem key={index} value={value}>{value}</MenuItem>))}
                             </Select>
                         </FormControl>
 
                     </Grid>
 
-                {/*    <Grid item> TODO FIX THIS WITH BACK*/}
+                {/*    <Grid item xs> TODO FIX THIS WITH BACK*/}
                 {/*        <TextField*/}
                 {/*            label="Objet demande"*/}
                 {/*            inputRef={this.requestObject}*/}
@@ -309,7 +322,6 @@ class BusinessTableFilter extends Component<Props, State> {
                 {/*            onChange={() => this.refresh()}*/}
                 {/*        />*/}
                 {/*    </Grid>*/}
-
                 </Grid>
 
                 <Grid container spacing={1} direction="row" justify="center" alignItems="center">
