@@ -272,7 +272,7 @@ class BusinessTableFilter extends Component<Props, State> {
                                 autoWidth={true}
                                 label="Statut demande"
                             >
-                                <MenuItem value="">Tous Empty</MenuItem>
+                                <MenuItem value="">Tous</MenuItem>
                                 {requestStatus.map((value, index) => (<MenuItem key={index} value={value}>{value}</MenuItem>))}
                             </Select>
                         </FormControl>
@@ -289,7 +289,7 @@ class BusinessTableFilter extends Component<Props, State> {
                                 autoWidth={true}
 
                             >
-                                <MenuItem value="">Tous Empty</MenuItem>
+                                <MenuItem value="">Tous</MenuItem>
                                 {sites.map((value, index) => (<MenuItem key={index} value={value}>{value}</MenuItem>))}
                             </Select>
                         </FormControl>
@@ -305,7 +305,7 @@ class BusinessTableFilter extends Component<Props, State> {
                                 label="Urgence label"
                                 autoWidth={true}
                             >
-                                <MenuItem value="">Tous Empty</MenuItem>
+                                <MenuItem value="">Tous</MenuItem>
                                 {urgencies.map((value, index) => (<MenuItem key={index} value={value}>{value}</MenuItem>))}
                             </Select>
                         </FormControl>
