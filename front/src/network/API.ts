@@ -687,16 +687,16 @@ const API = {
     },
 
     getRequestStatus() {
-        return ["En cours", "Nouveau", "Devis signé", "Doublon", "Facturé", "Refusé", "Clôturé", "Client a appelé", "Devis en cours", "Autre"];
+        return ["En cours", "Nouveau", "Devis signé", "Doublon", "Facturé", "Refusé", "Clôturé", "Client a appelé", "Devis en cours", "Autre", "Tous"];
     },
 
     getServices() {
         return [
-            "Bois", "Couture", "Tri démantèlement", "Recyclerie", "Dons enlèvements", "Estimateur", "Conciergerie"];
+            "Bois", "Couture", "Tri démantèlement", "Recyclerie", "Dons enlèvements", "Estimateur", "Conciergerie", "Tous"];
     },
 
     getUrgencyStatus() {
-        return ["Normale", "Alerte orange", "Alerte Rouge"]
+        return ["Normale", "Alerte orange", "Alerte Rouge", "Tous"]
     },
 
     sendEmail() {
