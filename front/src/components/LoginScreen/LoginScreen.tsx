@@ -14,6 +14,7 @@ interface IProps {
 interface IState {
     redirect: boolean
     triedToLogin: boolean
+    displayError: boolean
 }
 
 function RedirectionIfNotConnected() {
@@ -29,10 +30,12 @@ function RedirectionIfNotConnected() {
     }
 }
 
+
 class LoginScreen extends Component<IProps, IState> {
     state = {
         redirect: false,
         triedToLogin: false,
+        displayError:false
     }
     private readonly username: React.RefObject<any>;
     private readonly password: React.RefObject<any>;
@@ -47,6 +50,7 @@ class LoginScreen extends Component<IProps, IState> {
         this.login = this.login.bind(this);
 
         this.keyPress = this.keyPress.bind(this);
+        this.DisplayError = this.DisplayError.bind(this);
     }
 
     login() {
@@ -55,9 +59,19 @@ class LoginScreen extends Component<IProps, IState> {
             API.login(this.getUsername(), this.getPassword()).then((b) => {
                     if (b) {
                         this.props.handler(this.getUsername())
+                    }else{
+                        this.setState({displayError:true})
                     }
                 }
             );
+        }
+    }
+
+    DisplayError(){
+        if(this.state.displayError){
+            return <p style={{color:"red"}}>Erreur : Identifiant/Mot de Passe Invalide</p>
+        }else{
+            return <div/>
         }
     }
 
@@ -78,7 +92,7 @@ class LoginScreen extends Component<IProps, IState> {
     };
 
     keyPress(e: React.KeyboardEvent<HTMLInputElement>) {
-        if(e.key==="Enter"){
+        if (e.key === "Enter") {
             this.login();
         }
     }
@@ -88,6 +102,7 @@ class LoginScreen extends Component<IProps, IState> {
             <div className={styles.LoginScreen}>
                 <RedirectionIfNotConnected/>
                 <h1>Connexion</h1>
+                <this.DisplayError/>
                 <Grid container direction="column" justify="center" alignItems="center" spacing={5}>
                     <Grid item>
                         <TextField
@@ -113,8 +128,9 @@ class LoginScreen extends Component<IProps, IState> {
                             onKeyDown={this.keyPress}
                         />
                     </Grid>
-                    <Grid>
-                        <Button type="button" onClick={this.login}>
+                    <Grid item>
+                        <Button type="button" onClick={this.login}
+                                style={{backgroundColor: "#8fbe40", color: 'white', padding: 15}}>
                             Se connecter
                         </Button>
                     </Grid>

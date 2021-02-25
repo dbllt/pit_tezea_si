@@ -1,7 +1,33 @@
 .high_emergency_style_class {
-    background-color: red;
+    background-color: #ea4335;
 }
 
 .medium_emergency_style_class {
-    background-color: orange;
+    background-color: #f3782b;
+}
+
+
+.low_emergency_style_class {
+    background-color: #8fbe40;
+}
+
+.high_emergency_style_class:hover {
+    opacity: 0.8;
+}
+
+
+.medium_emergency_style_class:hover {
+    opacity: 0.8;
+}
+
+.low_emergency_style_class:hover {
+    opacity: 0.8;
+}
+
+.noUglyBorder{
+    border:0!important;
+}
+
+.idCell{
+    max-width: 5px!important;
 }

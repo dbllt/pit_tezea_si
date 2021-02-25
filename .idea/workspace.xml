@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bb6b740c-9156-491c-b051-4c422086a03e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/front/src/components/BusinessTable/BusinessTable.css" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/BusinessTable/BusinessTable.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/BusinessTable/BusinessTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/BusinessTable/BusinessTable.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/NewUserScreen/NewUserScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/NewUserScreen/NewUserScreen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/components/FormClient/FormClient.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/FormClient/FormClient.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/src/components/Request/Request.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/Request/Request.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/UsersScreen/UsersScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/UsersScreen/UsersScreen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/network/API.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/network/API.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,6 +41,7 @@
       <workItem from="1613943861944" duration="3000" />
       <workItem from="1613943878913" duration="4548000" />
       <workItem from="1613948490553" duration="7857000" />
+      <workItem from="1614179350305" duration="8516000" />
     </task>
     <servers />
   </component>
@@ -51,6 +49,10 @@
     <option name="version" value="3" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="625" y="342" width="659" height="403" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1614187874059">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="625" y="342" width="659" height="403" key="#com.intellij.fileTypes.FileTypeChooser/308.1080.1366.768/0.0.1920.1080@0.0.1920.1080" timestamp="1614187874059" />
     <state x="100" y="100" width="1720" height="880" key="DiffContextDialog" timestamp="1613948398559">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
@@ -75,10 +77,10 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="652" height="446" key="SwitcherDM/308.1080.1366.768/0.0.1920.1080@0.0.1920.1080" timestamp="1613955036127" />
-    <state x="651" y="279" width="790" height="522" key="find.popup" timestamp="1613951478974">
+    <state x="651" y="279" width="790" height="522" key="find.popup" timestamp="1614182156335">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="651" y="279" width="790" height="522" key="find.popup/308.1080.1366.768/0.0.1920.1080@0.0.1920.1080" timestamp="1613951478974" />
+    <state x="651" y="279" width="790" height="522" key="find.popup/308.1080.1366.768/0.0.1920.1080@0.0.1920.1080" timestamp="1614182156335" />
     <state x="624" y="245" key="run.anything.popup" timestamp="1613954835391">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>

@@ -62,7 +62,8 @@ public class RequestController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "The list of requests corresponding to your search"),
             @ApiResponse(responseCode = "400", description = "If the search body could not be parsed") })
-    @RequestMapping(method = RequestMethod.GET)
+
+    @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<List<SmallRequestDTO>> getRequests(@RequestBody SmallRequestSearchDTO search) {
         Specification<SmallRequest> spec = searchService.convert(search);
 
@@ -87,7 +88,7 @@ public class RequestController {
     @Operation(summary = "Create a request")
     @ApiResponses(value = { @ApiResponse(responseCode = "201", description = "The new request"),
             @ApiResponse(responseCode = "400", description = "If the input request body could not be parsed, or id was set") })
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(path="/create",method = RequestMethod.POST)
     public ResponseEntity<SmallRequestDTO> createRequest(@RequestBody SmallRequest request) {
         if (request.getId() != null && !dao.findById(request.getId()).isPresent())
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

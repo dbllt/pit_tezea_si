@@ -1,8 +1,10 @@
 import React, {Component, createRef} from 'react';
-import {Button, TextField} from "@material-ui/core";
+import {Button, FormHelperText, InputLabel, Select, TextField} from "@material-ui/core";
 import {Link, Redirect} from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import API from "../../network/API";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
 
 interface IProps {
 }
@@ -10,6 +12,8 @@ interface IProps {
 interface IState {
     redirect: boolean
     triedToCreate: boolean
+    displaySite: boolean
+    displayError: boolean
 }
 
 function RedirectionIfNotConnected() {
@@ -25,19 +29,32 @@ function RedirectionIfNotConnected() {
     }
 }
 
+
+function RedirectionIfNotAdmin() {
+    let role = localStorage.getItem('role');
+    if (role !=="ADMIN") {
+        return <Redirect to="/"/>
+    } else {
+        return <div/>
+    }
+}
 class NewUserScreen extends Component<IProps, IState> {
     state = {
         redirect: false,
         triedToCreate: false,
+        displaySite: false,
+        displayError: false,
     }
     private readonly username: React.RefObject<any>;
     private readonly password: React.RefObject<any>;
     private readonly role: React.RefObject<any>;
+    private readonly site: React.RefObject<any>;
 
     constructor(props: IProps) {
         super(props);
         this.username = createRef();
         this.role = createRef();
+        this.site = createRef();
         this.password = createRef();
 
 
@@ -45,6 +62,7 @@ class NewUserScreen extends Component<IProps, IState> {
         this.getRole = this.getRole.bind(this);
         this.getPassword = this.getPassword.bind(this);
         this.addUser = this.addUser.bind(this);
+        this.DisplayError = this.DisplayError.bind(this);
     }
 
     getUsername(): string {
@@ -56,15 +74,23 @@ class NewUserScreen extends Component<IProps, IState> {
     };
 
     getRole(): string {
-        if (this.role.current.value == null) {
+        if (this.role.current == null) {
             return "";
         } else {
             return this.role.current.value;
         }
     };
 
+    getSite(): string {
+        if (this.site.current == null) {
+            return "";
+        } else {
+            return this.site.current.value;
+        }
+    };
+
     getPassword(): string {
-        if (this.password.current.value == null) {
+        if (this.password.current == null) {
             return "";
         } else {
             return this.password.current.value;
@@ -73,21 +99,83 @@ class NewUserScreen extends Component<IProps, IState> {
 
     addUser() {
         this.setState({triedToCreate: true})
-        if (this.getUsername() !== "" && this.getRole() !== "" && this.getPassword() !== "") {
-            API.addUser(this.getUsername(), this.getPassword(), this.getRole()).then(() => this.setState({redirect: true}));
+        if (this.getUsername() !== "" && this.getRole() !== undefined && this.getPassword() !== "") {
+            API.addUser(this.getUsername(), this.getPassword(), this.getRole(), this.getSite()).then((b) => {
+                if (b) {
+                    this.setState({redirect: true})
+                } else {
+                    this.setState({displayError: true})
+
+                }
+            });
         }
     }
+
+    DisplayError() {
+        if (this.state.displayError) {
+            return <p style={{color: "red"}}>Erreur : Utilisateur déjà présent</p>
+        } else {
+            return <div/>
+        }
+    }
+
+    testDisplaySite(value: string) {
+        if (value === "Responsable Site") {
+            this.setState({displaySite: true});
+            this.forceUpdate()
+        } else {
+            this.setState({displaySite: false});
+            this.forceUpdate()
+        }
+    }
+
+
+    DisplaySite() {
+        if (this.state.displaySite) {
+            return <Grid item>
+                <FormControl style={{
+                    minWidth: 250,
+                    marginTop: 20
+
+                }}>
+                    <InputLabel id="demo-simple-select-label" style={{marginLeft: 15}}>Site</InputLabel>
+                    <Select name="typeRequest"
+                            inputRef={this.site}
+                            id="outlined-margin-normal"
+                            variant="outlined"
+                            error={(this.state.triedToCreate && this.getSite() === undefined)}
+                    >
+                        <MenuItem value="Bois">Bois</MenuItem>
+                        <MenuItem value="Couture">Couture</MenuItem>
+                        <MenuItem value="Tri démantèlement">Tri démantèlement</MenuItem>
+                        <MenuItem value="Recyclerie">Recyclerie</MenuItem>
+                        <MenuItem value="Dons enlèvements">Dons enlèvements</MenuItem>
+                        <MenuItem value="Estimateur">Estimateur</MenuItem>
+                        <MenuItem value="Conciergerie">Conciergerie</MenuItem>
+                    </Select>
+                    {(this.state.triedToCreate && this.getSite() === undefined) && <FormHelperText style={{color:"red",marginLeft:"16px"}}>Manquant</FormHelperText>}
+
+                </FormControl>
+            </Grid>
+        } else {
+
+            return <div/>
+        }
+    }
+
 
     render() {
         return (
             <div>
+                <RedirectionIfNotAdmin/>
                 <RedirectionIfNotConnected/>
                 <h1>Nouvel utilisateur</h1>
-                <Grid container direction="column" justify="center" alignItems="center" spacing={5}>
+                <this.DisplayError/>
+                <Grid container direction="column" justify="center" alignItems="center" spacing={2}>
                     <Grid item>
                         <TextField
                             inputRef={this.username}
-                            label="Identifiant:"
+                            label="Identifiant"
                             id="outlined-margin-normal"
                             margin="normal"
                             variant="outlined"
@@ -108,24 +196,43 @@ class NewUserScreen extends Component<IProps, IState> {
                         />
                     </Grid>
                     <Grid item>
-                        <TextField
-                            inputRef={this.role}
-                            label="Rôle"
-                            id="outlined-margin-normal"
-                            margin="normal"
-                            variant="outlined"
-                            error={(this.state.triedToCreate && this.getRole() === "")}
-                            helperText={(this.state.triedToCreate && this.getRole() === "") ? 'Manquant' : ' '}
-                        />
+                        <FormControl style={{
+                            minWidth: 250,
+                            marginTop: 20
+
+                        }}>
+                            <InputLabel id="demo-simple-select-label" style={{marginLeft: 15}}>Rôle</InputLabel>
+                            <Select name="typeRequest"
+                                    inputRef={this.role}
+                                    id="outlined-margin-normal"
+                                    variant="outlined"
+                                    error={(this.state.triedToCreate && this.getRole() === undefined)}
+                                    onChange={(e) => {
+                                        this.testDisplaySite(String(e.target.value))
+                                    }}
+                            >
+
+                                <MenuItem value="Responsable Site">Reponsable Site</MenuItem>
+                                <MenuItem value="Concierge">Concierge</MenuItem>
+                                <MenuItem value="Commercial">Commercial</MenuItem>
+                                <MenuItem value="ADMIN">ADMIN</MenuItem>
+                            </Select>
+                            {(this.state.triedToCreate && this.getRole() === undefined) && <FormHelperText style={{color:"red",marginLeft:"16px"}}>Manquant</FormHelperText>}
+                        </FormControl>
                     </Grid>
-                    <Grid>
-                        <Button type="button" onClick={this.addUser}>
+                    {this.DisplaySite()}
+                </Grid>
+                <Grid container direction="column" justify="center" alignItems="center" spacing={2}
+                      style={{marginTop: 100}}>
+                    <Grid item>
+                        <Button type="button" onClick={this.addUser}
+                                style={{backgroundColor: "#8fbe40", color: 'white', padding: 15}}>
                             Ajouter utilisateur
                         </Button>
                     </Grid>
-                    <Grid>
+                    <Grid item>
                         <Link to="/users">
-                            <Button type="button">
+                            <Button color="primary">
                                 Retour
                             </Button>
                         </Link>
