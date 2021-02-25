@@ -20,8 +20,8 @@ interface State {
 class BusinessTableSort extends Component<Props, State> {
 
     state: State = {
-        sort: "Date",
-        order: "Descendant"
+        sort: "Numéro",
+        order: "Ascendant"
     };
 
 
@@ -33,20 +33,28 @@ class BusinessTableSort extends Component<Props, State> {
         return sort;
     }
 
+    createSort=(sortt:string,order:string)=>{
+        const sort: Sort = {
+            sort: sortt,
+            order: order
+        };
+        return sort;
+    }
+
     refreshSort = (event: React.ChangeEvent<{ value: unknown }>) => {
-        this.setState({ sort: event.target.value as string });
-        this.props.applySort(this.createSortFromState());
+        this.setState({ sort: event.target.value as string});
+        this.props.applySort(this.createSort(event.target.value as string,this.state.order));
 
     };
 
     refreshOrder = (event: React.ChangeEvent<{ value: unknown }>) => {
-        this.setState({ order: event.target.value as string });
-        this.props.applySort(this.createSortFromState());
+        this.setState({order: event.target.value as string });
+        this.props.applySort(this.createSort(this.state.sort,event.target.value as string));
     };
 
 
     render() {
-        const possibleSort = ["Date", "Nom du client", "Urgence"];
+        const possibleSort = ["Numéro","Date", "Nom du client"];
         const possibleOrder = ["Ascendant", "Descendant"];
         return (
             <div>
@@ -59,6 +67,7 @@ class BusinessTableSort extends Component<Props, State> {
                                 displayEmpty
                                 inputProps={{ 'aria-label': 'Without label' }}
                             >
+                                <MenuItem value="" disabled>Champs</MenuItem>
                                 {possibleSort.map((value, index) => (<MenuItem key={index} value={value}>{value}</MenuItem>))}
                             </Select>
                         </FormControl>
@@ -71,6 +80,7 @@ class BusinessTableSort extends Component<Props, State> {
                                 onChange={this.refreshOrder}
                                 inputProps={{ 'aria-label': 'Without label' }}
                             >
+                                <MenuItem value="" disabled>Ordre</MenuItem>
                                 {possibleOrder.map((value, index) => (<MenuItem key={index} value={value}>{value}</MenuItem>))}
                             </Select>
                         </FormControl>

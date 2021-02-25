@@ -64,6 +64,11 @@ interface IClient {
     city: string
 }
 
+function formatDate(d: string) {
+    var t = d.split("-");
+    return t[1] + "/" + t[0] + "/" + t[2]
+}
+
 function Row(props: { row: Request, urgency: string | undefined, updateStatus: (name: string, id: string) => void }) {
     const {row} = props;
     const [open, setOpen] = React.useState(false);
@@ -71,11 +76,6 @@ function Row(props: { row: Request, urgency: string | undefined, updateStatus: (
 
     const executionDate = row.executionDate;
 
-
-    function formatDate(d: string) {
-        var t = d.split("-");
-        return t[1] + "/" + t[0] + "/" + t[2]
-    }
 
     const chooseRowEmergencyStyle = () => {
         const sevenDays = 7 * 24 * 3600 * 1000;
@@ -249,6 +249,53 @@ class BusinessTable extends Component<IProps, IState> {
     }
 
     applySort = (sort: Sort) => {
+        if (sort.order === "Ascendant") {
+            if (sort.sort === "Numéro") {
+                this.setState({requests: this.state.requests.sort((a, b) => (+a.id) - (+b.id))})
+
+            } else if (sort.sort === "Date") {
+                this.setState({requests: this.state.requests.sort((a, b) => (new Date(formatDate(a.executionDate))).getTime() - (new Date(formatDate(b.executionDate))).getTime())})
+
+            } else if (sort.sort === "Nom du client") {
+                let temp = this.state.requests.sort(function (a, b) {
+                    var nameA = a.client.lName.toLowerCase(), nameB = b.client.lName.toLowerCase();
+                    if (nameB < nameA) //sort string ascending
+                        return -1;
+                    if (nameB > nameA)
+                        return 1;
+                    return 0; //default return value (no sorting)
+                });
+                this.setState({requests:temp})
+            } else {
+                this.setState({requests: this.state.requests.sort((a, b) => (+a.id) - (+b.id))})
+
+            }
+        } else if (sort.order === "Descendant") {
+            if (sort.sort === "Numéro") {
+                this.setState({requests: this.state.requests.sort((a, b) => (+b.id) - (+a.id))})
+
+            } else if (sort.sort === "Date") {
+                this.setState({requests: this.state.requests.sort((a, b) => (new Date(formatDate(b.executionDate))).getTime() - (new Date(formatDate(a.executionDate))).getTime())})
+
+            } else if (sort.sort === "Nom du client") {
+                let temp = this.state.requests.sort(function (a, b) {
+                    var nameA = a.client.lName.toLowerCase(), nameB = b.client.lName.toLowerCase();
+                    if (nameA < nameB) //sort string ascending
+                        return -1;
+                    if (nameA > nameB)
+                        return 1;
+                    return 0; //default return value (no sorting)
+                });
+                this.setState({requests:temp})
+
+            } else {
+                this.setState({requests: this.state.requests.sort((a, b) => (+a.id) - (+b.id))})
+
+            }
+        } else {
+
+        }
+
 
     }
 
