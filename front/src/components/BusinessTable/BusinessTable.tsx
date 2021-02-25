@@ -6,7 +6,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import {Box, Button, Collapse, IconButton, Typography} from "@material-ui/core";
+import {Box, Button, Collapse, IconButton, Tooltip, Typography} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
@@ -100,7 +100,7 @@ function Row(props: { row: Request, urgency: string | undefined, updateStatus: (
                         onClick={() => setOpen(!open)}
                     >
                         {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
-                    </IconButton><span style={{marginLeft:10}}> {row.id}</span></TableCell>
+                    </IconButton><span style={{marginLeft: 10}}> {row.id}</span></TableCell>
                 <TableCell className={"noUglyBorder"} align="center">{executionDate}</TableCell>
                 <TableCell className={"noUglyBorder"} align="center">{row.client.clientStatus}</TableCell>
                 <TableCell className={"noUglyBorder"} align="center">{row.client.fName}</TableCell>
@@ -108,12 +108,15 @@ function Row(props: { row: Request, urgency: string | undefined, updateStatus: (
                 <TableCell className={"noUglyBorder"} align="center">{row.concierge}</TableCell>
                 <SelectRequestStatusTableCell key={row.id} status={row.requestStatus} id={row.id}
                                               updateStatus={props.updateStatus}/>
-                <TableCell className={"noUglyBorder"} align="center"><p style={{
-                    textAlign: "center",
-                    maxWidth: 100,
-                    overflow: "hidden",
-                    maxHeight: 13
-                }}>{row.requestDesc}</p></TableCell>
+
+                <TableCell className={"noUglyBorder"} align="center">
+                    <Tooltip title={<div style={{fontSize:20,padding:5}}>{row.requestDesc}</div>} >
+                        <p style={{
+                            textAlign: "center",
+                            overflow: "hidden",
+                        }}>{row.requestDesc.substring(0, 20)}...</p>
+                    </Tooltip>
+                </TableCell>
             </TableRow>
             <TableRow className={classes.root}>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={10}>
@@ -264,7 +267,7 @@ class BusinessTable extends Component<IProps, IState> {
                         return 1;
                     return 0; //default return value (no sorting)
                 });
-                this.setState({requests:temp})
+                this.setState({requests: temp})
             } else {
                 this.setState({requests: this.state.requests.sort((a, b) => (+a.id) - (+b.id))})
 
@@ -285,7 +288,7 @@ class BusinessTable extends Component<IProps, IState> {
                         return 1;
                     return 0; //default return value (no sorting)
                 });
-                this.setState({requests:temp})
+                this.setState({requests: temp})
 
             } else {
                 this.setState({requests: this.state.requests.sort((a, b) => (+a.id) - (+b.id))})

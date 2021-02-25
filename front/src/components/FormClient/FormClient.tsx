@@ -13,7 +13,7 @@ interface IClient {
     clientStatus: string,
     company: string,
     siret: string,
-    gender: string,
+    gender?: string,
     lName: string,
     fName: string,
     phone: string,
@@ -30,7 +30,7 @@ interface Props {
 
 interface State {
     statut: string;
-    gender: string;
+    gender?: string;
     nom: string;
     siret: string;
     lastName: string;
@@ -107,7 +107,6 @@ class FormClient extends Component<Props, State> {
                 clientStatus: this.state.statut,
                 company: this.state.nom,
                 siret: this.state.siret,
-                gender: "",
                 lName: "",
                 fName: "",
                 phone: this.state.tel,
