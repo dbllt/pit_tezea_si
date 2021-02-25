@@ -51,6 +51,16 @@ function RedirectionIfNotConnected() {
 }
 
 
+function RedirectionIfNotAdmin() {
+    let role = localStorage.getItem('role');
+    if (role !=="ADMIN") {
+        return <Redirect to="/"/>
+    } else {
+        return <div/>
+    }
+}
+
+
 class UsersScreen extends Component<IProps, IState> {
 
     state = {
@@ -120,10 +130,12 @@ class UsersScreen extends Component<IProps, IState> {
 
     }
 
+
     render() {
         return (
             <div className={"users"}>
                 <RedirectionIfNotConnected/>
+                <RedirectionIfNotAdmin/>
                 <TableContainer component={Paper}>
                     <Table aria-label="collapsible table">
                         <TableHead>

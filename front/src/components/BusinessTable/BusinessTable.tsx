@@ -92,16 +92,15 @@ function Row(props: { row: Request, urgency: string | undefined, updateStatus: (
     function DisplayRow() {
         return <React.Fragment>
             <TableRow className={chooseRowEmergencyStyle()}>
-                <TableCell className={"noUglyBorder"} align={"center"}>
+                <TableCell className={"idCell noUglyBorder"} align="center">
+
                     <IconButton
                         aria-label="expand row"
                         size="small"
                         onClick={() => setOpen(!open)}
                     >
                         {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
-                    </IconButton>
-                </TableCell>
-                <TableCell className={"filter"} align="center">{row.id}</TableCell>
+                    </IconButton><span style={{marginLeft:10}}> {row.id}</span></TableCell>
                 <TableCell className={"noUglyBorder"} align="center">{executionDate}</TableCell>
                 <TableCell className={"noUglyBorder"} align="center">{row.client.clientStatus}</TableCell>
                 <TableCell className={"noUglyBorder"} align="center">{row.client.fName}</TableCell>
@@ -319,7 +318,6 @@ class BusinessTable extends Component<IProps, IState> {
                     <Table size="small" aria-label="collapsible table">
                         <TableHead>
                             <TableRow style={{backgroundColor: '#01a1e4', height: "60px"}}>
-                                <TableCell className={"noUglyBorder"}/>
                                 {
                                     tableHeadNames.map((value, index) => (
                                         <TableCell className={"noUglyBorder"} key={index} align="center" style={{

@@ -230,10 +230,7 @@ const API = {
                 if (response.status !== 204) {
                     return Promise.reject(response);
                 } else {
-                    localStorage.setItem('token', "")
-                    localStorage.setItem('refreshToken', "")
-                    localStorage.setItem('role', "")
-                    localStorage.setItem('site', "")
+                    localStorage.clear()
                 }
             }).catch(error => {
                 console.error('There was an error!', error);

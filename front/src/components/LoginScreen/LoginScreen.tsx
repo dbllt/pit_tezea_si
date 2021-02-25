@@ -30,6 +30,7 @@ function RedirectionIfNotConnected() {
     }
 }
 
+
 class LoginScreen extends Component<IProps, IState> {
     state = {
         redirect: false,
@@ -127,7 +128,7 @@ class LoginScreen extends Component<IProps, IState> {
                             onKeyDown={this.keyPress}
                         />
                     </Grid>
-                    <Grid>
+                    <Grid item>
                         <Button type="button" onClick={this.login}
                                 style={{backgroundColor: "#8fbe40", color: 'white', padding: 15}}>
                             Se connecter

@@ -672,6 +672,7 @@ class Request extends Component<IndexProps, IState> {
                                 </Grid>
                                 <Grid item>
                                     <input
+                                        style={{backgroundColor:"floralwhite"}}
                                         id="date"
                                         type="date"
                                         name="executionDate"

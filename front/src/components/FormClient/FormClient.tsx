@@ -214,7 +214,7 @@ class FormClient extends Component<Props, State> {
                                     Téléphone :
                                 </Grid>
                                 <Grid item>
-                                    <PhoneInput country={'fr'} value={this.state.tel}
+                                    <PhoneInput inputStyle={{backgroundColor:"floralwhite"}} buttonStyle={{backgroundColor:"floralwhite"}} country={'fr'} value={this.state.tel}
                                                 onChange={phone => this.setState({tel: "+" + phone})}/>
                                 </Grid>
                             </Grid>

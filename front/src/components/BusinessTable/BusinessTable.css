@@ -28,8 +28,6 @@
     border:0!important;
 }
 
-
-.filter{
-    border:0!important;
-    width: 5px!important;
+.idCell{
+    max-width: 5px!important;
 }

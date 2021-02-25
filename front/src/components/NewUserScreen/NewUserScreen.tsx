@@ -29,6 +29,15 @@ function RedirectionIfNotConnected() {
     }
 }
 
+
+function RedirectionIfNotAdmin() {
+    let role = localStorage.getItem('role');
+    if (role !=="ADMIN") {
+        return <Redirect to="/"/>
+    } else {
+        return <div/>
+    }
+}
 class NewUserScreen extends Component<IProps, IState> {
     state = {
         redirect: false,
@@ -158,6 +167,7 @@ class NewUserScreen extends Component<IProps, IState> {
     render() {
         return (
             <div>
+                <RedirectionIfNotAdmin/>
                 <RedirectionIfNotConnected/>
                 <h1>Nouvel utilisateur</h1>
                 <this.DisplayError/>
