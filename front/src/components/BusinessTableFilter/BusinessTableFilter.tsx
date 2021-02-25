@@ -4,6 +4,7 @@ import { TextField, MenuItem, FormControl, Select, Grid, InputLabel } from "@mat
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import API from "../../network/API";
+import "../BusinessTableFilter/BusinessTableFilter.css";
 
 
 export interface Filter {
@@ -226,7 +227,7 @@ class BusinessTableFilter extends Component<Props, State> {
 
         return (
             <div style={{ marginRight: 5, marginLeft: 5 }}>
-                <Grid container spacing={1} direction="row" justify="space-evenly" alignItems="center">
+                <Grid container spacing={8} direction="row" justify="center">
                     <Grid item>
                         <TextField
                             label="Nom client"
@@ -240,7 +241,7 @@ class BusinessTableFilter extends Component<Props, State> {
 
                     <Grid item>
                         <TextField
-                            label="Télphone client"
+                            label="Téléphone client"
                             inputRef={this.phoneNumber}
                             id="outlined-margin-normal"
                             margin="normal"
@@ -261,15 +262,13 @@ class BusinessTableFilter extends Component<Props, State> {
                     </Grid>
                 </Grid>
 
-                <Grid container spacing={1} direction="row" justify="space-evenly" alignItems="center">
-                    <Grid item xs>
-                        <FormControl variant="outlined" fullWidth>
+                <Grid container spacing={4} direction="row" justify="center" >
+                    <Grid item>
+                        <FormControl variant="outlined" className={"filter"}>
                             <InputLabel id="status-label">Statut demande</InputLabel>
                             <Select
                                 value={this.state.filter.requestStatus}
                                 onChange={this.refreshStatus}
-                                displayEmpty
-                                autoWidth={true}
                                 label="Statut demande"
                             >
                                 <MenuItem value="">Tous</MenuItem>
@@ -278,15 +277,13 @@ class BusinessTableFilter extends Component<Props, State> {
                         </FormControl>
                     </Grid>
 
-                    <Grid item xs>
-                        <FormControl variant="outlined" fullWidth>
+                    <Grid item>
+                        <FormControl variant="outlined" className={"filter"}>
                             <InputLabel>Site demande</InputLabel>
                             <Select
                                 value={this.state.filter.site}
                                 onChange={this.refreshSite}
-                                displayEmpty
                                 label="Site demande"
-                                autoWidth={true}
 
                             >
                                 <MenuItem value="">Tous</MenuItem>
@@ -295,15 +292,13 @@ class BusinessTableFilter extends Component<Props, State> {
                         </FormControl>
                     </Grid>
 
-                    <Grid item xs>
-                        <FormControl variant="outlined" style={{minWidth: '400'}}>
+                    <Grid item>
+                        <FormControl variant="outlined" className={"filter"}>
                             <InputLabel>Urgence demande</InputLabel>
                             <Select
                                 value={this.state.filter.urgency}
                                 onChange={this.refreshUrgency}
-                                displayEmpty
                                 label="Urgence label"
-                                autoWidth={true}
                             >
                                 <MenuItem value="">Tous</MenuItem>
                                 {urgencies.map((value, index) => (<MenuItem key={index} value={value}>{value}</MenuItem>))}

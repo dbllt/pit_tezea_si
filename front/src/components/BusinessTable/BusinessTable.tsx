@@ -101,7 +101,7 @@ function Row(props: { row: Request, urgency: string | undefined, updateStatus: (
                         {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
                     </IconButton>
                 </TableCell>
-                <TableCell className={"test"} align="center">{row.id}</TableCell>
+                <TableCell className={"filter"} align="center">{row.id}</TableCell>
                 <TableCell className={"noUglyBorder"} align="center">{executionDate}</TableCell>
                 <TableCell className={"noUglyBorder"} align="center">{row.client.clientStatus}</TableCell>
                 <TableCell className={"noUglyBorder"} align="center">{row.client.fName}</TableCell>
@@ -250,7 +250,7 @@ class BusinessTable extends Component<IProps, IState> {
 
     applySort = (sort: Sort) => {
         if (sort.order === "Ascendant") {
-            if (sort.sort === "Numéro") {
+            if (sort.sort === "N° Demande") {
                 this.setState({requests: this.state.requests.sort((a, b) => (+a.id) - (+b.id))})
 
             } else if (sort.sort === "Date") {
@@ -271,7 +271,7 @@ class BusinessTable extends Component<IProps, IState> {
 
             }
         } else if (sort.order === "Descendant") {
-            if (sort.sort === "Numéro") {
+            if (sort.sort === "N° Demande") {
                 this.setState({requests: this.state.requests.sort((a, b) => (+b.id) - (+a.id))})
 
             } else if (sort.sort === "Date") {

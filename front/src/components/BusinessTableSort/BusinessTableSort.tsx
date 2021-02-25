@@ -20,7 +20,7 @@ interface State {
 class BusinessTableSort extends Component<Props, State> {
 
     state: State = {
-        sort: "Numéro",
+        sort: "N° Demande",
         order: "Ascendant"
     };
 
@@ -54,7 +54,7 @@ class BusinessTableSort extends Component<Props, State> {
 
 
     render() {
-        const possibleSort = ["Numéro","Date", "Nom du client"];
+        const possibleSort = ["N° Demande","Date", "Nom du client"];
         const possibleOrder = ["Ascendant", "Descendant"];
         return (
             <div>
