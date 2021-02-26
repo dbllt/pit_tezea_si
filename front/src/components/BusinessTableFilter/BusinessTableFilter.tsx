@@ -1,6 +1,6 @@
 
 import React, { Component, createRef } from 'react';
-import { TextField, MenuItem, FormControl, Select, Grid, InputLabel } from "@material-ui/core";
+import { TextField, MenuItem, FormControl, Select, Grid, InputLabel, Typography } from "@material-ui/core";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import API from "../../network/API";
@@ -226,7 +226,8 @@ class BusinessTableFilter extends Component<Props, State> {
         const requestStatus = API.getRequestStatus();
 
         return (
-            <div style={{ marginRight: 5, marginLeft: 5 }}>
+            <div>
+                <Typography variant="h6" align="center">Recherche</Typography>
                 <Grid container spacing={8} direction="row" justify="center">
                     <Grid item>
                         <TextField

@@ -28,7 +28,7 @@ interface IRequest {
     images: File [],
     photos: string[],
     client: IClient,
-    wood:string
+    wood:string,
 }
 
 interface IClient {
@@ -112,7 +112,7 @@ class Request extends Component<IndexProps, IState> {
             id: "",
             concierge: "",
             site: "",
-            typeRequest: "",
+            typeRequest: "Prestation",
             requestDesc: "",
             numberPerson: "",
             place: "",
@@ -134,7 +134,7 @@ class Request extends Component<IndexProps, IState> {
                 clientStatus: "Particulier",
                 company: "",
                 siret: "",
-                gender: "",
+                gender: "Mr",
                 lName: "",
                 fName: "",
                 phone: "",
@@ -241,7 +241,7 @@ class Request extends Component<IndexProps, IState> {
                     id: "",
                     concierge: "",
                     site: "",
-                    typeRequest: "",
+                    typeRequest: "Prestation",
                     requestDesc: "",
                     numberPerson: "",
                     place: "",
@@ -395,6 +395,7 @@ class Request extends Component<IndexProps, IState> {
                 firstName: client.fName,
                 honorificTitle: client.gender,
                 type: client.clientStatus,
+                siret:client.siret
 
             }
 

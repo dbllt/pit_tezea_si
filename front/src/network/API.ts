@@ -76,6 +76,7 @@ export interface backendClient {
     firstName: string;
     honorificTitle: string;
     type: string;
+    siret:string
 }
 
 export interface backendClosedBy {
@@ -127,6 +128,7 @@ export interface PatchClient {
     firstName?: string;
     honorificTitle?: string;
     type?: string;
+    siret?:string
 }
 
 export interface PatchClosedBy {
@@ -262,9 +264,6 @@ const API = {
             temp = "";
         }
         let token: string = temp;
-        if(request.typeRequest==="Prestation"){
-            this.sendEmail()
-        }
 
         const requestOptions = {
             method: 'POST',
@@ -285,14 +284,15 @@ const API = {
                     lastName: request.client.lName,
                     firstName: request.client.fName,
                     honorificTitle: request.client.gender,
-                    type: request.client.clientStatus
+                    type: request.client.clientStatus,
+                    siret:request.client.siret
                 },
                 "priority": "Basse",
                 "description": request.requestDesc,
                 "repetitionTime": +request.regularity,
                 "date": this.formatDate(request.executionDate),
                 "type": request.typeRequest,
-                "responsable": {"username": localStorage.getItem('username')},
+                "responsable": {username: request.concierge},
                 "status": "Nouveau",
                 "accessDetails": request.place,
                 "internalInfo":request.internalInfo,
@@ -313,6 +313,9 @@ const API = {
                 } else {
                     const data: BackendRequest = await response.json();
                     ret = true;
+                    if(request.typeRequest==="Prestation"){
+                        this.sendEmail()
+                    }
                     if (request.images.length > 0)
                         this.uploadFile(request.images, data.id.toString())
                 }
@@ -448,7 +451,7 @@ const API = {
                 address: request.client.address,
                 cp: request.client.postCode,
                 city: request.client.city,
-                siret: "XXXX"
+                siret: request.client.siret
             }
         } else {
             client = {

@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { MenuItem, FormControl, Select, Grid } from "@material-ui/core";
+import { MenuItem, FormControl, Select, Grid, Typography } from "@material-ui/core";
 
 
 export interface Sort {
@@ -33,7 +33,7 @@ class BusinessTableSort extends Component<Props, State> {
         return sort;
     }
 
-    createSort=(sortt:string,order:string)=>{
+    createSort = (sortt: string, order: string) => {
         const sort: Sort = {
             sort: sortt,
             order: order
@@ -42,23 +42,24 @@ class BusinessTableSort extends Component<Props, State> {
     }
 
     refreshSort = (event: React.ChangeEvent<{ value: unknown }>) => {
-        this.setState({ sort: event.target.value as string});
-        this.props.applySort(this.createSort(event.target.value as string,this.state.order));
+        this.setState({ sort: event.target.value as string });
+        this.props.applySort(this.createSort(event.target.value as string, this.state.order));
 
     };
 
     refreshOrder = (event: React.ChangeEvent<{ value: unknown }>) => {
-        this.setState({order: event.target.value as string });
-        this.props.applySort(this.createSort(this.state.sort,event.target.value as string));
+        this.setState({ order: event.target.value as string });
+        this.props.applySort(this.createSort(this.state.sort, event.target.value as string));
     };
 
 
     render() {
-        const possibleSort = ["N° Demande","Date", "Nom du client"];
+        const possibleSort = ["N° Demande", "Date", "Nom du client"];
         const possibleOrder = ["Ascendant", "Descendant"];
         return (
             <div>
-                <Grid container spacing={1} direction="row" justify="space-evenly" alignItems="center">
+                <Typography variant="h6" align="center">Tri</Typography>
+                <Grid container spacing={1} direction="row" justify="center" alignItems="center">
                     <Grid item>
                         <FormControl>
                             <Select

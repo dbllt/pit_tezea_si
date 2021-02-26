@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -6,16 +6,16 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import {Box, Button, Collapse, IconButton, Typography} from "@material-ui/core";
+import { Box, Button, Collapse, IconButton, Tooltip, Typography, Divider } from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
-import API, {PatchRequest} from "../../network/API";
-import {Link} from "react-router-dom";
+import API, { PatchRequest } from "../../network/API";
+import { Link } from "react-router-dom";
 import "./BusinessTable.css"
 import SelectRequestStatusTableCell from '../SelectRequestStatusTableCell/SelectRequestStatusTableCell';
-import BusinessTableFilter, {Filter} from '../BusinessTableFilter/BusinessTableFilter';
-import BusinessTableSort, {Sort} from '../BusinessTableSort/BusinessTableSort';
+import BusinessTableFilter, { Filter } from '../BusinessTableFilter/BusinessTableFilter';
+import BusinessTableSort, { Sort } from '../BusinessTableSort/BusinessTableSort';
 
 const useRowStyles = makeStyles({
     root: {
@@ -39,14 +39,14 @@ interface Request {
     place: string,
     regularity: string,
     duration: string,
-    material: string [],
+    material: string[],
     materialother: string,
     internalInfo: string,
     executionDate: string,
     executionTime: string,
     requestStatus: string,
     requestAssignment: string,
-    images: File [],
+    images: File[],
     photos: string[],
     client: IClient
 }
@@ -70,7 +70,7 @@ function formatDate(d: string) {
 }
 
 function Row(props: { row: Request, urgency: string | undefined, updateStatus: (name: string, id: string) => void }) {
-    const {row} = props;
+    const { row } = props;
     const [open, setOpen] = React.useState(false);
     const classes = useRowStyles();
 
@@ -99,24 +99,27 @@ function Row(props: { row: Request, urgency: string | undefined, updateStatus: (
                         size="small"
                         onClick={() => setOpen(!open)}
                     >
-                        {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
-                    </IconButton><span style={{marginLeft:10}}> {row.id}</span></TableCell>
+                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                    </IconButton><span style={{ marginLeft: 10 }}> {row.id}</span></TableCell>
                 <TableCell className={"noUglyBorder"} align="center">{executionDate}</TableCell>
                 <TableCell className={"noUglyBorder"} align="center">{row.client.clientStatus}</TableCell>
                 <TableCell className={"noUglyBorder"} align="center">{row.client.fName}</TableCell>
                 <TableCell className={"noUglyBorder"} align="center">{row.site}</TableCell>
                 <TableCell className={"noUglyBorder"} align="center">{row.concierge}</TableCell>
                 <SelectRequestStatusTableCell key={row.id} status={row.requestStatus} id={row.id}
-                                              updateStatus={props.updateStatus}/>
-                <TableCell className={"noUglyBorder"} align="center"><p style={{
-                    textAlign: "center",
-                    maxWidth: 100,
-                    overflow: "hidden",
-                    maxHeight: 13
-                }}>{row.requestDesc}</p></TableCell>
+                    updateStatus={props.updateStatus} />
+
+                <TableCell className={"noUglyBorder"} align="center">
+                    <Tooltip title={<div style={{ fontSize: 20, padding: 5 }}>{row.requestDesc}</div>} >
+                        <p style={{
+                            textAlign: "center",
+                            overflow: "hidden",
+                        }}>{row.requestDesc.substring(0, 20)}...</p>
+                    </Tooltip>
+                </TableCell>
             </TableRow>
             <TableRow className={classes.root}>
-                <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={10}>
+                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box margin={1}>
                             <Typography variant="h6" gutterBottom component="div">
@@ -128,7 +131,7 @@ function Row(props: { row: Request, urgency: string | undefined, updateStatus: (
                                         requestId: row.id
 
                                     }
-                                }} style={{margin: 20}}>
+                                }} style={{ margin: 20 }}>
                                     <Button variant="contained">
                                         Éditer
                                     </Button>
@@ -140,7 +143,7 @@ function Row(props: { row: Request, urgency: string | undefined, updateStatus: (
                                         {
                                             tableClientHeadNames.map((value, index) => (
                                                 <TableCell key={index} align="left"
-                                                           style={{fontWeight: "bold"}}>{value}</TableCell>
+                                                    style={{ fontWeight: "bold" }}>{value}</TableCell>
                                             ))
                                         }
                                     </TableRow>
@@ -174,13 +177,13 @@ function Row(props: { row: Request, urgency: string | undefined, updateStatus: (
                 if (API.getSite() === row.site) {
                     return DisplayRow()
                 } else {
-                    return <div/>
+                    return <div />
                 }
             } else {
                 return DisplayRow()
             }
         } else {
-            return <div/>
+            return <div />
         }
     } else if (props.urgency === "Alerte orange") {
         if (chooseRowEmergencyStyle() === "medium_emergency_style_class") {
@@ -188,13 +191,13 @@ function Row(props: { row: Request, urgency: string | undefined, updateStatus: (
                 if (API.getSite() === row.site) {
                     return DisplayRow()
                 } else {
-                    return <div/>
+                    return <div />
                 }
             } else {
                 return DisplayRow()
             }
         } else {
-            return <div/>
+            return <div />
         }
     } else if (props.urgency === "Normale") {
         if (chooseRowEmergencyStyle() === "low_emergency_style_class") {
@@ -202,20 +205,20 @@ function Row(props: { row: Request, urgency: string | undefined, updateStatus: (
                 if (API.getSite() === row.site) {
                     return DisplayRow()
                 } else {
-                    return <div/>
+                    return <div />
                 }
             } else {
                 return DisplayRow()
             }
         } else {
-            return <div/>
+            return <div />
         }
     } else {
         if (API.getRole() === "Responsable Site") {
             if (API.getSite() === row.site) {
                 return DisplayRow()
             } else {
-                return <div/>
+                return <div />
             }
         } else {
             return DisplayRow()
@@ -243,17 +246,17 @@ class BusinessTable extends Component<IProps, IState> {
 
     applyFilter = (filter: Filter) => {
         API.getRequests(filter).then(data => {
-            this.setState({requests: data, urgency: filter.urgency})
+            this.setState({ requests: data, urgency: filter.urgency })
         });
     }
 
     applySort = (sort: Sort) => {
         if (sort.order === "Ascendant") {
             if (sort.sort === "N° Demande") {
-                this.setState({requests: this.state.requests.sort((a, b) => (+a.id) - (+b.id))})
+                this.setState({ requests: this.state.requests.sort((a, b) => (+a.id) - (+b.id)) })
 
             } else if (sort.sort === "Date") {
-                this.setState({requests: this.state.requests.sort((a, b) => (new Date(formatDate(a.executionDate))).getTime() - (new Date(formatDate(b.executionDate))).getTime())})
+                this.setState({ requests: this.state.requests.sort((a, b) => (new Date(formatDate(a.executionDate))).getTime() - (new Date(formatDate(b.executionDate))).getTime()) })
 
             } else if (sort.sort === "Nom du client") {
                 let temp = this.state.requests.sort(function (a, b) {
@@ -264,17 +267,17 @@ class BusinessTable extends Component<IProps, IState> {
                         return 1;
                     return 0; //default return value (no sorting)
                 });
-                this.setState({requests:temp})
+                this.setState({ requests: temp })
             } else {
-                this.setState({requests: this.state.requests.sort((a, b) => (+a.id) - (+b.id))})
+                this.setState({ requests: this.state.requests.sort((a, b) => (+a.id) - (+b.id)) })
 
             }
         } else if (sort.order === "Descendant") {
             if (sort.sort === "N° Demande") {
-                this.setState({requests: this.state.requests.sort((a, b) => (+b.id) - (+a.id))})
+                this.setState({ requests: this.state.requests.sort((a, b) => (+b.id) - (+a.id)) })
 
             } else if (sort.sort === "Date") {
-                this.setState({requests: this.state.requests.sort((a, b) => (new Date(formatDate(b.executionDate))).getTime() - (new Date(formatDate(a.executionDate))).getTime())})
+                this.setState({ requests: this.state.requests.sort((a, b) => (new Date(formatDate(b.executionDate))).getTime() - (new Date(formatDate(a.executionDate))).getTime()) })
 
             } else if (sort.sort === "Nom du client") {
                 let temp = this.state.requests.sort(function (a, b) {
@@ -285,10 +288,10 @@ class BusinessTable extends Component<IProps, IState> {
                         return 1;
                     return 0; //default return value (no sorting)
                 });
-                this.setState({requests:temp})
+                this.setState({ requests: temp })
 
             } else {
-                this.setState({requests: this.state.requests.sort((a, b) => (+a.id) - (+b.id))})
+                this.setState({ requests: this.state.requests.sort((a, b) => (+a.id) - (+b.id)) })
 
             }
         } else {
@@ -310,14 +313,16 @@ class BusinessTable extends Component<IProps, IState> {
     render() {
         return (
             <div>
-
-                <BusinessTableFilter applyFilter={this.applyFilter}/>
-                <BusinessTableSort applySort={this.applySort}/>
-                <br/>
+                <div style={{ marginRight: 5, marginLeft: 5 }}>
+                    <BusinessTableFilter applyFilter={this.applyFilter} />
+                    <Divider variant="inset"/>
+                    <BusinessTableSort applySort={this.applySort} />
+                </div>
+                <br />
                 <TableContainer component={Paper}>
                     <Table size="small" aria-label="collapsible table">
                         <TableHead>
-                            <TableRow style={{backgroundColor: '#01a1e4', height: "60px"}}>
+                            <TableRow style={{ backgroundColor: '#01a1e4', height: "60px" }}>
                                 {
                                     tableHeadNames.map((value, index) => (
                                         <TableCell className={"noUglyBorder"} key={index} align="center" style={{
@@ -332,7 +337,7 @@ class BusinessTable extends Component<IProps, IState> {
                         <TableBody>
                             {this.state.requests.map((row: Request) => (
                                 <Row key={row.id} row={row} urgency={this.state.urgency}
-                                     updateStatus={this.updateStatus}/>
+                                    updateStatus={this.updateStatus} />
                             ))}
                         </TableBody>
                     </Table>
