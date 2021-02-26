@@ -1,26 +1,9 @@
-# pit_tezea_si
+# PIT TEZEA SI
+
+PIT TEZEA SI is an IT management app for TEZEA.
 
 
-## Authentication
-
-### Development
-
-You can find an example file with http requests
-
-`/test/authentication.rest`
-
-### Production
-
-Set Environment variable **APPLICATION_SECRET** with a secret.
-
-You can generate a secret in a terminal using node :
-
-```
-$ node
-> require('crypto').randomBytes(64).toString('hex')
-```
-
-### Deployement
+## Deployement
 
 Start the whole application inside Docker (access at port 80, http):
 
@@ -43,4 +26,37 @@ Start the whole application inside Docker (access at port 80/443, https):
 ```
 docker-compose up -f docker-compose.production.yml --build
 ```
+
+## Authentication
+
+### Development
+
+You can find an example file with http requests
+
+`/test/authentication.rest`
+
+### Production
+
+Set Environment variable **APPLICATION_SECRET** with a secret.
+
+You can generate a secret in a terminal using node :
+
+```
+$ node
+> require('crypto').randomBytes(64).toString('hex')
+```
+
+## Authors
+
+* **Dorian BOUILLET**
+* **Sigrid DROOGH**
+* **Nils RICHARD**
+* **Mehdi AIT OUALI**
+* **Thomas GUZIK**
+* **Djamel BOUATMANE**
+* **Maxime BEUCHER**
+* **Alexis GAGOUD**
+* **Théo JAMMES-BEUVE**
+
+
 
