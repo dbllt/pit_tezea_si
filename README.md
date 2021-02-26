@@ -58,5 +58,11 @@ $ node
 * **Alexis GAGOUD**
 * **Théo JAMMES-BEUVE**
 
+## Informations sur le projet
+
+- Questions réponses avec le client : https://docs.google.com/document/d/1gbnKbhvlVFYuwoJiLHHVJ-RoDDTHbnxX16Kuw3qcFZc/edit?usp=sharing
+- Spécifications des besoins client : https://docs.google.com/document/d/1aDL3acSm12unzHBQrcEsRBGM48mqHAF67EK8ELwp_DA/edit
+- Diapo de soutenance : https://docs.google.com/presentation/d/1CyCq6M6sbabxgRNivIWOH5C1MjcOlNcspJwJ38ILHSU/edit
+
 
 
